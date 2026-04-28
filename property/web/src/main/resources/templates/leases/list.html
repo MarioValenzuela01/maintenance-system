@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Leases / Contracts</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body class="container mt-4">
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="text-primary">Contratos y Ocupaciones (Leases)</h1>
+    <a th:href="@{/leases/create}" class="btn btn-success">+ Nuevo Contrato</a>
+</div>
+<hr/>
+
+<div class="card shadow-sm p-4">
+    <table class="table table-striped table-hover align-middle">
+        <thead class="table-dark">
+        <tr>
+            <th>ID Contrato</th>
+            <th>ID Arrendatario</th>
+            <th>ID Unidad</th>
+            <th>Fecha Inicio</th>
+            <th>Fecha Fin</th>
+            <th>Estado / Acción</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="l : ${leases}">
+            <td th:text="${l.id}"></td>
+            <td th:text="${l.tenantId}"></td>
+            <td th:text="${l.unitId}"></td>
+            <td th:text="${l.startDate}"></td>
+
+            <!-- Si tiene fecha de fin, mostramos la fecha. Si es nula, mostramos texto "Actual" -->
+            <td>
+                <span th:if="${l.endDate != null}" th:text="${l.endDate}"></span>
+                <span th:if="${l.endDate == null}" class="text-success fw-bold">Actual</span>
+            </td>
+
+            <!-- Botón para finalizar si aún está activo -->
+            <td>
+                <form th:if="${l.endDate == null}" th:action="@{/leases/end/{id}(id=${l.id})}" method="post">
+                    <button type="submit" class="btn btn-sm btn-danger">Finish Lease</button>
+                </form>
+                <span th:if="${l.endDate != null}" class="badge bg-secondary">History</span>
+            </td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(leases)}">
+            <td colspan="6" class="text-center text-muted">No hay contratos registrados.</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- Navegación rápida a las otras entidades -->
+<div class="mt-4">
+    <a th:href="@{/tenants}" class="btn btn-outline-primary">Tenants</a>
+    <a th:href="@{/units}" class="btn btn-outline-info ms-2">Units</a>
+    <a th:href="@{/}" class="btn btn-secondary ms-2">Home</a>
+</div>
+
+</body>
+</html>
