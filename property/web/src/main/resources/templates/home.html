@@ -2,51 +2,63 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Maintenance System - Dashboard</title>
+    <title>Cornerstone Maintenance System</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 </head>
-<body class="container mt-5">
+<body class="bg-light">
 
-<div class="text-center mb-5">
-    <h1 class="text-primary display-4 fw-bold">Maintenance System</h1>
-    <p class="lead text-muted">Dashboard</p>
-    <hr class="w-25 mx-auto"/>
-</div>
+<div class="container mt-5">
 
-<div class="row justify-content-center text-center mt-4">
-
-    <!-- Tarjeta Unidades -->
-    <div class="col-md-4 mb-4">
-        <div class="card shadow-sm h-100 border-info">
-            <div class="card-body py-5">
-                <h3 class="card-title text-info mb-3">Units</h3>
-                <p class="card-text text-muted mb-4">Register and manage Units.</p>
-                <br>
-                <a th:href="@{/units}" class="btn btn-outline-info btn-lg w-100">Unit Management</a>
-            </div>
-        </div>
+    <div class="text-center mb-5">
+        <h1 class="text-primary display-4 fw-bold">Cornerstone Maintenance System</h1>
+        <p class="lead text-muted">Property, tenant, and lease management</p>
+        <hr class="w-25 mx-auto"/>
     </div>
 
-    <!-- Tarjeta Arrendatarios -->
-    <div class="col-md-4 mb-4">
-        <div class="card shadow-sm h-100 border-success">
-            <div class="card-body py-5">
-                <h3 class="card-title text-success mb-3">Tenants</h3>
-                <p class="card-text text-muted mb-4">Manages the personal information of tenants who rent the units</p>
-                <a th:href="@{/tenants}" class="btn btn-outline-success btn-lg w-100">Tenant Management</a>
-            </div>
-        </div>
-    </div>
+    <div class="row justify-content-center text-center mt-4">
 
-    <!-- Tarjeta Contratos (Leases) -->
-    <div class="col-md-4 mb-4">
-        <div class="card shadow-sm h-100 border-warning">
-            <div class="card-body py-5">
-                <h3 class="card-title text-warning mb-3">Contracts</h3>
-                <p class="card-text text-muted mb-4">Assigns units, records move-ins and move-outs, and maintains occupancy history.</p>
-                <a th:href="@{/leases}" class="btn btn-outline-warning btn-lg w-100">Lease Management</a>
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm h-100 border-0">
+                <div class="card-body py-5">
+                    <h3 class="card-title text-info mb-3">Units</h3>
+                    <p class="card-text text-muted mb-4">
+                        Manage unit records, addresses, and occupancy status.
+                    </p>
+                    <a th:href="@{/units}" class="btn btn-info text-white btn-lg w-100">
+                        Unit Management
+                    </a>
+                </div>
             </div>
         </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm h-100 border-0">
+                <div class="card-body py-5">
+                    <h3 class="card-title text-success mb-3">Tenants</h3>
+                    <p class="card-text text-muted mb-4">
+                        Manage tenants’ personal information and contact details.
+                    </p>
+                    <a th:href="@{/tenants}" class="btn btn-success btn-lg w-100">
+                        Tenant Management
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm h-100 border-0">
+                <div class="card-body py-5">
+                    <h3 class="card-title text-warning mb-3">Leases</h3>
+                    <p class="card-text text-muted mb-4">
+                        Assign units, record move-ins/move-outs, and keep occupancy history.
+                    </p>
+                    <a th:href="@{/leases}" class="btn btn-warning text-white btn-lg w-100">
+                        Lease Management
+                    </a>
+                </div>
+            </div>
+        </div>
+
     </div>
 
 </div>

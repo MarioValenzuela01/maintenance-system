@@ -1,0 +1,124 @@
+#mapWrapper {
+    overflow: hidden;
+    height: 600px;
+    border: 1px solid #ddd;
+    cursor: grab;
+    background-color: #f8f9fa;
+}
+
+#mapContent {
+    position: relative;
+    width: 1000px;
+    height: auto;
+    transform-origin: 0 0;
+}
+
+#unitMap {
+    display: block;
+    width: 1000px;
+    height: auto;
+}
+
+.unit-btn {
+    position: absolute;
+    width: 35px;
+    height: 20px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background-color: rgba(13, 110, 253, 0.9);
+    color: white;
+    border-radius: 4px;
+    font-size: 12px;
+    text-decoration: none;
+
+    transform: translate(-50%, -50%);
+    z-index: 10;
+}
+
+.unit-btn-v {
+    position: absolute;
+    width: 20px;
+    height: 35px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background-color: rgba(13, 110, 253, 0.9);
+    color: white;
+    border-radius: 4px;
+    font-size: 12px;
+    text-decoration: none;
+
+    transform: translate(-50%, -50%);
+    z-index: 10;
+}
+
+.unit-btn-diagonal {
+    transform: translate(-50%, -50%) rotate(43deg);
+}
+
+.unit-btn-diagonal-v {
+    transform: translate(-50%, -50%) rotate(-43deg);
+}
+
+.unit-btn-hall {
+    position: absolute;
+    width: 70px;
+    height: 40px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background-color: rgba(13, 110, 253, 0.9);
+    color: white;
+    border-radius: 4px;
+    font-size: 12px;
+    text-decoration: none;
+
+    transform: translate(-50%, -50%);
+    z-index: 10;
+}
+
+/*para que despues sean transparentes*/
+
+/*.unit-btn,*/
+/*.unit-btn-v {*/
+/*    position: absolute;*/
+
+/*    display: flex;*/
+/*    align-items: center;*/
+/*    justify-content: center;*/
+
+/*    background-color: transparent; !* 🔥 invisible *!*/
+/*    border: 2px solid transparent; !* base invisible *!*/
+
+/*    border-radius: 4px;*/
+/*    text-decoration: none;*/
+
+/*    transform: translate(-50%, -50%);*/
+/*    z-index: 10;*/
+/*}*/
+
+/*!* tamaño horizontal *!*/
+/*.unit-btn {*/
+/*    width: 35px;*/
+/*    height: 20px;*/
+/*}*/
+
+/*!* tamaño vertical *!*/
+/*.unit-btn-v {*/
+/*    width: 20px;*/
+/*    height: 35px;*/
+/*}*/
+
+/*!* 🔥 EFECTO HOVER *!*/
+/*.unit-btn:hover,*/
+/*.unit-btn-v:hover {*/
+/*    border: 4px solid #0d6efd; !* azul Bootstrap *!*/
+/*    background-color: rgba(13, 110, 253, 0.1); !* leve sombra *!*/
+/*}*/
