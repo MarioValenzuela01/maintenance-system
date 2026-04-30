@@ -1,71 +1,39 @@
 package com.cornerstone.dto;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
-
 public class TenantDto {
 
     private Long id;
-
-    @NotBlank(message = "First name is required")
     private String firstName;
-
-    @NotBlank(message = "Last name is required")
     private String lastName;
-
-    @NotBlank(message = "Email is required")
-    @Email(message = "Must be a valid email address")
+    private String phone;
     private String email;
 
-    @Size(max = 15, message = "Phone number cannot exceed 15 characters")
-    private String phone;
+    private String emergencyContactName;
+    private String emergencyContactPhone;
 
-    public TenantDto() {
-    }
+    private String notes;
 
-    public Long getId() {
-        return id;
-    }
+    public Long getId() { return id; }
+    public TenantDto setId(Long id) { this.id = id; return this; }
 
-    public TenantDto setId(Long id) {
-        this.id = id;
-        return this;
-    }
+    public String getFirstName() { return firstName; }
+    public TenantDto setFirstName(String firstName) { this.firstName = firstName; return this; }
 
-    public String getFirstName() {
-        return firstName;
-    }
+    public String getLastName() { return lastName; }
+    public TenantDto setLastName(String lastName) { this.lastName = lastName; return this; }
 
-    public TenantDto setFirstName(String firstName) {
-        this.firstName = firstName;
-        return this;
-    }
+    public String getPhone() { return phone; }
+    public TenantDto setPhone(String phone) { this.phone = phone; return this; }
 
-    public String getLastName() {
-        return lastName;
-    }
+    public String getEmail() { return email; }
+    public TenantDto setEmail(String email) { this.email = email; return this; }
 
-    public TenantDto setLastName(String lastName) {
-        this.lastName = lastName;
-        return this;
-    }
+    public String getEmergencyContactName() { return emergencyContactName; }
+    public TenantDto setEmergencyContactName(String emergencyContactName) { this.emergencyContactName = emergencyContactName; return this; }
 
-    public String getEmail() {
-        return email;
-    }
+    public String getEmergencyContactPhone() { return emergencyContactPhone; }
+    public TenantDto setEmergencyContactPhone(String emergencyContactPhone) { this.emergencyContactPhone = emergencyContactPhone; return this; }
 
-    public TenantDto setEmail(String email) {
-        this.email = email;
-        return this;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public TenantDto setPhone(String phone) {
-        this.phone = phone;
-        return this;
-    }
+    public String getNotes() { return notes; }
+    public TenantDto setNotes(String notes) { this.notes = notes; return this; }
 }

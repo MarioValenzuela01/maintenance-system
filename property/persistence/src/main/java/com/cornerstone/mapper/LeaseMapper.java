@@ -4,42 +4,74 @@ import com.cornerstone.dto.LeaseDto;
 import com.cornerstone.entity.LeaseEntity;
 import com.cornerstone.entity.TenantEntity;
 import com.cornerstone.entity.UnitEntity;
+import com.cornerstone.repository.TenantJpaRepository;
+import com.cornerstone.repository.UnitJpaRepository;
 import org.springframework.stereotype.Component;
 
 @Component
 public class LeaseMapper implements EntityMapper<LeaseDto, LeaseEntity> {
 
+    private final TenantJpaRepository tenantRepository;
+    private final UnitJpaRepository unitRepository;
+
+    public LeaseMapper(TenantJpaRepository tenantRepository,
+                       UnitJpaRepository unitRepository) {
+        this.tenantRepository = tenantRepository;
+        this.unitRepository = unitRepository;
+    }
+
     @Override
     public LeaseDto toDTO(LeaseEntity entity) {
         if (entity == null) return null;
 
-        Long tenantId = (entity.getTenant() != null) ? entity.getTenant().getId() : null;
-        Long unitId = (entity.getUnit() != null) ? entity.getUnit().getId() : null;
-
         return new LeaseDto()
                 .setId(entity.getId())
-                .setTenantId(tenantId)
-                .setUnitId(unitId)
+                .setTenantId(entity.getTenant() != null ? entity.getTenant().getId() : null)
+                .setUnitId(entity.getUnit() != null ? entity.getUnit().getId() : null)
                 .setStartDate(entity.getStartDate())
-                .setEndDate(entity.getEndDate());
+                .setEndDate(entity.getEndDate())
+                .setRentAmount(entity.getRentAmount())
+                .setSubsidyAmount(entity.getSubsidyAmount())
+                .setTenantContribution(entity.getTenantContribution())
+                .setAdultsCount(entity.getAdultsCount())
+                .setChildrenCount(entity.getChildrenCount())
+                .setSeniorsCount(entity.getSeniorsCount())
+                .setSmokers(entity.getSmokers())
+                .setPetsCount(entity.getPetsCount())
+                .setCarsCount(entity.getCarsCount())
+                .setProgramNotes(entity.getProgramNotes());
     }
 
     @Override
     public LeaseEntity toEntity(LeaseDto dto) {
         if (dto == null) return null;
 
-        LeaseEntity entity = new LeaseEntity()
-                .setId(dto.getId())
-                .setStartDate(dto.getStartDate())
-                .setEndDate(dto.getEndDate());
+        TenantEntity tenant = null;
+        UnitEntity unit = null;
 
         if (dto.getTenantId() != null) {
-            entity.setTenant(new TenantEntity().setId(dto.getTenantId()));
-        }
-        if (dto.getUnitId() != null) {
-            entity.setUnit(new UnitEntity().setId(dto.getUnitId()));
+            tenant = tenantRepository.findById(dto.getTenantId()).orElse(null);
         }
 
-        return entity;
+        if (dto.getUnitId() != null) {
+            unit = unitRepository.findById(dto.getUnitId()).orElse(null);
+        }
+
+        return new LeaseEntity()
+                .setId(dto.getId())
+                .setTenant(tenant)
+                .setUnit(unit)
+                .setStartDate(dto.getStartDate())
+                .setEndDate(dto.getEndDate())
+                .setRentAmount(dto.getRentAmount())
+                .setSubsidyAmount(dto.getSubsidyAmount())
+                .setTenantContribution(dto.getTenantContribution())
+                .setAdultsCount(dto.getAdultsCount())
+                .setChildrenCount(dto.getChildrenCount())
+                .setSeniorsCount(dto.getSeniorsCount())
+                .setSmokers(dto.getSmokers())
+                .setPetsCount(dto.getPetsCount())
+                .setCarsCount(dto.getCarsCount())
+                .setProgramNotes(dto.getProgramNotes());
     }
 }

@@ -11,4 +11,5 @@ public interface LeaseService {
 
     // Regla de negocio: Registrar que un arrendatario dejó la unidad
     LeaseDto endLease(Long leaseId);
+    LeaseDto update(Long id, LeaseDto lease);
 }

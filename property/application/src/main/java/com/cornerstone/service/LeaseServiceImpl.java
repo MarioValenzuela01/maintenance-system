@@ -13,6 +13,7 @@ public class LeaseServiceImpl implements LeaseService {
 
     private final LeaseRepository leaseRepository;
 
+
     public LeaseServiceImpl(LeaseRepository leaseRepository) {
         this.leaseRepository = leaseRepository;
     }
@@ -22,12 +23,20 @@ public class LeaseServiceImpl implements LeaseService {
 
     @Override
     public LeaseDto create(LeaseDto lease) {
-        // Regla de negocio: Si no se manda fecha de inicio, empieza hoy.
-        // La fecha de fin siempre es nula al crear un contrato nuevo.
+
         if (lease.getStartDate() == null) {
             lease.setStartDate(LocalDate.now());
         }
+
         lease.setEndDate(null);
+
+        if (lease.getAdultsCount() == null) lease.setAdultsCount(0);
+        if (lease.getChildrenCount() == null) lease.setChildrenCount(0);
+        if (lease.getSeniorsCount() == null) lease.setSeniorsCount(0);
+        if (lease.getPetsCount() == null) lease.setPetsCount(0);
+        if (lease.getCarsCount() == null) lease.setCarsCount(0);
+        if (lease.getSmokers() == null) lease.setSmokers(false);
+
         return leaseRepository.save(lease);
     }
 
@@ -43,5 +52,19 @@ public class LeaseServiceImpl implements LeaseService {
             return leaseRepository.save(lease);
         }
         throw new IllegalArgumentException("Contrato no encontrado");
+    }
+
+    @Override
+    public LeaseDto update(Long id, LeaseDto lease) {
+        lease.setId(id);
+
+        if (lease.getAdultsCount() == null) lease.setAdultsCount(0);
+        if (lease.getChildrenCount() == null) lease.setChildrenCount(0);
+        if (lease.getSeniorsCount() == null) lease.setSeniorsCount(0);
+        if (lease.getPetsCount() == null) lease.setPetsCount(0);
+        if (lease.getCarsCount() == null) lease.setCarsCount(0);
+        if (lease.getSmokers() == null) lease.setSmokers(false);
+
+        return leaseRepository.save(lease);
     }
 }

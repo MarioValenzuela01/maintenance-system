@@ -14,8 +14,14 @@
     <div class="col-md-8">
         <div class="card shadow-sm p-4">
 
-            <form th:action="@{/leases/create}" th:object="${lease}" method="post">
+            <div class="mb-3">
+                <span class="badge"
+                      th:classappend="${lease.endDate == null} ? 'bg-success' : 'bg-secondary'"
+                      th:text="${lease.endDate == null} ? 'Active Lease' : 'Ended Lease'">
+                </span>
+            </div>
 
+            <form th:action="@{/leases/edit/{id}(id=${lease.id})}" th:object="${lease}" method="post">
                 <h4 class="text-primary mb-3">Lease Information</h4>
 
                 <div class="mb-3">
@@ -42,8 +48,27 @@
 
                 <div class="mb-4">
                     <label class="form-label fw-bold">Start Date</label>
-                    <input type="date" th:field="*{startDate}" class="form-control">
+                    <input type="date"
+                           th:name="startDate"
+                           th:value="${lease.startDate}"
+                           class="form-control">
                 </div>
+
+                <div class="mb-4">
+                    <label class="form-label fw-bold">End Date</label>
+                    <div th:if="${lease.endDate == null}">
+                        <span class="badge bg-success">Active Lease</span>
+                    </div>
+
+                    <div th:if="${lease.endDate != null}">
+                        <input type="date"
+                               th:name="endDate"
+                               th:value="${lease.endDate}"
+                               class="form-control">
+                    </div>
+                </div>
+
+
 
                 <h4 class="text-primary mb-3">Household Information</h4>
 
@@ -108,7 +133,7 @@
                 </div>
 
                 <div class="mt-4">
-                    <button type="submit" class="btn btn-primary px-4">Save Lease</button>
+                    <button type="submit" class="btn btn-primary px-4">Save Changes</button>
                     <a th:href="@{/leases}" class="btn btn-secondary ms-2">Cancel</a>
                 </div>
 

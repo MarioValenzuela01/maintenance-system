@@ -13,6 +13,20 @@
 </div>
 <hr/>
 
+<div class="mb-3">
+    <a th:if="${!showHistory}"
+       th:href="@{/leases(showHistory=true)}"
+       class="btn btn-outline-secondary">
+        Show Lease History
+    </a>
+
+    <a th:if="${showHistory}"
+       th:href="@{/leases}"
+       class="btn btn-outline-success">
+        Show Active Leases Only
+    </a>
+</div>
+
 <div class="card shadow-sm p-4">
     <table class="table table-striped table-hover align-middle">
         <thead class="table-dark">
@@ -22,7 +36,8 @@
             <th>ID Unidad</th>
             <th>Fecha Inicio</th>
             <th>Fecha Fin</th>
-            <th>Estado / Acción</th>
+            <th>Estado</th>
+            <th>Acción</th>
         </tr>
         </thead>
         <tbody>
@@ -45,6 +60,11 @@
                 </form>
                 <span th:if="${l.endDate != null}" class="badge bg-secondary">History</span>
             </td>
+
+            <td>
+                <a th:href="@{/leases/edit/{id}(id=${l.id})}" class="btn btn-sm btn-outline-primary">Edit</a>
+            </td>
+
         </tr>
         <tr th:if="${#lists.isEmpty(leases)}">
             <td colspan="6" class="text-center text-muted">No hay contratos registrados.</td>

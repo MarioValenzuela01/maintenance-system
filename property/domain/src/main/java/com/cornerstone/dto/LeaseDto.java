@@ -1,15 +1,31 @@
 package com.cornerstone.dto;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public class LeaseDto {
     private Long id;
     private Long tenantId;
     private Long unitId;
-    private LocalDate startDate;
-    private LocalDate endDate; // Será null mientras vivan ahí
 
-    public LeaseDto() {}
+    private LocalDate startDate;
+    private LocalDate endDate;
+
+    private BigDecimal rentAmount;
+    private BigDecimal subsidyAmount;
+    private BigDecimal tenantContribution;
+
+    private Integer adultsCount;
+    private Integer childrenCount;
+    private Integer seniorsCount;
+    private Boolean smokers;
+    private Integer petsCount;
+    private Integer carsCount;
+
+    private String programNotes;
+
+    public LeaseDto() {
+    }
 
     public Long getId() { return id; }
     public LeaseDto setId(Long id) { this.id = id; return this; }
@@ -25,4 +41,34 @@ public class LeaseDto {
 
     public LocalDate getEndDate() { return endDate; }
     public LeaseDto setEndDate(LocalDate endDate) { this.endDate = endDate; return this; }
+
+    public BigDecimal getRentAmount() { return rentAmount; }
+    public LeaseDto setRentAmount(BigDecimal rentAmount) { this.rentAmount = rentAmount; return this; }
+
+    public BigDecimal getSubsidyAmount() { return subsidyAmount; }
+    public LeaseDto setSubsidyAmount(BigDecimal subsidyAmount) { this.subsidyAmount = subsidyAmount; return this; }
+
+    public BigDecimal getTenantContribution() { return tenantContribution; }
+    public LeaseDto setTenantContribution(BigDecimal tenantContribution) { this.tenantContribution = tenantContribution; return this; }
+
+    public Integer getAdultsCount() { return adultsCount; }
+    public LeaseDto setAdultsCount(Integer adultsCount) { this.adultsCount = adultsCount; return this; }
+
+    public Integer getChildrenCount() { return childrenCount; }
+    public LeaseDto setChildrenCount(Integer childrenCount) { this.childrenCount = childrenCount; return this; }
+
+    public Integer getSeniorsCount() { return seniorsCount; }
+    public LeaseDto setSeniorsCount(Integer seniorsCount) { this.seniorsCount = seniorsCount; return this; }
+
+    public Boolean getSmokers() { return smokers; }
+    public LeaseDto setSmokers(Boolean smokers) { this.smokers = smokers; return this; }
+
+    public Integer getPetsCount() { return petsCount; }
+    public LeaseDto setPetsCount(Integer petsCount) { this.petsCount = petsCount; return this; }
+
+    public Integer getCarsCount() { return carsCount; }
+    public LeaseDto setCarsCount(Integer carsCount) { this.carsCount = carsCount; return this; }
+
+    public String getProgramNotes() { return programNotes; }
+    public LeaseDto setProgramNotes(String programNotes) { this.programNotes = programNotes; return this; }
 }

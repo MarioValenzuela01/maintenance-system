@@ -19,44 +19,49 @@
     height: auto;
 }
 
-.unit-btn {
+/* ===== BOTONES BASE ===== */
+.unit-btn,
+.unit-btn-v,
+.unit-btn-hall,
+.unit-btn-diagonal,
+.unit-btn-diagonal-v {
     position: absolute;
-    width: 35px;
-    height: 20px;
 
     display: flex;
     align-items: center;
     justify-content: center;
 
-    background-color: rgba(13, 110, 253, 0.9);
-    color: white;
+    /* 🔥 TOTALMENTE INVISIBLE */
+    background: transparent !important;
+    background-color: transparent !important;
+    color: transparent !important;
+    border: 2px solid transparent !important;
+    box-shadow: none !important;
+
     border-radius: 4px;
-    font-size: 12px;
     text-decoration: none;
 
     transform: translate(-50%, -50%);
     z-index: 10;
+}
+
+/* ===== TAMAÑOS ===== */
+.unit-btn {
+    width: 35px;
+    height: 20px;
 }
 
 .unit-btn-v {
-    position: absolute;
     width: 20px;
     height: 35px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    background-color: rgba(13, 110, 253, 0.9);
-    color: white;
-    border-radius: 4px;
-    font-size: 12px;
-    text-decoration: none;
-
-    transform: translate(-50%, -50%);
-    z-index: 10;
 }
 
+.unit-btn-hall {
+    width: 70px;
+    height: 40px;
+}
+
+/* ===== ROTACIONES ===== */
 .unit-btn-diagonal {
     transform: translate(-50%, -50%) rotate(43deg);
 }
@@ -65,60 +70,12 @@
     transform: translate(-50%, -50%) rotate(-43deg);
 }
 
-.unit-btn-hall {
-    position: absolute;
-    width: 70px;
-    height: 40px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    background-color: rgba(13, 110, 253, 0.9);
-    color: white;
-    border-radius: 4px;
-    font-size: 12px;
-    text-decoration: none;
-
-    transform: translate(-50%, -50%);
-    z-index: 10;
+/* ===== HOVER (VISIBLE SOLO AQUÍ) ===== */
+.unit-btn:hover,
+.unit-btn-v:hover,
+.unit-btn-hall:hover,
+.unit-btn-diagonal:hover,
+.unit-btn-diagonal-v:hover {
+    border: 4px solid #0d6efd !important;
+    background-color: rgba(13, 110, 253, 0.1) !important;
 }
-
-/*para que despues sean transparentes*/
-
-/*.unit-btn,*/
-/*.unit-btn-v {*/
-/*    position: absolute;*/
-
-/*    display: flex;*/
-/*    align-items: center;*/
-/*    justify-content: center;*/
-
-/*    background-color: transparent; !* 🔥 invisible *!*/
-/*    border: 2px solid transparent; !* base invisible *!*/
-
-/*    border-radius: 4px;*/
-/*    text-decoration: none;*/
-
-/*    transform: translate(-50%, -50%);*/
-/*    z-index: 10;*/
-/*}*/
-
-/*!* tamaño horizontal *!*/
-/*.unit-btn {*/
-/*    width: 35px;*/
-/*    height: 20px;*/
-/*}*/
-
-/*!* tamaño vertical *!*/
-/*.unit-btn-v {*/
-/*    width: 20px;*/
-/*    height: 35px;*/
-/*}*/
-
-/*!* 🔥 EFECTO HOVER *!*/
-/*.unit-btn:hover,*/
-/*.unit-btn-v:hover {*/
-/*    border: 4px solid #0d6efd; !* azul Bootstrap *!*/
-/*    background-color: rgba(13, 110, 253, 0.1); !* leve sombra *!*/
-/*}*/

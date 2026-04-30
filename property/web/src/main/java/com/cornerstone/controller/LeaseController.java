@@ -8,6 +8,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("/leases")
 public class LeaseController {
@@ -25,8 +27,20 @@ public class LeaseController {
 
     // Mostrar todos los contratos
     @GetMapping
-    public String list(Model model) {
-        model.addAttribute("leases", leaseService.getAll());
+    public String list(@RequestParam(name = "showHistory", defaultValue = "false") boolean showHistory,
+                       Model model) {
+
+        List<LeaseDto> leases = leaseService.getAll();
+
+        if (!showHistory) {
+            leases = leases.stream()
+                    .filter(l -> l.getEndDate() == null)
+                    .toList();
+        }
+
+        model.addAttribute("leases", leases);
+        model.addAttribute("showHistory", showHistory);
+
         return "leases/list";
     }
 
@@ -51,6 +65,27 @@ public class LeaseController {
     @PostMapping("/end/{id}")
     public String endLease(@PathVariable("id") Long id) {
         leaseService.endLease(id);
+        return "redirect:/leases";
+    }
+
+    @GetMapping("/edit/{id}")
+    public String editForm(@PathVariable("id") Long id, Model model) {
+        var lease = leaseService.get(id);
+
+        if (lease.isPresent()) {
+            model.addAttribute("lease", lease.get());
+            model.addAttribute("tenants", tenantService.getAll());
+            model.addAttribute("units", unitService.getAll());
+            return "leases/edit";
+        }
+
+        return "redirect:/leases";
+    }
+
+    @PostMapping("/edit/{id}")
+    public String editSubmit(@PathVariable("id") Long id,
+                             @ModelAttribute("lease") LeaseDto lease) {
+        leaseService.update(id, lease);
         return "redirect:/leases";
     }
 }

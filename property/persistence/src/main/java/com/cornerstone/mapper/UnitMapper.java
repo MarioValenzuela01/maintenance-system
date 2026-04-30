@@ -13,7 +13,12 @@ public class UnitMapper implements EntityMapper<UnitDto, UnitEntity> {
         return new UnitDto()
                 .setId(entity.getId())
                 .setUnitNumber(entity.getUnitNumber())
-                .setAddress(entity.getAddress());
+                .setAddress(entity.getAddress())
+                .setStatus(entity.getStatus())
+                .setOwnershipType(entity.getOwnershipType())
+                .setProgramType(entity.getProgramType())
+                .setManagedByCornerstone(entity.getManagedByCornerstone())
+                .setNotes(entity.getNotes());
     }
 
     @Override
@@ -22,6 +27,11 @@ public class UnitMapper implements EntityMapper<UnitDto, UnitEntity> {
         return new UnitEntity()
                 .setId(dto.getId())
                 .setUnitNumber(dto.getUnitNumber())
-                .setAddress(dto.getAddress());
+                .setAddress(dto.getAddress())
+                .setStatus(dto.getStatus())
+                .setOwnershipType(dto.getOwnershipType())
+                .setProgramType(dto.getProgramType())
+                .setManagedByCornerstone(dto.getManagedByCornerstone())
+                .setNotes(dto.getNotes());
     }
 }
