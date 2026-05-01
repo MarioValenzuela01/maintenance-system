@@ -5,8 +5,17 @@ import java.util.List;
 import java.util.Optional;
 
 public interface LeaseRepository {
+
     List<LeaseDto> getAll();
+
     Optional<LeaseDto> get(Long id);
+
     LeaseDto save(LeaseDto lease);
+
     void delete(Long id);
+
+    // 🔥 NUEVO
+    boolean existsActiveLeaseByTenantId(Long tenantId);
+
+    boolean existsActiveLeaseByUnitId(Long unitId);
 }

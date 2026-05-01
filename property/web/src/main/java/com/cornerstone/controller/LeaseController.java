@@ -49,8 +49,8 @@ public class LeaseController {
     public String createForm(Model model) {
         model.addAttribute("lease", new LeaseDto());
         // Pasamos la lista de arrendatarios y unidades a la vista para los <select>
-        model.addAttribute("tenants", tenantService.getAll());
-        model.addAttribute("units", unitService.getAll());
+        model.addAttribute("tenants", leaseService.getAvailableTenants());
+        model.addAttribute("units", leaseService.getAvailableUnits());
         return "leases/create";
     }
 

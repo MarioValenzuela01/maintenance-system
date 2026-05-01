@@ -11,16 +11,54 @@
 <hr/>
 
 <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-7">
         <div class="card shadow-sm p-4">
             <form th:action="@{/units/create}" th:object="${unit}" method="post">
 
+                <h5 class="mb-3">Basic Information</h5>
+
                 <div class="form-group mb-3">
                     <label class="control-label fw-bold">Unit Number *</label>
-                    <input type="text" th:field="*{unitNumber}" class="form-control" placeholder="Ej. Apt 101, Local B" required />
-                    <label class="control-label fw-bold">Address *</label>
-                    <input type="text" th:field="*{address}" class="form-control" placeholder="Ej. Apt 101, Local B" required />
+                    <input type="text" th:field="*{unitNumber}" class="form-control" placeholder="Ej. Apt 101" required />
+                </div>
 
+                <div class="form-group mb-3">
+                    <label class="control-label fw-bold">Address *</label>
+                    <input type="text" th:field="*{address}" class="form-control" placeholder="Ej. 220 Mapleton Rd" required />
+                </div>
+
+                <hr/>
+
+                <h5 class="mb-3">Unit Characteristics</h5>
+
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label class="control-label fw-bold">Bedrooms</label>
+                        <input type="number" th:field="*{bedrooms}" class="form-control" min="0" placeholder="2" />
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        <label class="control-label fw-bold">Bathrooms</label>
+                        <input type="number" th:field="*{bathrooms}" class="form-control" min="0" placeholder="1" />
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        <label class="control-label fw-bold">Floors</label>
+                        <input type="number" th:field="*{floors}" class="form-control" min="1" placeholder="1" />
+                    </div>
+                </div>
+
+                <div class="form-check mb-3">
+                    <input type="checkbox" th:field="*{hasBasement}" class="form-check-input" id="hasBasement">
+                    <label class="form-check-label fw-bold" for="hasBasement">
+                        Has Basement
+                    </label>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label class="control-label fw-bold">Notes</label>
+                    <textarea th:field="*{notes}" class="form-control" rows="3"
+                              placeholder="Additional information about the unit"></textarea>
                 </div>
 
                 <div class="form-group mt-4">

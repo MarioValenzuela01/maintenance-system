@@ -39,4 +39,9 @@ public class UnitRepositoryAdapter implements UnitRepository {
     public void delete(Long id) {
         jpaRepository.deleteById(id);
     }
+
+    @Override
+    public Optional<UnitDto> getByUnitNumber(String unitNumber) {
+        return mapper.toDTO(jpaRepository.findByUnitNumber(unitNumber));
+    }
 }

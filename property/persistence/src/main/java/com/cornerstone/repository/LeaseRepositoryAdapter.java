@@ -39,4 +39,15 @@ public class LeaseRepositoryAdapter implements LeaseRepository {
     public void delete(Long id) {
         jpaRepository.deleteById(id);
     }
+
+    @Override
+    public boolean existsActiveLeaseByTenantId(Long tenantId) {
+        return jpaRepository.existsByTenantIdAndEndDateIsNull(tenantId);
+    }
+
+    @Override
+    public boolean existsActiveLeaseByUnitId(Long unitId) {
+        return jpaRepository.existsByUnitIdAndEndDateIsNull(unitId);
+    }
+
 }

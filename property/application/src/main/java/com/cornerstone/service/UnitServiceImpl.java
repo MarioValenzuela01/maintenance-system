@@ -16,9 +16,20 @@ public class UnitServiceImpl implements UnitService {
         this.unitRepository = unitRepository;
     }
 
-    @Override public List<UnitDto> getAll() { return unitRepository.getAll(); }
-    @Override public Optional<UnitDto> get(Long id) { return unitRepository.get(id); }
-    @Override public UnitDto create(UnitDto unit) { return unitRepository.save(unit); }
+    @Override
+    public List<UnitDto> getAll() {
+        return unitRepository.getAll();
+    }
+
+    @Override
+    public Optional<UnitDto> get(Long id) {
+        return unitRepository.get(id);
+    }
+
+    @Override
+    public UnitDto create(UnitDto unit) {
+        return unitRepository.save(unit);
+    }
 
     @Override
     public UnitDto update(Long id, UnitDto unit) {
@@ -26,5 +37,13 @@ public class UnitServiceImpl implements UnitService {
         return unitRepository.save(unit);
     }
 
-    @Override public void delete(Long id) { unitRepository.delete(id); }
+    @Override
+    public void delete(Long id) {
+        unitRepository.delete(id);
+    }
+
+    @Override
+    public Optional<UnitDto> getByUnitNumber(String unitNumber) {
+        return unitRepository.getByUnitNumber(unitNumber);
+    }
 }

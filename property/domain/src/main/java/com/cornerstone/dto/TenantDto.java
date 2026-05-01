@@ -13,6 +13,8 @@ public class TenantDto {
 
     private String notes;
 
+    private Boolean active = true;
+
     public Long getId() { return id; }
     public TenantDto setId(Long id) { this.id = id; return this; }
 
@@ -36,4 +38,11 @@ public class TenantDto {
 
     public String getNotes() { return notes; }
     public TenantDto setNotes(String notes) { this.notes = notes; return this; }
+
+    public Boolean getActive() { return active; }
+
+    public TenantDto setActive(Boolean active) {
+        this.active = active;
+        return this;
+    }
 }

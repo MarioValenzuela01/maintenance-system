@@ -7,6 +7,8 @@ public class LeaseDto {
     private Long id;
     private Long tenantId;
     private Long unitId;
+    private String tenantName;
+    private String unitNumber;
 
     private LocalDate startDate;
     private LocalDate endDate;
@@ -71,4 +73,22 @@ public class LeaseDto {
 
     public String getProgramNotes() { return programNotes; }
     public LeaseDto setProgramNotes(String programNotes) { this.programNotes = programNotes; return this; }
+
+    public String getTenantName() {
+        return tenantName;
+    }
+
+    public LeaseDto setTenantName(String tenantName) {
+        this.tenantName = tenantName;
+        return this;
+    }
+
+    public String getUnitNumber() {
+        return unitNumber;
+    }
+
+    public LeaseDto setUnitNumber(String unitNumber) {
+        this.unitNumber = unitNumber;
+        return this;
+    }
 }

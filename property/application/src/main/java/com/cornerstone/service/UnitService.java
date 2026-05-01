@@ -7,6 +7,7 @@ import java.util.Optional;
 public interface UnitService {
     List<UnitDto> getAll();
     Optional<UnitDto> get(Long id);
+    Optional<UnitDto> getByUnitNumber(String unitNumber);
     UnitDto create(UnitDto unit);
     UnitDto update(Long id, UnitDto unit);
     void delete(Long id);

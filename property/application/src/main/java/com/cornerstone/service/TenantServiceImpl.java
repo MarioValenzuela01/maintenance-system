@@ -12,14 +12,17 @@ public class TenantServiceImpl implements TenantService {
 
     private final TenantRepository tenantRepository;
 
-    // Inyección de dependencias a través del constructor
+    // Inyección de dependencias
     public TenantServiceImpl(TenantRepository tenantRepository) {
         this.tenantRepository = tenantRepository;
     }
 
     @Override
     public List<TenantDto> getAll() {
-        return tenantRepository.getAll();
+        return tenantRepository.getAll()
+                .stream()
+                .filter(t -> Boolean.TRUE.equals(t.getActive()))
+                .toList();
     }
 
     @Override
@@ -29,7 +32,6 @@ public class TenantServiceImpl implements TenantService {
 
     @Override
     public TenantDto create(TenantDto tenant) {
-        // Más adelante aquí inyectaremos un ValidationService para aplicar reglas de negocio
         return tenantRepository.save(tenant);
     }
 
@@ -41,6 +43,15 @@ public class TenantServiceImpl implements TenantService {
 
     @Override
     public void delete(Long id) {
-        tenantRepository.delete(id);
+        Optional<TenantDto> tenantOpt = tenantRepository.get(id);
+
+        if (tenantOpt.isEmpty()) {
+            return;
+        }
+
+        TenantDto tenant = tenantOpt.get();
+        tenant.setActive(false); // 👈 soft delete
+
+        tenantRepository.save(tenant);
     }
 }

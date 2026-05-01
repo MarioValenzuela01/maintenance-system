@@ -31,9 +31,8 @@
     <table class="table table-striped table-hover align-middle">
         <thead class="table-dark">
         <tr>
-            <th>ID Contrato</th>
-            <th>ID Arrendatario</th>
-            <th>ID Unidad</th>
+            <th>Tenant</th>
+            <th>Unit Lease</th>
             <th>Fecha Inicio</th>
             <th>Fecha Fin</th>
             <th>Estado</th>
@@ -42,9 +41,8 @@
         </thead>
         <tbody>
         <tr th:each="l : ${leases}">
-            <td th:text="${l.id}"></td>
-            <td th:text="${l.tenantId}"></td>
-            <td th:text="${l.unitId}"></td>
+            <td th:text="${l.tenantName}"></td>
+            <td th:text="${l.unitNumber}"></td>
             <td th:text="${l.startDate}"></td>
 
             <!-- Si tiene fecha de fin, mostramos la fecha. Si es nula, mostramos texto "Actual" -->
@@ -67,7 +65,7 @@
 
         </tr>
         <tr th:if="${#lists.isEmpty(leases)}">
-            <td colspan="6" class="text-center text-muted">No hay contratos registrados.</td>
+            <td colspan="7" class="text-center text-muted">No hay contratos registrados.</td>
         </tr>
         </tbody>
     </table>

@@ -11,6 +11,12 @@ public class UnitDto {
     private Boolean managedByCornerstone;
     private String notes;
 
+    // 🔥 Características reales
+    private Integer bedrooms;
+    private Integer bathrooms;
+    private Integer floors;
+    private Boolean hasBasement;
+
     public UnitDto() {
     }
 
@@ -83,6 +89,42 @@ public class UnitDto {
 
     public UnitDto setNotes(String notes) {
         this.notes = notes;
+        return this;
+    }
+
+    public Integer getBedrooms() {
+        return bedrooms;
+    }
+
+    public UnitDto setBedrooms(Integer bedrooms) {
+        this.bedrooms = bedrooms;
+        return this;
+    }
+
+    public Integer getBathrooms() {
+        return bathrooms;
+    }
+
+    public UnitDto setBathrooms(Integer bathrooms) {
+        this.bathrooms = bathrooms;
+        return this;
+    }
+
+    public Integer getFloors() {
+        return floors;
+    }
+
+    public UnitDto setFloors(Integer floors) {
+        this.floors = floors;
+        return this;
+    }
+
+    public Boolean getHasBasement() {
+        return hasBasement;
+    }
+
+    public UnitDto setHasBasement(Boolean hasBasement) {
+        this.hasBasement = hasBasement;
         return this;
     }
 }

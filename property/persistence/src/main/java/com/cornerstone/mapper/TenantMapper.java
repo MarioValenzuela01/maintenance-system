@@ -19,6 +19,7 @@ public class TenantMapper implements EntityMapper<TenantDto, TenantEntity> {
         dto.setLastName(entity.getLastName());
         dto.setEmail(entity.getEmail());
         dto.setPhone(entity.getPhoneNumber());
+        dto.setActive(entity.getActive());
 
         return dto;
     }
@@ -35,6 +36,7 @@ public class TenantMapper implements EntityMapper<TenantDto, TenantEntity> {
                 .setFirstName(dto.getFirstName())
                 .setLastName(dto.getLastName())
                 .setEmail(dto.getEmail())
-                .setPhoneNumber(dto.getPhone());
+                .setPhoneNumber(dto.getPhone())
+                .setActive(dto.getActive());
     }
 }

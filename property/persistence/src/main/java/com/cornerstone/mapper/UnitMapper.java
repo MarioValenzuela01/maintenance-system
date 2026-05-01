@@ -10,6 +10,7 @@ public class UnitMapper implements EntityMapper<UnitDto, UnitEntity> {
     @Override
     public UnitDto toDTO(UnitEntity entity) {
         if (entity == null) return null;
+
         return new UnitDto()
                 .setId(entity.getId())
                 .setUnitNumber(entity.getUnitNumber())
@@ -18,12 +19,19 @@ public class UnitMapper implements EntityMapper<UnitDto, UnitEntity> {
                 .setOwnershipType(entity.getOwnershipType())
                 .setProgramType(entity.getProgramType())
                 .setManagedByCornerstone(entity.getManagedByCornerstone())
-                .setNotes(entity.getNotes());
+                .setNotes(entity.getNotes())
+
+                // 🔥 NUEVOS CAMPOS
+                .setBedrooms(entity.getBedrooms())
+                .setBathrooms(entity.getBathrooms())
+                .setFloors(entity.getFloors())
+                .setHasBasement(entity.getHasBasement());
     }
 
     @Override
     public UnitEntity toEntity(UnitDto dto) {
         if (dto == null) return null;
+
         return new UnitEntity()
                 .setId(dto.getId())
                 .setUnitNumber(dto.getUnitNumber())
@@ -32,6 +40,12 @@ public class UnitMapper implements EntityMapper<UnitDto, UnitEntity> {
                 .setOwnershipType(dto.getOwnershipType())
                 .setProgramType(dto.getProgramType())
                 .setManagedByCornerstone(dto.getManagedByCornerstone())
-                .setNotes(dto.getNotes());
+                .setNotes(dto.getNotes())
+
+                // 🔥 NUEVOS CAMPOS
+                .setBedrooms(dto.getBedrooms())
+                .setBathrooms(dto.getBathrooms())
+                .setFloors(dto.getFloors())
+                .setHasBasement(dto.getHasBasement());
     }
 }

@@ -22,6 +22,9 @@ public class TenantEntity {
     @Column(name = "phone_number", nullable = false)
     private String phoneNumber;
 
+    @Column(nullable = false)
+    private Boolean active = true;
+
     // Constructor vacío obligatorio para JPA
     public TenantEntity() {
     }
@@ -70,6 +73,15 @@ public class TenantEntity {
 
     public TenantEntity setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+        return this;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public TenantEntity setActive(Boolean active) {
+        this.active = active;
         return this;
     }
 }

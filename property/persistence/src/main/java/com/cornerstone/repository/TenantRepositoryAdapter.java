@@ -22,7 +22,7 @@ public class TenantRepositoryAdapter implements TenantRepository {
 
     @Override
     public List<TenantDto> getAll() {
-        List<TenantEntity> entities = jpaRepository.findAll();
+        List<TenantEntity> entities = jpaRepository.findByActiveTrue();
         // Gracias a los default methods que pusimos en EntityMapper, esto funciona automático:
         return mapper.toDTO(entities);
     }

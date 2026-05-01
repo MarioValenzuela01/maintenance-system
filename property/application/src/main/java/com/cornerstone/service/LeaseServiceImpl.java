@@ -1,7 +1,11 @@
 package com.cornerstone.service;
 
 import com.cornerstone.dto.LeaseDto;
+import com.cornerstone.dto.TenantDto;
+import com.cornerstone.dto.UnitDto;
 import com.cornerstone.repository.LeaseRepository;
+import com.cornerstone.repository.TenantRepository;
+import com.cornerstone.repository.UnitRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -12,14 +16,26 @@ import java.util.Optional;
 public class LeaseServiceImpl implements LeaseService {
 
     private final LeaseRepository leaseRepository;
+    private final TenantRepository tenantRepository;
+    private final UnitRepository unitRepository;
 
-
-    public LeaseServiceImpl(LeaseRepository leaseRepository) {
+    public LeaseServiceImpl(LeaseRepository leaseRepository,
+                            TenantRepository tenantRepository,
+                            UnitRepository unitRepository) {
         this.leaseRepository = leaseRepository;
+        this.tenantRepository = tenantRepository;
+        this.unitRepository = unitRepository;
     }
 
-    @Override public List<LeaseDto> getAll() { return leaseRepository.getAll(); }
-    @Override public Optional<LeaseDto> get(Long id) { return leaseRepository.get(id); }
+    @Override
+    public List<LeaseDto> getAll() {
+        return leaseRepository.getAll();
+    }
+
+    @Override
+    public Optional<LeaseDto> get(Long id) {
+        return leaseRepository.get(id);
+    }
 
     @Override
     public LeaseDto create(LeaseDto lease) {
@@ -42,8 +58,6 @@ public class LeaseServiceImpl implements LeaseService {
 
     @Override
     public LeaseDto endLease(Long leaseId) {
-        // Regla de negocio: En lugar de borrar de la base de datos (y perder historial),
-        // simplemente marcamos la fecha de fin (endDate) del contrato con el día de hoy.
         Optional<LeaseDto> existingLease = leaseRepository.get(leaseId);
 
         if (existingLease.isPresent()) {
@@ -51,6 +65,7 @@ public class LeaseServiceImpl implements LeaseService {
             lease.setEndDate(LocalDate.now());
             return leaseRepository.save(lease);
         }
+
         throw new IllegalArgumentException("Contrato no encontrado");
     }
 
@@ -66,5 +81,31 @@ public class LeaseServiceImpl implements LeaseService {
         if (lease.getSmokers() == null) lease.setSmokers(false);
 
         return leaseRepository.save(lease);
+    }
+
+    // 🔥 NUEVO: tenants disponibles
+    @Override
+    public List<TenantDto> getAvailableTenants() {
+        return tenantRepository.getAll()
+                .stream()
+                .filter(t -> !leaseRepository.existsActiveLeaseByTenantId(t.getId()))
+                .toList();
+    }
+
+    // 🔥 NUEVO: unidades disponibles
+    @Override
+    public List<UnitDto> getAvailableUnits() {
+        return unitRepository.getAll()
+                .stream()
+                .filter(u -> !leaseRepository.existsActiveLeaseByUnitId(u.getId()))
+                .toList();
+    }
+
+    @Override
+    public Optional<LeaseDto> getActiveLeaseByUnitId(Long unitId) {
+        return leaseRepository.getAll()
+                .stream()
+                .filter(l -> l.getUnitId().equals(unitId) && l.getEndDate() == null)
+                .findFirst();
     }
 }

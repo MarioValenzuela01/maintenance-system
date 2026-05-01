@@ -112,4 +112,83 @@ public class UnitController {
         unitService.delete(id);
         return "redirect:/units";
     }
+
+    @GetMapping("/details/{id}")
+    public String details(@PathVariable("id") Long id, Model model) {
+        var unit = unitService.get(id);
+
+        if (unit.isEmpty()) {
+            return "redirect:/units";
+        }
+
+        model.addAttribute("unit", unit.get());
+
+        return "units/details";
+    }
+
+    @GetMapping("/details/by-number/{unitNumber}")
+    public String detailsByUnitNumber(@PathVariable("unitNumber") String unitNumber, Model model) {
+
+        var unit = unitService.getByUnitNumber(unitNumber);
+
+        if (unit.isEmpty()) {
+            return "redirect:/units";
+        }
+
+        var unitDto = unit.get();
+
+        // 🔥 SOLO UNA VEZ
+        var activeLease = leaseService.getActiveLeaseByUnitId(unitDto.getId());
+
+        String status = activeLease.isPresent() ? "Occupied" : "Available";
+
+        model.addAttribute("unit", unitDto);
+        model.addAttribute("statusCalculated", status);
+        model.addAttribute("activeLease", activeLease.orElse(null)); // 🔥 CLAVE
+
+        return "units/details";
+    }
+
+    @GetMapping("/table")
+    public String table(@RequestParam(name="page", defaultValue = "0") int page, Model model) {
+        List<UnitDto> units = unitService.getAll();
+        List<LeaseDto> leases = leaseService.getAll();
+
+        for (UnitDto unitDto : units) {
+            boolean isOccupied = leases.stream()
+                    .anyMatch(lease -> lease.getUnitId().equals(unitDto.getId()) && lease.getEndDate() == null);
+
+            unitDto.setStatus(isOccupied ? "Occupied" : "Not Occupied");
+        }
+
+        int pageSize = 10;
+        int totalPages = (int) Math.ceil((double) units.size() / pageSize);
+
+        if (page < 0) {
+            page = 0;
+        }
+
+        if (totalPages > 0 && page >= totalPages) {
+            page = totalPages - 1;
+        }
+
+        int start = page * pageSize;
+        int end = Math.min(start + pageSize, units.size());
+
+        List<UnitDto> pagedUnits = new ArrayList<>();
+
+        if (!units.isEmpty() && start < units.size()) {
+            pagedUnits = units.subList(start, end);
+        }
+
+        model.addAttribute("units", pagedUnits);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", totalPages);
+
+        return "units/list :: unitsTable";
+    }
+
+
+
+
 }

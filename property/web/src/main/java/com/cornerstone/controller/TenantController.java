@@ -35,4 +35,33 @@ public class TenantController {
         tenantService.create(tenant);
         return "redirect:/tenants";
     }
+    @GetMapping("/edit/{id}")
+    public String editTenant(@PathVariable("id") Long id, Model model) {
+        Optional<TenantDto> tenant = tenantService.get(id);
+
+        if (tenant.isEmpty()) {
+            return "redirect:/tenants";
+        }
+
+        model.addAttribute("tenant", tenant.get());
+        return "tenants/edit";
+    }
+
+    @PostMapping("/edit/{id}")
+    public String updateTenant(@PathVariable("id") Long id, @ModelAttribute("tenant") TenantDto tenant) {
+        tenantService.update(id, tenant);
+        return "redirect:/tenants";
+    }
+
+    @GetMapping("/delete/{id}")
+    public String deleteTenant(@PathVariable("id") Long id) {
+        try {
+            tenantService.delete(id);
+        } catch (Exception ex) {
+            return "redirect:/tenants?deleteError=true";
+        }
+
+        return "redirect:/tenants";
+    }
+
 }

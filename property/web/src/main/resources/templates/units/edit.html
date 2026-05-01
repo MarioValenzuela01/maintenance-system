@@ -7,35 +7,100 @@
 </head>
 <body class="container mt-4">
 
-<h1 class="text-primary">Editar Unidad</h1>
+<h1 class="text-primary">Edit Unit</h1>
 <hr/>
 
-<div class="row">
-    <div class="col-md-6">
-        <div class="card shadow-sm p-4">
-            <form th:action="@{/units/edit/{id}(id=${unit.id})}" th:object="${unit}" method="post">
+<div class="card shadow-sm mb-4">
+    <div class="card-header bg-primary text-white">
+        <h4 class="mb-0" th:text="'Edit Unit ' + ${unit.unitNumber}"></h4>
+    </div>
 
-                <!-- CAMPO OCULTO REQUERIDO PARA QUE SPRING SEPA QUÉ REGISTRO ACTUALIZAR -->
-                <input type="hidden" th:field="*{id}" />
+    <div class="card-body">
+        <form th:action="@{/units/edit/{id}(id=${unit.id})}" th:object="${unit}" method="post">
 
-                <div class="form-group mb-3">
-                    <label class="control-label fw-bold">Número o Nombre de la Unidad *</label>
-                    <input type="text" th:field="*{unitNumber}" class="form-control" required />
-                </div>
+            <input type="hidden" th:field="*{id}" />
 
-                <div class="form-group mb-3">
-                    <label class="control-label fw-bold">Dirección *</label>
-                    <input type="text" th:field="*{address}" class="form-control" required />
-                </div>
+            <h5>Basic Information</h5>
 
-                <div class="form-group mt-4">
-                    <button type="submit" class="btn btn-primary px-4">Guardar Cambios</button>
-                    <a th:href="@{/units}" class="btn btn-secondary ms-2">Cancelar</a>
-                </div>
+            <div class="mb-3">
+                <label class="form-label fw-bold">Unit Number *</label>
+                <input type="text" th:field="*{unitNumber}" class="form-control" required />
+            </div>
 
-            </form>
-        </div>
+            <div class="mb-3">
+                <label class="form-label fw-bold">Address *</label>
+                <input type="text" th:field="*{address}" class="form-control" required />
+            </div>
+
+
+            <div class="mb-3">
+                <label class="form-label fw-bold">Ownership Type</label>
+                <input type="text" th:field="*{ownershipType}" class="form-control" />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-bold">Program Type</label>
+                <input type="text" th:field="*{programType}" class="form-control" />
+            </div>
+
+            <div class="form-check mb-3">
+                <input type="checkbox" th:field="*{managedByCornerstone}" class="form-check-input" id="managedByCornerstone">
+                <label class="form-check-label fw-bold" for="managedByCornerstone">
+                    Managed by Cornerstone
+                </label>
+            </div>
+
+            <hr/>
+
+            <h5>Unit Characteristics</h5>
+
+            <div class="mb-3">
+                <label class="form-label fw-bold">Bedrooms</label>
+                <input type="number" th:field="*{bedrooms}" class="form-control" min="0" />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-bold">Bathrooms</label>
+                <input type="number" th:field="*{bathrooms}" class="form-control" min="0" />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-bold">Floors</label>
+                <input type="number" th:field="*{floors}" class="form-control" min="1" />
+            </div>
+
+            <div class="form-check mb-3">
+                <input type="checkbox" th:field="*{hasBasement}" class="form-check-input" id="hasBasement">
+                <label class="form-check-label fw-bold" for="hasBasement">
+                    Basement
+                </label>
+            </div>
+
+            <hr/>
+
+            <h5>Notes</h5>
+
+            <div class="mb-3">
+                <textarea th:field="*{notes}" class="form-control" rows="4"></textarea>
+            </div>
+
+            <div class="mt-4">
+                <button type="submit" class="btn btn-primary">
+                    Save Changes
+                </button>
+
+                <a th:href="@{/units/details/{id}(id=${unit.id})}" class="btn btn-secondary ms-2">
+                    Back to Details
+                </a>
+
+                <a th:href="@{/units}" class="btn btn-outline-secondary ms-2">
+                    Back to Units
+                </a>
+            </div>
+
+        </form>
     </div>
 </div>
+
 </body>
 </html>

@@ -1,15 +1,30 @@
 package com.cornerstone.service;
 
 import com.cornerstone.dto.LeaseDto;
+import com.cornerstone.dto.TenantDto;
+import com.cornerstone.dto.UnitDto;
+
 import java.util.List;
 import java.util.Optional;
 
 public interface LeaseService {
+
     List<LeaseDto> getAll();
+
     Optional<LeaseDto> get(Long id);
+
     LeaseDto create(LeaseDto lease);
 
-    // Regla de negocio: Registrar que un arrendatario dejó la unidad
-    LeaseDto endLease(Long leaseId);
     LeaseDto update(Long id, LeaseDto lease);
+
+    LeaseDto endLease(Long leaseId);
+
+    // 🔥 AGREGA ESTO
+    List<TenantDto> getAvailableTenants();
+
+    List<UnitDto> getAvailableUnits();
+
+    Optional<LeaseDto> getActiveLeaseByUnitId(Long unitId);
+
+
 }
