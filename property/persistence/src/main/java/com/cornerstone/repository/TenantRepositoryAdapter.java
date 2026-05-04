@@ -44,4 +44,14 @@ public class TenantRepositoryAdapter implements TenantRepository {
     public void delete(Long id) {
         jpaRepository.deleteById(id);
     }
+
+    @Override
+    public boolean existsByEmailAndActiveTrue(String email) {
+        return false;
+    }
+
+    @Override
+    public boolean existsByEmailAndActiveTrueAndIdNot(String email, Long id) {
+        return false;
+    }
 }

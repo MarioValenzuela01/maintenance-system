@@ -8,7 +8,7 @@
 <body class="container mt-4">
 
 <h1 class="text-primary">Editar Arrendatario</h1>
-<hr/>
+<hr>
 
 <div class="row">
     <div class="col-md-6">
@@ -16,26 +16,48 @@
             <form th:action="@{/tenants/edit/{id}(id=${tenant.id})}" th:object="${tenant}" method="post">
 
                 <!-- CAMPO OCULTO REQUERIDO -->
-                <input type="hidden" th:field="*{id}" />
+                <input type="hidden" th:field="*{id}">
 
                 <div class="form-group mb-3">
                     <label class="control-label fw-bold">Nombre *</label>
-                    <input type="text" th:field="*{firstName}" class="form-control" required />
+                    <input type="text" th:field="*{firstName}" class="form-control" required>
                 </div>
 
                 <div class="form-group mb-3">
                     <label class="control-label fw-bold">Apellido *</label>
-                    <input type="text" th:field="*{lastName}" class="form-control" required />
+                    <input type="text" th:field="*{lastName}" class="form-control" required>
                 </div>
 
                 <div class="form-group mb-3">
                     <label class="control-label fw-bold">Email *</label>
-                    <input type="email" th:field="*{email}" class="form-control" required />
+                    <input type="email" th:field="*{email}" class="form-control" required>
                 </div>
 
                 <div class="form-group mb-3">
                     <label class="control-label fw-bold">Number Phone *</label>
-                    <input type="text" th:field="*{phone}" class="form-control" required />
+                    <input type="text" th:field="*{phone}" class="form-control" required>
+                </div>
+
+                <!-- AGREGADO: sección de contacto de emergencia -->
+                <hr>
+                <h5>Emergency Contact</h5>
+
+                <div class="form-group mb-3">
+                    <label class="control-label fw-bold">Name</label>
+                    <!-- AGREGADO: campo emergencyContactName -->
+                    <input type="text" th:field="*{emergencyContactName}" class="form-control">
+                </div>
+
+                <div class="form-group mb-3">
+                    <label class="control-label fw-bold">Phone</label>
+                    <!-- AGREGADO: campo emergencyContactPhone -->
+                    <input type="text" th:field="*{emergencyContactPhone}" class="form-control">
+                </div>
+
+                <!-- AGREGADO: campo de notas -->
+                <div class="form-group mb-3">
+                    <label class="control-label fw-bold">Notes</label>
+                    <textarea th:field="*{notes}" class="form-control" rows="3"></textarea>
                 </div>
 
                 <div class="form-group mt-4">
@@ -47,5 +69,6 @@
         </div>
     </div>
 </div>
+
 </body>
 </html>

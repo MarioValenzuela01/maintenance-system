@@ -20,12 +20,13 @@ public class UnitMapper implements EntityMapper<UnitDto, UnitEntity> {
                 .setProgramType(entity.getProgramType())
                 .setManagedByCornerstone(entity.getManagedByCornerstone())
                 .setNotes(entity.getNotes())
-
-                // 🔥 NUEVOS CAMPOS
                 .setBedrooms(entity.getBedrooms())
                 .setBathrooms(entity.getBathrooms())
                 .setFloors(entity.getFloors())
-                .setHasBasement(entity.getHasBasement());
+                .setHasBasement(entity.getHasBasement())
+                // AGREGADO: mapeamos archived en ambas direcciones
+                .setArchived(entity.getArchived())
+                .setGoogleMapsUrl(entity.getGoogleMapsUrl());
     }
 
     @Override
@@ -41,11 +42,12 @@ public class UnitMapper implements EntityMapper<UnitDto, UnitEntity> {
                 .setProgramType(dto.getProgramType())
                 .setManagedByCornerstone(dto.getManagedByCornerstone())
                 .setNotes(dto.getNotes())
-
-                // 🔥 NUEVOS CAMPOS
                 .setBedrooms(dto.getBedrooms())
                 .setBathrooms(dto.getBathrooms())
                 .setFloors(dto.getFloors())
-                .setHasBasement(dto.getHasBasement());
+                .setHasBasement(dto.getHasBasement())
+                // AGREGADO: mapeamos archived en ambas direcciones
+                .setArchived(dto.getArchived())
+                .setGoogleMapsUrl(dto.getGoogleMapsUrl());
     }
 }

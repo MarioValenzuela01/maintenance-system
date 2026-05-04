@@ -9,4 +9,8 @@ public interface TenantRepository {
     Optional<TenantDto> get(Long id);
     TenantDto save(TenantDto tenant);
     void delete(Long id);
+
+    boolean existsByEmailAndActiveTrue(String email);
+
+    boolean existsByEmailAndActiveTrueAndIdNot(String email, Long id);
 }

@@ -1,22 +1,37 @@
+.main-wrapper {
+    width: 60%;
+    margin: 0 auto;
+    padding-bottom: 50px;
+}
+@media (max-width: 992px) {
+    .main-wrapper { width: 90%; }
+}
 #mapWrapper {
+    width: 100%;
+    height: 70vh; /* Ajusta según necesites */
     overflow: hidden;
-    height: 600px;
-    border: 1px solid #ddd;
+    position: relative;
+    background-color: #eee;
+    touch-action: none;
     cursor: grab;
-    background-color: #f8f9fa;
+    display: block; /* Importante: block para cálculos de coordenadas */
 }
 
 #mapContent {
-    position: relative;
     width: 1000px;
-    height: auto;
-    transform-origin: 0 0;
+    height: 1065px;
+    position: absolute;
+    transform-origin: 0 0; /* Necesario para la matemática de Panzoom */
+    visibility: hidden;
+    display: block;
 }
 
 #unitMap {
-    display: block;
     width: 1000px;
-    height: auto;
+    height: 1065px;
+    display: block;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
 }
 
 /* ===== BOTONES BASE ===== */
@@ -78,4 +93,22 @@
 .unit-btn-diagonal-v:hover {
     border: 4px solid #0d6efd !important;
     background-color: rgba(13, 110, 253, 0.1) !important;
+}
+
+.modal-backdrop.show {
+    opacity: 0.8;
+}
+
+
+ .modal-backdrop.show {
+     opacity: 0.8;
+ }
+
+#unitMapModal .modal-dialog {
+    max-width: 95vw;
+}
+
+#unitMapModal .modal-body {
+    height: 70vh;
+    overflow: hidden;
 }

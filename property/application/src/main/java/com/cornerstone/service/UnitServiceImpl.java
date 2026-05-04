@@ -4,6 +4,7 @@ import com.cornerstone.dto.UnitDto;
 import com.cornerstone.repository.UnitRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,9 +17,32 @@ public class UnitServiceImpl implements UnitService {
         this.unitRepository = unitRepository;
     }
 
+    // AGREGADO: extrae el número al inicio del unitNumber para ordenar numéricamente
+    // Ejemplos: "9" -> 9, "100" -> 100, "140-1" -> 140, "Shed" -> Integer.MAX_VALUE (va al final)
+    private int extractLeadingNumber(String unitNumber) {
+        if (unitNumber == null) return Integer.MAX_VALUE;
+        try {
+            // toma solo la parte numérica inicial antes de cualquier letra o guión
+            String numeric = unitNumber.split("[^0-9]")[0];
+            if (numeric.isEmpty()) return Integer.MAX_VALUE;
+            return Integer.parseInt(numeric);
+        } catch (NumberFormatException e) {
+            // si no tiene número (ej: "Shed", "C-Can") va al final
+            return Integer.MAX_VALUE;
+        }
+    }
+
     @Override
     public List<UnitDto> getAll() {
-        return unitRepository.getAll();
+        return unitRepository.getAll()
+                .stream()
+                // CAMBIADO: ahora ordena numéricamente en vez de alfabéticamente
+                // primero por número principal, luego alfabético para desempatar (ej: 140-1, 140-2)
+                .sorted(Comparator.comparingInt(
+                                (UnitDto u) -> extractLeadingNumber(u.getUnitNumber()))
+                        .thenComparing(UnitDto::getUnitNumber,
+                                Comparator.nullsLast(Comparator.naturalOrder())))
+                .toList();
     }
 
     @Override

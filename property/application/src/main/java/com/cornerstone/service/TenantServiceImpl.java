@@ -32,11 +32,32 @@ public class TenantServiceImpl implements TenantService {
 
     @Override
     public TenantDto create(TenantDto tenant) {
+        if (tenant.getEmail() != null && !tenant.getEmail().isBlank()) {
+
+            boolean exists = tenantRepository
+                    .existsByEmailAndActiveTrue(tenant.getEmail());
+
+            if (exists) {
+                throw new RuntimeException("Email already used by an active tenant");
+            }
+        }
+
         return tenantRepository.save(tenant);
     }
 
     @Override
     public TenantDto update(Long id, TenantDto tenant) {
+        if (tenant.getEmail() != null && !tenant.getEmail().isBlank()) {
+
+            boolean exists = tenantRepository
+                    .existsByEmailAndActiveTrueAndIdNot(tenant.getEmail(), id);
+
+            if (exists) {
+                throw new RuntimeException("Email already used by another active tenant");
+            }
+        }
+
+
         tenant.setId(id);
         return tenantRepository.save(tenant);
     }

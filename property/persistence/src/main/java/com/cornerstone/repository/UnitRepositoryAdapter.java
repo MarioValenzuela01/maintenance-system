@@ -21,7 +21,8 @@ public class UnitRepositoryAdapter implements UnitRepository {
 
     @Override
     public List<UnitDto> getAll() {
-        return mapper.toDTO(jpaRepository.findAll());
+        // CAMBIADO: antes era findAll(), ahora solo trae las no archivadas
+        return mapper.toDTO(jpaRepository.findByArchivedFalse());
     }
 
     @Override
@@ -37,11 +38,16 @@ public class UnitRepositoryAdapter implements UnitRepository {
 
     @Override
     public void delete(Long id) {
-        jpaRepository.deleteById(id);
+        // CAMBIADO: antes borraba físico, ahora hace soft delete
+        jpaRepository.findById(id).ifPresent(unit -> {
+            unit.setArchived(true); // AGREGADO: marcamos como archivada
+            jpaRepository.save(unit);
+        });
     }
 
     @Override
     public Optional<UnitDto> getByUnitNumber(String unitNumber) {
-        return mapper.toDTO(jpaRepository.findByUnitNumber(unitNumber));
+        // CAMBIADO: solo busca entre las no archivadas
+        return mapper.toDTO(jpaRepository.findByUnitNumberAndArchivedFalse(unitNumber));
     }
 }

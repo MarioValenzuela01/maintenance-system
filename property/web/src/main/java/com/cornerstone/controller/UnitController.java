@@ -93,7 +93,7 @@ public class UnitController {
     @PostMapping("/edit/{id}")
     public String editSubmit(@PathVariable("id") Long id, @ModelAttribute("unit") UnitDto unit) {
         unitService.update(id, unit);
-        return "redirect:/units";
+        return "redirect:/units/details/" + id;
     }
 
     // --- ELIMINAR (Delete) ---
@@ -121,7 +121,15 @@ public class UnitController {
             return "redirect:/units";
         }
 
-        model.addAttribute("unit", unit.get());
+        var unitDto = unit.get();
+
+        var activeLease = leaseService.getActiveLeaseByUnitId(unitDto.getId());
+
+        String status = activeLease.isPresent() ? "Occupied" : "Available";
+
+        model.addAttribute("unit", unitDto);
+        model.addAttribute("statusCalculated", status);
+        model.addAttribute("activeLease", activeLease.orElse(null));
 
         return "units/details";
     }
@@ -188,6 +196,10 @@ public class UnitController {
         return "units/list :: unitsTable";
     }
 
+    @GetMapping("/map")
+    public String map() {
+        return "units/map";
+    }
 
 
 

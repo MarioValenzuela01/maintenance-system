@@ -1,90 +1,79 @@
-document.addEventListener("DOMContentLoaded", function () {
+let panzoom = null;
+const contentWidth = 1000;
+const contentHeight = 1065;
 
-    console.log("MAP JS LOADED");
+function toggleMap() {
+    const container = document.getElementById("inlineMapContainer");
+    const btn = document.getElementById("mapToggleBtn");
 
+    if (container.style.display === "none") {
+        container.style.display = "block";
+        btn.innerText = "Hide Map";
+        btn.classList.replace("btn-outline-success", "btn-danger");
+
+        // Ejecución inmediata y una de respaldo para asegurar renderizado en pantallas grandes
+        centerMap();
+        setTimeout(centerMap, 60);
+    } else {
+        container.style.display = "none";
+        btn.innerText = "View Interactive Map";
+        btn.classList.replace("btn-danger", "btn-outline-success");
+    }
+}
+
+function centerMap() {
     const element = document.getElementById("mapContent");
     const wrapper = document.getElementById("mapWrapper");
+    if (!element || !wrapper) return;
 
-    console.log("element:", element);
-    console.log("wrapper:", wrapper);
+    // Obtener dimensiones exactas del contenedor visible
+    const rect = wrapper.getBoundingClientRect();
+    const w = rect.width;
+    const h = rect.height;
 
-    if (!element || !wrapper) {
-        console.error("mapContent or mapWrapper not found");
-        return;
+    if (w === 0 || h === 0) return;
+
+    // Calcular escala para que el mapa entre perfecto (Zoom Out)
+    const scale = Math.min(w / contentWidth, h / contentHeight);
+
+    if (panzoom) {
+        panzoom.destroy();
     }
 
-    // TEST GLOBAL
-    document.addEventListener("click", function () {
-        console.log("DOCUMENT CLICK TEST");
-    }, true);
-
-    document.addEventListener("pointerdown", function () {
-        console.log("DOCUMENT POINTERDOWN TEST");
-    }, true);
-
-    const panzoom = Panzoom(element, {
+    // Inicializar Panzoom
+    panzoom = Panzoom(element, {
         maxScale: 5,
-        minScale: 1,
-        contain: "outside",
-        disableDoubleClickZoom: true
+        minScale: scale,
+        initialScale: scale,
+        contain: 'outside',
+        cursor: "grab",
+        animate: false // Evita el deslizamiento al cargar
     });
 
-    wrapper.addEventListener("wheel", panzoom.zoomWithWheel);
+    // Activar zoom con rueda del ratón
+    wrapper.addEventListener('wheel', panzoom.zoomWithWheel);
 
-    let startX = 0;
-    let startY = 0;
-    let isDragging = false;
+    // CENTRADO MATEMÁTICO:
+    // Calculamos el espacio sobrante en X e Y para centrar el bloque escalado
+    const x = (w - (contentWidth * scale)) / 2;
+    const y = (h - (contentHeight * scale)) / 2;
 
-    wrapper.addEventListener("pointerdown", function (e) {
-        isDragging = false;
-        startX = e.clientX;
-        startY = e.clientY;
-    }, true);
+    // Forzar posición sin animaciones
+    panzoom.pan(x, y, { force: true });
 
-    wrapper.addEventListener("pointermove", function (e) {
-        const diffX = Math.abs(e.clientX - startX);
-        const diffY = Math.abs(e.clientY - startY);
+    // Mostrar el mapa
+    element.style.visibility = "visible";
+    element.style.display = "block";
+}
 
-        if (diffX > 8 || diffY > 8) {
-            isDragging = true;
-        }
-    }, true);
-
-    // Doble click para abrir unidad
-    document.addEventListener("dblclick", function (e) {
-        const link = e.target.closest(".unit-btn, .unit-btn-v, .unit-btn-hall");
-
-        if (!link) return;
-        if (!wrapper.contains(link)) return;
-
-        window.location.href = link.href;
-    }, true);
-
-    function fitToScreen() {
-        const wrapperWidth = wrapper.clientWidth;
-        const wrapperHeight = wrapper.clientHeight;
-
-        const contentWidth = element.offsetWidth;
-        const contentHeight = element.offsetHeight;
-
-        const scaleX = wrapperWidth / contentWidth;
-        const scaleY = wrapperHeight / contentHeight;
-        const scale = Math.min(scaleX, scaleY);
-
-        const newWidth = contentWidth * scale;
-        const newHeight = contentHeight * scale;
-
-        const x = (wrapperWidth - newWidth) / 2;
-        const y = (wrapperHeight - newHeight) / 2;
-
-        panzoom.setOptions({ minScale: scale });
-
-        panzoom.zoom(scale, { animate: false });
-        panzoom.pan(x / scale, y / scale, { animate: false });
+window.addEventListener("resize", function() {
+    const container = document.getElementById("inlineMapContainer");
+    if (container && container.style.display === "block") {
+        centerMap();
     }
+});
 
-    setTimeout(fitToScreen, 100);
-    window.addEventListener("resize", fitToScreen);
+
 
 //     // Click para copiar coordenadas
 //     document.addEventListener("pointerup", function (e) {
@@ -131,4 +120,3 @@ document.addEventListener("DOMContentLoaded", function () {
 //         }, 100);
 //     }, true);
 //
-});
