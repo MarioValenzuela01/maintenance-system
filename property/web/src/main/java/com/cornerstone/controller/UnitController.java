@@ -3,6 +3,7 @@ package com.cornerstone.controller;
 import com.cornerstone.dto.LeaseDto;
 import com.cornerstone.dto.UnitDto;
 import com.cornerstone.service.LeaseService;
+import com.cornerstone.service.ManagerService;
 import com.cornerstone.service.UnitService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,10 +19,13 @@ public class UnitController {
 
     private final UnitService unitService;
     private final LeaseService leaseService;
+    private final ManagerService managerService;
 
-    public UnitController(UnitService unitService, LeaseService leaseService) {
+    public UnitController(UnitService unitService, LeaseService leaseService, ManagerService managerService) {
         this.unitService = unitService;
         this.leaseService = leaseService;
+        this.managerService = managerService;
+
 
     }
 
@@ -30,12 +34,21 @@ public class UnitController {
     public String list(@RequestParam(name="page", defaultValue = "0") int page, Model model) {
         List<UnitDto> units = unitService.getAll();
         List<LeaseDto> leases = leaseService.getAll();
+        List<Long> managedUnitIds = managerService.getManagedUnitIds();
 
         for (UnitDto unitDto : units) {
             boolean isOccupied = leases.stream()
                     .anyMatch(lease -> lease.getUnitId().equals(unitDto.getId()) && lease.getEndDate() == null);
 
-            unitDto.setStatus(isOccupied ? "Occupied" : "Not Occupied");
+            boolean isManaged = managedUnitIds.contains(unitDto.getId());
+
+            if (isOccupied) {
+                unitDto.setStatus("Occupied");
+            } else if (isManaged) {
+                unitDto.setStatus("Managed");
+            } else {
+                unitDto.setStatus("Available");
+            }
         }
 
         // --- NUEVA LÓGICA DE AGRUPACIÓN (15 registros) ---
@@ -124,8 +137,19 @@ public class UnitController {
         var unitDto = unit.get();
 
         var activeLease = leaseService.getActiveLeaseByUnitId(unitDto.getId());
+        List<Long> managedUnitIds = managerService.getManagedUnitIds();
 
-        String status = activeLease.isPresent() ? "Occupied" : "Available";
+        boolean isManaged = managedUnitIds.contains(unitDto.getId());
+
+        String status;
+
+        if (activeLease.isPresent()) {
+            status = "Occupied";
+        } else if (isManaged) {
+            status = "Managed";
+        } else {
+            status = "Available";
+        }
 
         model.addAttribute("unit", unitDto);
         model.addAttribute("statusCalculated", status);
@@ -136,7 +160,6 @@ public class UnitController {
 
     @GetMapping("/details/by-number/{unitNumber}")
     public String detailsByUnitNumber(@PathVariable("unitNumber") String unitNumber, Model model) {
-
         var unit = unitService.getByUnitNumber(unitNumber);
 
         if (unit.isEmpty()) {
@@ -145,14 +168,24 @@ public class UnitController {
 
         var unitDto = unit.get();
 
-        // 🔥 SOLO UNA VEZ
         var activeLease = leaseService.getActiveLeaseByUnitId(unitDto.getId());
+        List<Long> managedUnitIds = managerService.getManagedUnitIds();
 
-        String status = activeLease.isPresent() ? "Occupied" : "Available";
+        boolean isManaged = managedUnitIds.contains(unitDto.getId());
+
+        String status;
+
+        if (activeLease.isPresent()) {
+            status = "Occupied";
+        } else if (isManaged) {
+            status = "Managed";
+        } else {
+            status = "Available";
+        }
 
         model.addAttribute("unit", unitDto);
         model.addAttribute("statusCalculated", status);
-        model.addAttribute("activeLease", activeLease.orElse(null)); // 🔥 CLAVE
+        model.addAttribute("activeLease", activeLease.orElse(null));
 
         return "units/details";
     }
@@ -161,12 +194,22 @@ public class UnitController {
     public String table(@RequestParam(name="page", defaultValue = "0") int page, Model model) {
         List<UnitDto> units = unitService.getAll();
         List<LeaseDto> leases = leaseService.getAll();
+        List<Long> managedUnitIds = managerService.getManagedUnitIds();
 
         for (UnitDto unitDto : units) {
             boolean isOccupied = leases.stream()
-                    .anyMatch(lease -> lease.getUnitId().equals(unitDto.getId()) && lease.getEndDate() == null);
+                    .anyMatch(lease -> lease.getUnitId().equals(unitDto.getId())
+                            && lease.getEndDate() == null);
 
-            unitDto.setStatus(isOccupied ? "Occupied" : "Not Occupied");
+            boolean isManaged = managedUnitIds.contains(unitDto.getId());
+
+            if (isOccupied) {
+                unitDto.setStatus("Occupied");
+            } else if (isManaged) {
+                unitDto.setStatus("Managed");
+            } else {
+                unitDto.setStatus("Available");
+            }
         }
 
         int pageSize = 10;
@@ -195,7 +238,6 @@ public class UnitController {
 
         return "units/list :: unitsTable";
     }
-
     @GetMapping("/map")
     public String map() {
         return "units/map";

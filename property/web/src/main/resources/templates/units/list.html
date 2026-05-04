@@ -211,7 +211,8 @@
                         <td th:text="${u.address}"></td>
                         <td>
                                 <span th:text="${u.status}" class="badge rounded-pill px-3"
-                                      th:classappend="${u.status == 'Occupied'} ? 'bg-danger' : 'bg-success'"></span>
+                                      th:classappend="${u.status == 'Occupied'} ? 'bg-danger' : (${u.status == 'Managed'} ? 'bg-primary' : 'bg-success')">
+</span>
                         </td>
                         <td>
                             <div class="btn-group">

@@ -46,6 +46,7 @@
                         <strong>Status:</strong>
                         <span class="badge bg-success" th:if="${statusCalculated == 'Available'}">Available</span>
                         <span class="badge bg-danger" th:if="${statusCalculated == 'Occupied'}">Occupied</span>
+                        <span class="badge bg-primary" th:if="${statusCalculated == 'Managed'}">Managed</span>
                     </p>
 
                     <div th:if="${activeLease != null}" class="mb-3 text-primary fs-5">

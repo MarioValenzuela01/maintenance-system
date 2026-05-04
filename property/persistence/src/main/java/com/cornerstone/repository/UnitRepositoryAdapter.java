@@ -50,4 +50,9 @@ public class UnitRepositoryAdapter implements UnitRepository {
         // CAMBIADO: solo busca entre las no archivadas
         return mapper.toDTO(jpaRepository.findByUnitNumberAndArchivedFalse(unitNumber));
     }
+
+    @Override
+    public List<UnitDto> getAllByIds(List<Long> ids) {
+        return mapper.toDTO(jpaRepository.findAllById(ids));
+    }
 }
