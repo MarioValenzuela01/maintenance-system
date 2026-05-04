@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<div th:fragment="sidebar">
+
+    <div class="sidebar-card shadow-sm">
+        <div class="text-center mb-3">
+
+            <a th:href="@{/}">
+                <img src="/images/cornerstone-logo.png"
+                     alt="Cornerstone"
+                     style="max-width: 240px; height: auto;">
+            </a>
+
+        </div>
+
+
+        <a th:href="@{/units}" class="sidebar-link">🏘 Units</a>
+        <a th:href="@{/tenants}" class="sidebar-link">👤 Tenants</a>
+        <a th:href="@{/leases}" class="sidebar-link">📄 Leases</a>
+        <a th:href="@{/managers}" class="sidebar-link">🛠 Managers</a>
+    </div>
+
+</div>
+
+</body>
+</html>
