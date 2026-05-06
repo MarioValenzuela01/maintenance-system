@@ -1,57 +1,179 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
+    <meta charset="UTF-8">
     <title>Create Tenant</title>
+
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link th:href="@{/css/home.css?v=11}" rel="stylesheet"/>
 </head>
-<body class="container mt-4">
 
-<h2 class="text-primary">Create Tenant</h2>
-<hr/>
+<body>
 
-<form th:action="@{/tenants/create}" th:object="${tenant}" method="post">
+<div class="page-shell mt-4">
 
-    <div class="mb-3">
-        <label class="form-label">First Name</label>
-        <input type="text" th:field="*{firstName}" class="form-control" required>
+    <!-- SIDEBAR -->
+    <div class="sidebar-wrapper">
+        <div th:replace="~{fragments/sidebar :: sidebar}"></div>
     </div>
 
-    <div class="mb-3">
-        <label class="form-label">Last Name</label>
-        <input type="text" th:field="*{lastName}" class="form-control" required>
+    <!-- CONTENT -->
+    <div class="content-wrapper">
+
+        <h2 class="text-primary">Create Tenant</h2>
+        <hr/>
+
+        <div class="card shadow-sm p-4">
+
+            <form th:action="@{/tenants/create}" th:object="${tenant}" method="post">
+
+                <!-- BASIC -->
+                <h5 class="text-primary">Basic Information</h5>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label>First Name</label>
+                        <input type="text" th:field="*{firstName}" class="form-control" required>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label>Last Name</label>
+                        <input type="text" th:field="*{lastName}" class="form-control" required>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label>Phone</label>
+                        <input type="text" th:field="*{phone}" class="form-control">
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label>Email</label>
+                        <input type="email" th:field="*{email}" class="form-control">
+                    </div>
+                </div>
+
+                <hr>
+
+                <!-- EMERGENCY -->
+                <h5 class="text-primary">Emergency Contact</h5>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label>Name</label>
+                        <input type="text" th:field="*{emergencyContactName}" class="form-control">
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label>Phone</label>
+                        <input type="text" th:field="*{emergencyContactPhone}" class="form-control">
+                    </div>
+                </div>
+
+                <hr>
+
+                <!-- HOUSEHOLD -->
+                <h5 class="text-primary">Household</h5>
+
+                <div class="row">
+                    <div class="col-md-3 mb-3">
+                        <label>Children</label>
+                        <input type="number" min="0" th:field="*{childrenCount}" class="form-control">
+                    </div>
+
+                    <div class="col-md-3 mb-3">
+                        <label>Youth</label>
+                        <input type="number" min="0" th:field="*{youthCount}" class="form-control">
+                    </div>
+
+                    <div class="col-md-3 mb-3">
+                        <label>Adults</label>
+                        <input type="number" min="0" th:field="*{adultsCount}" class="form-control">
+                    </div>
+
+                    <div class="col-md-3 mb-3">
+                        <label>Seniors</label>
+                        <input type="number" min="0" th:field="*{seniorsCount}" class="form-control">
+                    </div>
+                </div>
+
+                <hr>
+
+                <!-- PETS -->
+                <h5 class="text-primary">Pets</h5>
+
+                <div class="row">
+                    <div class="col-md-3 mb-3">
+                        <label>Dogs</label>
+                        <input type="number" min="0" th:field="*{dogsCount}" class="form-control" id="dogsCount">
+                    </div>
+
+                    <div class="col-md-3 mb-3">
+                        <label>Cats</label>
+                        <input type="number" min="0" th:field="*{catsCount}" class="form-control" id="catsCount">
+                    </div>
+
+
+
+                    <div class="col-md-3 mb-3">
+                        <label>Other Pets</label>
+                        <input type="text" th:field="*{otherPets}" class="form-control">
+                    </div>
+                </div>
+
+                <!-- HIDDEN FIELDS -->
+                <input type="hidden" th:field="*{dogNames}" id="dogNames">
+                <input type="hidden" th:field="*{dogInfo}" id="dogInfo">
+                <input type="hidden" th:field="*{catNames}" id="catNames">
+
+                <!-- DYNAMIC INPUTS -->
+                <div class="row">
+                    <div class="col-md-6">
+                        <div id="dogNamesContainer"></div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div id="catNamesContainer"></div>
+                    </div>
+                </div>
+
+                <hr>
+
+                <!-- VEHICLES -->
+                <h5 class="text-primary">Vehicles & Lifestyle</h5>
+
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label>Cars</label>
+                        <input type="number" min="0" th:field="*{carsCount}" class="form-control">
+                    </div>
+
+                    <div class="col-md-4 mb-3 d-flex align-items-end">
+                        <div class="form-check">
+                            <input type="checkbox" th:field="*{smokers}" class="form-check-input">
+                            <label class="form-check-label">Smokers</label>
+                        </div>
+                    </div>
+                </div>
+
+                <hr>
+
+                <!-- NOTES -->
+                <h5 class="text-primary">Notes</h5>
+
+                <textarea th:field="*{notes}" class="form-control mb-3"></textarea>
+
+                <button class="btn btn-primary px-4">Save</button>
+                <a th:href="@{/tenants}" class="btn btn-secondary ms-2">Cancel</a>
+
+            </form>
+
+        </div>
+
     </div>
+</div>
 
-    <div class="mb-3">
-        <label class="form-label">Phone</label>
-        <input type="text" th:field="*{phone}" class="form-control">
-    </div>
-
-    <div class="mb-3">
-        <label class="form-label">Email</label>
-        <input type="email" th:field="*{email}" class="form-control">
-    </div>
-
-    <h5>Emergency Contact</h5>
-
-    <div class="mb-3">
-        <label class="form-label">Name</label>
-        <input type="text" th:field="*{emergencyContactName}" class="form-control">
-    </div>
-
-    <div class="mb-3">
-        <label class="form-label">Phone</label>
-        <input type="text" th:field="*{emergencyContactPhone}" class="form-control">
-    </div>
-
-    <div class="mb-3">
-        <label class="form-label">Notes</label>
-        <textarea th:field="*{notes}" class="form-control"></textarea>
-    </div>
-
-    <button class="btn btn-primary">Save</button>
-    <a th:href="@{/tenants}" class="btn btn-secondary">Cancel</a>
-
-</form>
-
+<script th:src="@{/js/tenant-pets.js}"></script>
 </body>
 </html>

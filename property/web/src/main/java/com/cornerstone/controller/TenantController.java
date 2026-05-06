@@ -64,4 +64,16 @@ public class TenantController {
         return "redirect:/tenants";
     }
 
+    @GetMapping("/details/{id}")
+    public String details(@PathVariable("id") Long id, Model model) {
+        var tenant = tenantService.get(id);
+
+        if (tenant.isEmpty()) {
+            return "redirect:/tenants";
+        }
+
+        model.addAttribute("tenant", tenant.get());
+        return "tenants/details";
+    }
+
 }

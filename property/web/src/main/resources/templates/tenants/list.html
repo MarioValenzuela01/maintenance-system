@@ -45,7 +45,13 @@
                     <tbody>
                     <tr th:each="t : ${tenants}">
                         <td th:text="${t.id}"></td>
-                        <td th:text="${t.firstName + ' ' + t.lastName}"></td>
+                        <td>
+                            <a th:href="@{/tenants/details/{id}(id=${t.id})}"
+                               th:text="${t.firstName + ' ' + t.lastName}"
+                               class="text-decoration-none fw-bold">
+
+                            </a>
+                        </td>
                         <td th:text="${t.email}"></td>
                         <td th:text="${t.phone}"></td>
 

@@ -10,6 +10,7 @@ public class TenantEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // BASIC
     @Column(name = "first_name", nullable = false)
     private String firstName;
 
@@ -22,20 +23,59 @@ public class TenantEntity {
     @Column(name = "phone_number", nullable = false)
     private String phoneNumber;
 
-    @Column(nullable = false)
+    @Column(name = "active", nullable = false)
     private Boolean active = true;
 
-    // AGREGADO: campo para el nombre del contacto de emergencia
+    // EMERGENCY
     @Column(name = "emergency_contact_name")
     private String emergencyContactName;
 
-    // AGREGADO: campo para el teléfono del contacto de emergencia
     @Column(name = "emergency_contact_phone")
     private String emergencyContactPhone;
 
-    // AGREGADO: campo para notas adicionales del tenant
-    @Column(columnDefinition = "TEXT")
+    // NOTES
+    @Column(name = "notes", columnDefinition = "TEXT")
     private String notes;
+
+    // HOUSEHOLD
+    @Column(name = "children_count")
+    private Integer childrenCount;
+
+    @Column(name = "youth_count")
+    private Integer youthCount;
+
+    @Column(name = "adults_count")
+    private Integer adultsCount;
+
+    @Column(name = "seniors_count")
+    private Integer seniorsCount;
+
+    // PETS
+    @Column(name = "dogs_count")
+    private Integer dogsCount;
+
+    @Column(name = "cats_count")
+    private Integer catsCount;
+
+    @Column(name = "dog_names", columnDefinition = "TEXT")
+    private String dogNames;
+
+    @Column(name = "cat_names", columnDefinition = "TEXT")
+    private String catNames;
+
+    @Column(name = "dog_info", columnDefinition = "TEXT")
+    private String dogInfo;
+
+    @Column(name = "other_pets")
+    private String otherPets;
+
+    // VEHICLES
+    @Column(name = "cars_count")
+    private Integer carsCount;
+
+    // LIFESTYLE
+    @Column(name = "smokers")
+    private Boolean smokers;
 
     public TenantEntity() {}
 
@@ -57,21 +97,58 @@ public class TenantEntity {
     public Boolean getActive() { return active; }
     public TenantEntity setActive(Boolean active) { this.active = active; return this; }
 
-    // AGREGADO: getter y setter para emergencyContactName
     public String getEmergencyContactName() { return emergencyContactName; }
     public TenantEntity setEmergencyContactName(String emergencyContactName) {
         this.emergencyContactName = emergencyContactName;
         return this;
     }
 
-    // AGREGADO: getter y setter para emergencyContactPhone
     public String getEmergencyContactPhone() { return emergencyContactPhone; }
     public TenantEntity setEmergencyContactPhone(String emergencyContactPhone) {
         this.emergencyContactPhone = emergencyContactPhone;
         return this;
     }
 
-    // AGREGADO: getter y setter para notes
     public String getNotes() { return notes; }
     public TenantEntity setNotes(String notes) { this.notes = notes; return this; }
+
+    // HOUSEHOLD
+    public Integer getChildrenCount() { return childrenCount; }
+    public void setChildrenCount(Integer childrenCount) { this.childrenCount = childrenCount; }
+
+    public Integer getYouthCount() { return youthCount; }
+    public void setYouthCount(Integer youthCount) { this.youthCount = youthCount; }
+
+    public Integer getAdultsCount() { return adultsCount; }
+    public void setAdultsCount(Integer adultsCount) { this.adultsCount = adultsCount; }
+
+    public Integer getSeniorsCount() { return seniorsCount; }
+    public void setSeniorsCount(Integer seniorsCount) { this.seniorsCount = seniorsCount; }
+
+    // PETS
+    public Integer getDogsCount() { return dogsCount; }
+    public void setDogsCount(Integer dogsCount) { this.dogsCount = dogsCount; }
+
+    public Integer getCatsCount() { return catsCount; }
+    public void setCatsCount(Integer catsCount) { this.catsCount = catsCount; }
+
+    public String getDogInfo() {return dogInfo;}
+    public TenantEntity setDogInfo(String dogInfo) {this.dogInfo = dogInfo;return this;}
+
+    public String getDogNames() { return dogNames; }
+    public void setDogNames(String dogNames) { this.dogNames = dogNames; }
+
+    public String getCatNames() { return catNames; }
+    public void setCatNames(String catNames) { this.catNames = catNames; }
+
+    public String getOtherPets() { return otherPets; }
+    public void setOtherPets(String otherPets) { this.otherPets = otherPets; }
+
+    // VEHICLES
+    public Integer getCarsCount() { return carsCount; }
+    public void setCarsCount(Integer carsCount) { this.carsCount = carsCount; }
+
+    // LIFESTYLE
+    public Boolean getSmokers() { return smokers; }
+    public void setSmokers(Boolean smokers) { this.smokers = smokers; }
 }
