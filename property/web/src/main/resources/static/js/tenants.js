@@ -104,31 +104,9 @@ function formatPhoneNumber(input) {
 
     let numbers = input.value.replace(/\D/g, '');
 
-    // Limit to 10 digits
     numbers = numbers.substring(0, 10);
 
-    // 1-3 digits
-    if (numbers.length <= 3) {
-        input.value = numbers;
-    }
-
-    // 4-6 digits
-    else if (numbers.length <= 6) {
-        input.value =
-            `(${numbers.substring(0, 3)}) ${numbers.substring(3)}`;
-    }
-
-    // Exactly 7 digits → unknown area code
-    else if (numbers.length === 7) {
-        input.value =
-            `(---) ${numbers.substring(0, 3)}-${numbers.substring(3)}`;
-    }
-
-    // 8-10 digits → normal phone format
-    else {
-        input.value =
-            `(${numbers.substring(0, 3)}) ${numbers.substring(3, 6)}-${numbers.substring(6)}`;
-    }
+    input.value = numbers;
 }
 
 document.addEventListener("DOMContentLoaded", function () {
