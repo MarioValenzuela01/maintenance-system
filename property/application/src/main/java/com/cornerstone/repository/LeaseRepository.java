@@ -18,4 +18,5 @@ public interface LeaseRepository {
     boolean existsActiveLeaseByTenantId(Long tenantId);
 
     boolean existsActiveLeaseByUnitId(Long unitId);
+
 }

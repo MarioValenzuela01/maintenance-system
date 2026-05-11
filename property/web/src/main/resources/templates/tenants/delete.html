@@ -15,6 +15,11 @@
     <p>Esta acción no se puede deshacer.</p>
 </div>
 
+<div th:if="${deleteError}" class="alert alert-danger">
+    <strong>Cannot deactivate tenant:</strong>
+    <span th:text="${deleteError}"></span>
+</div>
+
 <div class="card shadow-sm p-4 mb-4" style="max-width: 500px;">
     <dl class="row mb-0">
         <dt class="col-sm-4">ID:</dt>

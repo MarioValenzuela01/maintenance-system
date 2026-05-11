@@ -54,14 +54,33 @@ public class TenantController {
     }
 
     @GetMapping("/delete/{id}")
-    public String deleteTenant(@PathVariable("id") Long id) {
+    public String showDeletePage(@PathVariable("id") Long id, Model model) {
+
+        TenantDto tenant = tenantService.get(id)
+                .orElseThrow(() -> new RuntimeException("Tenant not found"));
+
+        model.addAttribute("tenant", tenant);
+
+        return "tenants/delete";
+    }
+
+    @PostMapping("/delete/{id}")
+    public String deleteTenant(@PathVariable("id") Long id, Model model) {
+
         try {
             tenantService.delete(id);
-        } catch (Exception ex) {
-            return "redirect:/tenants?deleteError=true";
-        }
+            return "redirect:/tenants";
 
-        return "redirect:/tenants";
+        } catch (RuntimeException ex) {
+
+            TenantDto tenant = tenantService.get(id)
+                    .orElseThrow(() -> new RuntimeException("Tenant not found"));
+
+            model.addAttribute("tenant", tenant);
+            model.addAttribute("deleteError", ex.getMessage());
+
+            return "tenants/delete";
+        }
     }
 
     @GetMapping("/details/{id}")

@@ -75,4 +75,6 @@ public class LeaseRepositoryAdapter implements LeaseRepository {
     public boolean existsActiveLeaseByUnitId(Long unitId) {
         return jpaRepository.existsByUnitIdAndEndDateIsNull(unitId);
     }
+
+
 }

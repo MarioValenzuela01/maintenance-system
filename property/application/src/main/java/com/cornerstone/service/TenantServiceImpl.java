@@ -1,6 +1,7 @@
 package com.cornerstone.service;
 
 import com.cornerstone.dto.TenantDto;
+import com.cornerstone.repository.LeaseRepository;
 import com.cornerstone.repository.TenantRepository;
 import org.springframework.stereotype.Service;
 
@@ -12,10 +13,13 @@ import java.time.LocalDateTime;
 public class TenantServiceImpl implements TenantService {
 
     private final TenantRepository tenantRepository;
+    private final LeaseRepository leaseRepository;
 
     // Inyección de dependencias
-    public TenantServiceImpl(TenantRepository tenantRepository) {
+    public TenantServiceImpl(TenantRepository tenantRepository,
+                             LeaseRepository leaseRepository) {
         this.tenantRepository = tenantRepository;
+        this.leaseRepository = leaseRepository;
     }
 
     @Override
@@ -67,14 +71,18 @@ public class TenantServiceImpl implements TenantService {
 
     @Override
     public void delete(Long id) {
-        Optional<TenantDto> tenantOpt = tenantRepository.get(id);
 
-        if (tenantOpt.isEmpty()) {
-            return;
+        boolean hasActiveLease = leaseRepository.existsActiveLeaseByTenantId(id);
+
+        if (hasActiveLease) {
+            throw new RuntimeException("Cannot deactivate tenant with an active lease.");
         }
 
-        TenantDto tenant = tenantOpt.get();
-        tenant.setActive(false); // 👈 soft delete
+        TenantDto tenant = tenantRepository.get(id)
+                .orElseThrow(() -> new RuntimeException("Tenant not found"));
+
+        tenant.setActive(false);
+        tenant.setUpdatedAt(LocalDateTime.now());
 
         tenantRepository.save(tenant);
     }
