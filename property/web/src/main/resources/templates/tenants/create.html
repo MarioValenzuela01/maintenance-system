@@ -45,12 +45,46 @@
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label>Phone</label>
-                        <input type="text" th:field="*{phone}" class="form-control">
+                        <div class="col-md-6 mb-3">
+                            <label>Phone</label>
+                            <input type="tel"
+                                   th:field="*{phone}"
+                                   class="form-control"
+                                   placeholder="3843928 or 5063843928"
+                                   maxlength="20"
+                                   oninput="formatPhoneNumber(this)">
+                        </div>
                     </div>
 
                     <div class="col-md-6 mb-3">
                         <label>Email</label>
                         <input type="email" th:field="*{email}" class="form-control">
+                    </div>
+                </div>
+
+                <hr>
+
+                <h5 class="text-primary">Secondary Tenant / Additional Contact</h5>
+
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label>Name</label>
+                        <input type="text" th:field="*{secondaryTenantName}" class="form-control">
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        <label>Phone</label>
+                        <input type="tel"
+                               th:field="*{secondaryTenantPhone}"
+                               class="form-control"
+                               placeholder="3843928 or 5063843928"
+                               maxlength="20"
+                               oninput="formatPhoneNumber(this)">
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        <label>Email</label>
+                        <input type="email" th:field="*{secondaryTenantEmail}" class="form-control">
                     </div>
                 </div>
 
@@ -62,8 +96,16 @@
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label>Name</label>
-                        <input type="text" th:field="*{emergencyContactName}" class="form-control">
-                    </div>
+                        <div class="col-md-6 mb-3">
+                            <label>Phone</label>
+                            <input type="tel"
+                                   th:field="*{emergencyContactPhone}"
+                                   class="form-control"
+                                   placeholder="3843928 or 5063843928"
+                                   maxlength="20"
+                                   oninput="formatPhoneNumber(this)">
+                            </div>
+                        </div>
 
                     <div class="col-md-6 mb-3">
                         <label>Phone</label>
@@ -174,6 +216,6 @@
     </div>
 </div>
 
-<script th:src="@{/js/tenant-pets.js}"></script>
+<script th:src="@{/js/tenants.js?v=2}"></script>
 </body>
 </html>

@@ -1,6 +1,8 @@
 package com.cornerstone.controller;
 
 import com.cornerstone.dto.LeaseDto;
+import com.cornerstone.entity.LeaseEntity;
+import com.cornerstone.repository.LeaseRepository;
 import com.cornerstone.service.LeaseService;
 import com.cornerstone.service.TenantService;
 import com.cornerstone.service.UnitService;
@@ -17,12 +19,14 @@ public class LeaseController {
     private final LeaseService leaseService;
     private final TenantService tenantService;
     private final UnitService unitService;
+    private final LeaseRepository leaseRepository;
 
     // Inyectamos los 3 servicios
-    public LeaseController(LeaseService leaseService, TenantService tenantService, UnitService unitService) {
+    public LeaseController(LeaseService leaseService, TenantService tenantService, UnitService unitService, LeaseRepository leaseRepository) {
         this.leaseService = leaseService;
         this.tenantService = tenantService;
         this.unitService = unitService;
+        this.leaseRepository = leaseRepository;
     }
 
     // Mostrar todos los contratos
@@ -87,5 +91,16 @@ public class LeaseController {
                              @ModelAttribute("lease") LeaseDto lease) {
         leaseService.update(id, lease);
         return "redirect:/leases";
+    }
+
+    @GetMapping("/details/{id}")
+    public String details(@PathVariable("id") Long id, Model model) {
+
+        LeaseDto lease = leaseRepository.get(id)
+                .orElseThrow(() -> new RuntimeException("Lease not found"));
+
+        model.addAttribute("lease", lease);
+
+        return "leases/details";
     }
 }

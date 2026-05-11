@@ -8,6 +8,10 @@ public class TenantDto {
     private String phone;
     private String email;
 
+    private String secondaryTenantName;
+    private String secondaryTenantPhone;
+    private String secondaryTenantEmail;
+
     private String emergencyContactName;
     private String emergencyContactPhone;
 
@@ -50,6 +54,15 @@ public class TenantDto {
 
     public String getEmail() { return email; }
     public TenantDto setEmail(String email) { this.email = email; return this; }
+
+    public String getSecondaryTenantName() { return secondaryTenantName; }
+    public TenantDto setSecondaryTenantName(String secondaryTenantName) {this.secondaryTenantName = secondaryTenantName;return this;}
+
+    public String getSecondaryTenantPhone() { return secondaryTenantPhone; }
+    public TenantDto setSecondaryTenantPhone(String secondaryTenantPhone) {this.secondaryTenantPhone = secondaryTenantPhone;return this;}
+
+    public String getSecondaryTenantEmail() { return secondaryTenantEmail; }
+    public TenantDto setSecondaryTenantEmail(String secondaryTenantEmail) {this.secondaryTenantEmail = secondaryTenantEmail;return this;}
 
     public String getEmergencyContactName() { return emergencyContactName; }
     public TenantDto setEmergencyContactName(String emergencyContactName) { this.emergencyContactName = emergencyContactName; return this; }

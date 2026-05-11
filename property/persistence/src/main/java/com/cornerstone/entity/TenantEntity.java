@@ -26,6 +26,15 @@ public class TenantEntity {
     @Column(name = "active", nullable = false)
     private Boolean active = true;
 
+    @Column(name = "secondary_tenant_name")
+    private String secondaryTenantName;
+
+    @Column(name = "secondary_tenant_phone")
+    private String secondaryTenantPhone;
+
+    @Column(name = "secondary_tenant_email")
+    private String secondaryTenantEmail;
+
     // EMERGENCY
     @Column(name = "emergency_contact_name")
     private String emergencyContactName;
@@ -93,6 +102,15 @@ public class TenantEntity {
 
     public String getPhoneNumber() { return phoneNumber; }
     public TenantEntity setPhoneNumber(String phoneNumber) { this.phoneNumber = phoneNumber; return this; }
+
+    public String getSecondaryTenantName() {return secondaryTenantName;}
+    public TenantEntity setSecondaryTenantName(String secondaryTenantName) {this.secondaryTenantName = secondaryTenantName;return this;}
+
+    public String getSecondaryTenantPhone() {return secondaryTenantPhone;}
+    public TenantEntity setSecondaryTenantPhone(String secondaryTenantPhone) {this.secondaryTenantPhone = secondaryTenantPhone;return this;}
+
+    public String getSecondaryTenantEmail() {return secondaryTenantEmail;}
+    public TenantEntity setSecondaryTenantEmail(String secondaryTenantEmail) {this.secondaryTenantEmail = secondaryTenantEmail;return this;}
 
     public Boolean getActive() { return active; }
     public TenantEntity setActive(Boolean active) { this.active = active; return this; }

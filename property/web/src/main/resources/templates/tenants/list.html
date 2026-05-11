@@ -34,7 +34,7 @@
 
                     <thead class="table-dark">
                     <tr>
-                        <th>ID</th>
+<!--                        <th>ID</th>-->
                         <th>Name</th>
                         <th>Email</th>
                         <th>Phone</th>
@@ -44,8 +44,8 @@
 
                     <tbody>
                     <tr th:each="t : ${tenants}">
-                        <td th:text="${t.id}"></td>
-                        <td>
+<!--                        <td th:text="${t.id}"></td>-->
+                        <td class="text-start ps-4">
                             <a th:href="@{/tenants/details/{id}(id=${t.id})}"
                                th:text="${t.firstName + ' ' + t.lastName}"
                                class="text-decoration-none fw-bold">

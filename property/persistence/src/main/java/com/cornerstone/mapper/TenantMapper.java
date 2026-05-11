@@ -37,6 +37,10 @@ public class TenantMapper implements EntityMapper<TenantDto, TenantEntity> {
         dto.setCarsCount(entity.getCarsCount());
         dto.setSmokers(entity.getSmokers());
 
+        dto.setSecondaryTenantName(entity.getSecondaryTenantName());
+        dto.setSecondaryTenantPhone(entity.getSecondaryTenantPhone());
+        dto.setSecondaryTenantEmail(entity.getSecondaryTenantEmail());
+
         return dto;
     }
 
@@ -53,7 +57,10 @@ public class TenantMapper implements EntityMapper<TenantDto, TenantEntity> {
                 .setActive(dto.getActive())
                 .setEmergencyContactName(dto.getEmergencyContactName())
                 .setEmergencyContactPhone(dto.getEmergencyContactPhone())
-                .setNotes(dto.getNotes());
+                .setNotes(dto.getNotes())
+                .setSecondaryTenantName(dto.getSecondaryTenantName())
+                .setSecondaryTenantPhone(dto.getSecondaryTenantPhone())
+                .setSecondaryTenantEmail(dto.getSecondaryTenantEmail());
 
         entity.setChildrenCount(dto.getChildrenCount());
         entity.setYouthCount(dto.getYouthCount());
