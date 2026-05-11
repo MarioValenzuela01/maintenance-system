@@ -100,16 +100,63 @@ function createDogInputs() {
     render();
 }
 
-function formatPhoneNumber(input) {
+/* PHONE FORMAT */
 
-    let numbers = input.value.replace(/\D/g, '');
+function getDigits(value) {
+    return value.replace(/\D/g, "").substring(0, 10);
+}
 
-    numbers = numbers.substring(0, 10);
+function formatPhoneDisplay(value) {
+    const numbers = getDigits(value);
 
-    input.value = numbers;
+    if (numbers.length === 10) {
+        return `(${numbers.substring(0, 3)}) ${numbers.substring(3, 6)}-${numbers.substring(6, 10)}`;
+    }
+
+    if (numbers.length === 7) {
+        return `(---) ${numbers.substring(0, 3)}-${numbers.substring(3, 7)}`;
+    }
+
+    return numbers;
+}
+
+function setupPhoneInputs() {
+    const phoneInputs = document.querySelectorAll(".phone-input");
+
+    phoneInputs.forEach(input => {
+
+        // Show formatted value when page loads
+        input.value = formatPhoneDisplay(input.value);
+
+        // When editing, show only digits so the cursor works correctly
+        input.addEventListener("focus", function () {
+            input.value = getDigits(input.value);
+        });
+
+        // While typing, keep only digits
+        input.addEventListener("input", function () {
+            input.value = getDigits(input.value);
+        });
+
+        // When leaving the field, show formatted value again
+        input.addEventListener("blur", function () {
+            input.value = formatPhoneDisplay(input.value);
+        });
+    });
+
+    const form = document.querySelector("form");
+
+    if (form) {
+        form.addEventListener("submit", function () {
+            phoneInputs.forEach(input => {
+                input.value = formatPhoneDisplay(input.value);
+            });
+        });
+    }
 }
 
 document.addEventListener("DOMContentLoaded", function () {
     createDogInputs();
     createCatInputs();
+    setupPhoneInputs();
 });

@@ -57,7 +57,16 @@
 
                         <td th:text="${t.email}"></td>
 
-                        <td th:text="${t.phone}"></td>
+                        <td>
+    <span th:if="${t.phone != null and t.phone.length() == 10}"
+          th:text="${'(' + t.phone.substring(0,3) + ') ' + t.phone.substring(3,6) + '-' + t.phone.substring(6,10)}"></span>
+
+                            <span th:if="${t.phone != null and t.phone.length() == 7}"
+                                  th:text="${'(---) ' + t.phone.substring(0,3) + '-' + t.phone.substring(3,7)}"></span>
+
+                            <span th:if="${t.phone == null or (t.phone.length() != 7 and t.phone.length() != 10)}"
+                                  th:text="${t.phone}"></span>
+                        </td>
 
                         <td>
                             <span th:if="${t.updatedAt != null}"

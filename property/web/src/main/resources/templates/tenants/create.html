@@ -44,15 +44,12 @@
 
                 <div class="row">
                     <div class="col-md-6 mb-3">
-                        <div class="col-md-6 mb-3">
-                            <label>Phone</label>
-                            <input type="tel"
-                                   th:field="*{phone}"
-                                   class="form-control"
-                                   placeholder="8550314 or 9028550314"
-                                   maxlength="10"
-                                   oninput="formatPhoneNumber(this)">
-                        </div>
+                        <label>Phone</label>
+                        <input type="tel"
+                               th:field="*{phone}"
+                               class="form-control phone-input"
+                               placeholder="8550314 or 5068550314"
+                               maxlength="14">
                     </div>
 
                     <div class="col-md-6 mb-3">
@@ -74,11 +71,10 @@
                     <div class="col-md-4 mb-3">
                         <label>Phone</label>
                         <input type="tel"
-                               th:field="*{emergencyContactPhone}"
-                               class="form-control"
-                               placeholder="8550314 or 9028550314"
-                               maxlength="10"
-                               oninput="formatPhoneNumber(this)">
+                               th:field="*{secondaryTenantPhone}"
+                               class="form-control phone-input"
+                               placeholder="8550314 or 5068550314"
+                               maxlength="14">
                     </div>
 
                     <div class="col-md-4 mb-3">
@@ -95,24 +91,26 @@
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label>Name</label>
-                        <div class="col-md-6 mb-3">
-                            <label>Phone</label>
-                            <input type="tel"
-                                   th:field="*{emergencyContactPhone}"
-                                   class="form-control"
-                                   placeholder="3843928 or 5063843928"
-                                   maxlength="20"
-                                   oninput="formatPhoneNumber(this)">
-                            </div>
-                        </div>
+                        <input type="text" th:field="*{emergencyContactName}" class="form-control">
+                    </div>
 
                     <div class="col-md-6 mb-3">
                         <label>Phone</label>
-                        <input type="text" th:field="*{emergencyContactPhone}" class="form-control">
+                        <input type="tel"
+                               th:field="*{emergencyContactPhone}"
+                               class="form-control phone-input"
+                               placeholder="8550314 or 5068550314"
+                               maxlength="14">
                     </div>
                 </div>
 
+
+
                 <hr>
+
+
+
+
 
                 <!-- HOUSEHOLD -->
                 <h5 class="text-primary">Household</h5>
@@ -215,6 +213,6 @@
     </div>
 </div>
 
-<script th:src="@{/js/tenants.js?v=2}"></script>
+<script th:src="@{/js/tenants.js?v=3}"></script>
 </body>
 </html>
