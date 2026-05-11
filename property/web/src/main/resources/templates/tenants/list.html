@@ -34,39 +34,60 @@
 
                     <thead class="table-dark">
                     <tr>
-<!--                        <th>ID</th>-->
+                        <!--                        <th>ID</th>-->
                         <th>Name</th>
                         <th>Email</th>
                         <th>Phone</th>
+                        <th>Last Updated</th>
                         <th>Actions</th>
                     </tr>
                     </thead>
 
                     <tbody>
+
                     <tr th:each="t : ${tenants}">
-<!--                        <td th:text="${t.id}"></td>-->
+                        <!--                        <td th:text="${t.id}"></td>-->
+
                         <td class="text-start ps-4">
                             <a th:href="@{/tenants/details/{id}(id=${t.id})}"
                                th:text="${t.firstName + ' ' + t.lastName}"
                                class="text-decoration-none fw-bold">
-
                             </a>
                         </td>
+
                         <td th:text="${t.email}"></td>
+
                         <td th:text="${t.phone}"></td>
 
                         <td>
+                            <span th:if="${t.updatedAt != null}"
+                                  th:text="${#temporals.format(t.updatedAt, 'yyyy-MM-dd')}">
+                            </span>
+
+                            <span th:unless="${t.updatedAt != null}">
+                                Not Updated
+                            </span>
+                        </td>
+
+                        <td>
                             <a th:href="@{/tenants/edit/{id}(id=${t.id})}"
-                               class="btn btn-sm btn-outline-primary">Edit</a>
+                               class="btn btn-sm btn-outline-primary">
+                                Edit
+                            </a>
 
                             <a th:href="@{/tenants/delete/{id}(id=${t.id})}"
-                               class="btn btn-sm btn-outline-danger ms-1">Delete</a>
+                               class="btn btn-sm btn-outline-danger ms-1">
+                                Delete
+                            </a>
                         </td>
                     </tr>
 
                     <tr th:if="${#lists.isEmpty(tenants)}">
-                        <td colspan="5" class="text-muted">No tenants registered</td>
+                        <td colspan="5" class="text-muted">
+                            No tenants registered
+                        </td>
                     </tr>
+
                     </tbody>
 
                 </table>

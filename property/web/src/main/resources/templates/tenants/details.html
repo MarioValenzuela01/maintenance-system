@@ -19,6 +19,10 @@
     <div class="content-wrapper">
 
         <h2 class="text-primary">Tenant Details</h2>
+        <p>
+            <strong>Last Updated:</strong>
+            <span th:text="${tenant.updatedAt != null ? #temporals.format(tenant.updatedAt, 'yyyy-MM-dd HH:mm') : 'Never'}"></span>
+        </p>
         <hr/>
 
         <div class="card shadow-sm mb-4">

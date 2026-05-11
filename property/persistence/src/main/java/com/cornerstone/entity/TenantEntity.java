@@ -1,6 +1,7 @@
 package com.cornerstone.entity;
 
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "tenants")
@@ -34,6 +35,9 @@ public class TenantEntity {
 
     @Column(name = "secondary_tenant_email")
     private String secondaryTenantEmail;
+
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
 
     // EMERGENCY
     @Column(name = "emergency_contact_name")
@@ -111,6 +115,9 @@ public class TenantEntity {
 
     public String getSecondaryTenantEmail() {return secondaryTenantEmail;}
     public TenantEntity setSecondaryTenantEmail(String secondaryTenantEmail) {this.secondaryTenantEmail = secondaryTenantEmail;return this;}
+
+    public LocalDateTime getUpdatedAt() {return updatedAt;}
+    public TenantEntity setUpdatedAt(LocalDateTime updatedAt) {this.updatedAt = updatedAt;return this;}
 
     public Boolean getActive() { return active; }
     public TenantEntity setActive(Boolean active) { this.active = active; return this; }

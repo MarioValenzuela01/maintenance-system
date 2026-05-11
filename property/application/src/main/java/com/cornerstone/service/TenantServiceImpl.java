@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.time.LocalDateTime;
 
 @Service
 public class TenantServiceImpl implements TenantService {
@@ -42,6 +43,7 @@ public class TenantServiceImpl implements TenantService {
             }
         }
 
+        tenant.setUpdatedAt(LocalDateTime.now());
         return tenantRepository.save(tenant);
     }
 
@@ -59,6 +61,7 @@ public class TenantServiceImpl implements TenantService {
 
 
         tenant.setId(id);
+        tenant.setUpdatedAt(LocalDateTime.now());
         return tenantRepository.save(tenant);
     }
 

@@ -1,4 +1,5 @@
 package com.cornerstone.dto;
+import java.time.LocalDateTime;
 
 public class TenantDto {
 
@@ -14,6 +15,8 @@ public class TenantDto {
 
     private String emergencyContactName;
     private String emergencyContactPhone;
+
+    private LocalDateTime updatedAt;
 
     private String notes;
 
@@ -72,6 +75,10 @@ public class TenantDto {
 
     public String getNotes() { return notes; }
     public TenantDto setNotes(String notes) { this.notes = notes; return this; }
+
+    public LocalDateTime getUpdatedAt() {return updatedAt;}
+
+    public TenantDto setUpdatedAt(LocalDateTime updatedAt) {this.updatedAt = updatedAt;return this;}
 
     public Boolean getActive() { return active; }
     public TenantDto setActive(Boolean active) { this.active = active; return this; }

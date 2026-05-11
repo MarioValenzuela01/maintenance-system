@@ -40,6 +40,7 @@ public class TenantMapper implements EntityMapper<TenantDto, TenantEntity> {
         dto.setSecondaryTenantName(entity.getSecondaryTenantName());
         dto.setSecondaryTenantPhone(entity.getSecondaryTenantPhone());
         dto.setSecondaryTenantEmail(entity.getSecondaryTenantEmail());
+        dto.setUpdatedAt(entity.getUpdatedAt());
 
         return dto;
     }
@@ -60,7 +61,8 @@ public class TenantMapper implements EntityMapper<TenantDto, TenantEntity> {
                 .setNotes(dto.getNotes())
                 .setSecondaryTenantName(dto.getSecondaryTenantName())
                 .setSecondaryTenantPhone(dto.getSecondaryTenantPhone())
-                .setSecondaryTenantEmail(dto.getSecondaryTenantEmail());
+                .setSecondaryTenantEmail(dto.getSecondaryTenantEmail())
+                .setUpdatedAt(dto.getUpdatedAt());
 
         entity.setChildrenCount(dto.getChildrenCount());
         entity.setYouthCount(dto.getYouthCount());
