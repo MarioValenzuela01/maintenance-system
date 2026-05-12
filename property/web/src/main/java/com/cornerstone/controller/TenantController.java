@@ -1,6 +1,7 @@
 package com.cornerstone.controller;
 
 import com.cornerstone.dto.TenantDto;
+import com.cornerstone.service.LeaseService;
 import com.cornerstone.service.TenantService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,9 +14,11 @@ import java.util.Optional;
 public class TenantController {
 
     private final TenantService tenantService;
+    private final LeaseService leaseService;
 
-    public TenantController(TenantService tenantService) {
+    public TenantController(TenantService tenantService, LeaseService leaseService) {
         this.tenantService = tenantService;
+        this.leaseService = leaseService;
     }
 
     @GetMapping
@@ -91,7 +94,11 @@ public class TenantController {
             return "redirect:/tenants";
         }
 
+        var activeLease = leaseService.getActiveLeaseByTenantId(id);
+
         model.addAttribute("tenant", tenant.get());
+        model.addAttribute("activeLease", activeLease.orElse(null));
+
         return "tenants/details";
     }
 

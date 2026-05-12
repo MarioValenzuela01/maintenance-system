@@ -105,7 +105,21 @@ public class LeaseServiceImpl implements LeaseService {
     public Optional<LeaseDto> getActiveLeaseByUnitId(Long unitId) {
         return leaseRepository.getAll()
                 .stream()
-                .filter(l -> l.getUnitId().equals(unitId) && l.getEndDate() == null)
+                .filter(l -> l.getUnitId() != null)
+                .filter(l -> l.getUnitId().equals(unitId))
+                .filter(l -> l.getEndDate() == null)
                 .findFirst();
     }
+
+    @Override
+    public Optional<LeaseDto> getActiveLeaseByTenantId(Long tenantId) {
+        return leaseRepository.getAll()
+                .stream()
+                .filter(l -> l.getTenantId() != null)
+                .filter(l -> l.getTenantId().equals(tenantId))
+                .filter(l -> l.getEndDate() == null)
+                .findFirst();
+    }
+
+
 }

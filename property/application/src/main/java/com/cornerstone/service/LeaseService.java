@@ -19,12 +19,11 @@ public interface LeaseService {
 
     LeaseDto endLease(Long leaseId);
 
-    // 🔥 AGREGA ESTO
     List<TenantDto> getAvailableTenants();
 
     List<UnitDto> getAvailableUnits();
 
     Optional<LeaseDto> getActiveLeaseByUnitId(Long unitId);
 
-
+    Optional<LeaseDto> getActiveLeaseByTenantId(Long tenantId);
 }

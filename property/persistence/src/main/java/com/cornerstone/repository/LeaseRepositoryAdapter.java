@@ -72,6 +72,20 @@ public class LeaseRepositoryAdapter implements LeaseRepository {
     }
 
     @Override
+    public Optional<LeaseDto> getActiveLeaseByTenantId(Long tenantId) {
+        return mapper.toDTO(
+                jpaRepository.findFirstByTenantIdAndEndDateIsNull(tenantId)
+        );
+    }
+
+    @Override
+    public Optional<LeaseDto> getActiveLeaseByUnitId(Long unitId) {
+        return mapper.toDTO(
+                jpaRepository.findFirstByUnitIdAndEndDateIsNull(unitId)
+        );
+    }
+
+    @Override
     public boolean existsActiveLeaseByUnitId(Long unitId) {
         return jpaRepository.existsByUnitIdAndEndDateIsNull(unitId);
     }
