@@ -2,7 +2,8 @@ package com.cornerstone.entity;
 
 import jakarta.persistence.*;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "managers")
@@ -18,9 +19,10 @@ public class ManagerEntity {
     @JoinTable(
             name = "manager_units",
             joinColumns = @JoinColumn(name = "manager_id"),
-            inverseJoinColumns = @JoinColumn(name = "unit_id")
+            inverseJoinColumns = @JoinColumn(name = "unit_id"),
+            uniqueConstraints = @UniqueConstraint(columnNames = {"manager_id", "unit_id"})
     )
-    private List<UnitEntity> units = new ArrayList<>();
+    private Set<UnitEntity> units = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -40,11 +42,11 @@ public class ManagerEntity {
         return this;
     }
 
-    public List<UnitEntity> getUnits() {
+    public Set<UnitEntity> getUnits() {
         return units;
     }
 
-    public ManagerEntity setUnits(List<UnitEntity> units) {
+    public ManagerEntity setUnits(Set<UnitEntity> units) {
         this.units = units;
         return this;
     }

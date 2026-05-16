@@ -6,6 +6,7 @@ import com.cornerstone.entity.UnitEntity;
 import com.cornerstone.mapper.ManagerMapper;
 import org.springframework.stereotype.Repository;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -56,7 +57,7 @@ public class ManagerRepositoryAdapter implements ManagerRepository {
                 ? List.of()
                 : unitJpaRepository.findAllById(unitIds);
 
-        manager.setUnits(units);
+        manager.setUnits(new HashSet<>(units));
         managerJpaRepository.save(manager);
     }
 }
