@@ -37,4 +37,4 @@ build/
 ### Mac OS ###
 .DS_Store
 
-application-aiven.properties
+#application-aiven.properties
