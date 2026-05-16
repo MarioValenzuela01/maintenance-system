@@ -10,4 +10,4 @@ RUN ./mvnw clean package -DskipTests
 
 EXPOSE 8080
 
-CMD ["java", "-jar", "web/target/web-1.0-SNAPSHOT.jar"]
+CMD ["java", "-jar", "property/web/target/web-1.0-SNAPSHOT.jar"]
