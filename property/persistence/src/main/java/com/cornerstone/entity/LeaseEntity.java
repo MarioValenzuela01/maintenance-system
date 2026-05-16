@@ -26,15 +26,6 @@ public class LeaseEntity {
     @Column
     private LocalDate endDate;
 
-    @Column(name = "rent_amount")
-    private BigDecimal rentAmount;
-
-    @Column(name = "subsidy_amount")
-    private BigDecimal subsidyAmount;
-
-    @Column(name = "tenant_contribution")
-    private BigDecimal tenantContribution;
-
     @Column(name = "adults_count")
     private Integer adultsCount;
 
@@ -70,34 +61,7 @@ public class LeaseEntity {
 
     public LocalDate getEndDate() { return endDate; }
     public LeaseEntity setEndDate(LocalDate endDate) { this.endDate = endDate; return this; }
-
-    public BigDecimal getRentAmount() {
-        return rentAmount;
-    }
-
-    public LeaseEntity setRentAmount(BigDecimal rentAmount) {
-        this.rentAmount = rentAmount;
-        return this;
-    }
-
-    public BigDecimal getSubsidyAmount() {
-        return subsidyAmount;
-    }
-
-    public LeaseEntity setSubsidyAmount(BigDecimal subsidyAmount) {
-        this.subsidyAmount = subsidyAmount;
-        return this;
-    }
-
-    public BigDecimal getTenantContribution() {
-        return tenantContribution;
-    }
-
-    public LeaseEntity setTenantContribution(BigDecimal tenantContribution) {
-        this.tenantContribution = tenantContribution;
-        return this;
-    }
-
+    
     public Integer getAdultsCount() {
         return adultsCount;
     }

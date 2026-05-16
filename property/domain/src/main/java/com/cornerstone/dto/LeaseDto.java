@@ -13,9 +13,6 @@ public class LeaseDto {
     private LocalDate startDate;
     private LocalDate endDate;
 
-    private BigDecimal rentAmount;
-    private BigDecimal subsidyAmount;
-    private BigDecimal tenantContribution;
 
     private Integer adultsCount;
     private Integer childrenCount;
@@ -43,15 +40,6 @@ public class LeaseDto {
 
     public LocalDate getEndDate() { return endDate; }
     public LeaseDto setEndDate(LocalDate endDate) { this.endDate = endDate; return this; }
-
-    public BigDecimal getRentAmount() { return rentAmount; }
-    public LeaseDto setRentAmount(BigDecimal rentAmount) { this.rentAmount = rentAmount; return this; }
-
-    public BigDecimal getSubsidyAmount() { return subsidyAmount; }
-    public LeaseDto setSubsidyAmount(BigDecimal subsidyAmount) { this.subsidyAmount = subsidyAmount; return this; }
-
-    public BigDecimal getTenantContribution() { return tenantContribution; }
-    public LeaseDto setTenantContribution(BigDecimal tenantContribution) { this.tenantContribution = tenantContribution; return this; }
 
     public Integer getAdultsCount() { return adultsCount; }
     public LeaseDto setAdultsCount(Integer adultsCount) { this.adultsCount = adultsCount; return this; }

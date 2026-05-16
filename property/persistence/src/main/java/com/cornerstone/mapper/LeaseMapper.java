@@ -18,11 +18,6 @@ public class LeaseMapper implements EntityMapper<LeaseDto, LeaseEntity> {
                 .setStartDate(entity.getStartDate())
                 .setEndDate(entity.getEndDate())
 
-                // 🔥 DATOS ECONÓMICOS
-                .setRentAmount(entity.getRentAmount())
-                .setSubsidyAmount(entity.getSubsidyAmount())
-                .setTenantContribution(entity.getTenantContribution())
-
                 // 🔥 COMPOSICIÓN FAMILIAR
                 .setAdultsCount(entity.getAdultsCount())
                 .setChildrenCount(entity.getChildrenCount())
@@ -51,11 +46,6 @@ public class LeaseMapper implements EntityMapper<LeaseDto, LeaseEntity> {
                 .setStartDate(dto.getStartDate())
                 .setEndDate(dto.getEndDate())
 
-                // 🔥 DATOS ECONÓMICOS
-                .setRentAmount(dto.getRentAmount())
-                .setSubsidyAmount(dto.getSubsidyAmount())
-                .setTenantContribution(dto.getTenantContribution())
-
                 // 🔥 COMPOSICIÓN FAMILIAR
                 .setAdultsCount(dto.getAdultsCount())
                 .setChildrenCount(dto.getChildrenCount())
@@ -67,6 +57,5 @@ public class LeaseMapper implements EntityMapper<LeaseDto, LeaseEntity> {
                 .setCarsCount(dto.getCarsCount())
                 .setProgramNotes(dto.getProgramNotes());
 
-        // 🔴 tenant y unit se asignan fuera del mapper (correcto en tu arquitectura)
     }
 }
