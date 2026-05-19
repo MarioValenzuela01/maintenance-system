@@ -53,7 +53,7 @@ public class UnitController {
 
         // --- NUEVA LÓGICA DE AGRUPACIÓN (15 registros) ---
 
-        int pageSize = 10;
+        int pageSize = 15;
         int totalPages = (int) Math.ceil((double) units.size() / pageSize);
 
         if (page < 0) {
@@ -212,7 +212,7 @@ public class UnitController {
             }
         }
 
-        int pageSize = 10;
+        int pageSize = 15;
         int totalPages = (int) Math.ceil((double) units.size() / pageSize);
 
         if (page < 0) {
