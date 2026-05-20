@@ -5,6 +5,7 @@ import com.cornerstone.dto.UnitDto;
 import com.cornerstone.service.LeaseService;
 import com.cornerstone.service.ManagerService;
 import com.cornerstone.service.UnitService;
+import com.cornerstone.service.UnitMaintenanceHistoryService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -20,13 +21,16 @@ public class UnitController {
     private final UnitService unitService;
     private final LeaseService leaseService;
     private final ManagerService managerService;
+    private final UnitMaintenanceHistoryService historyService;
 
-    public UnitController(UnitService unitService, LeaseService leaseService, ManagerService managerService) {
+    public UnitController(UnitService unitService,
+                          LeaseService leaseService,
+                          ManagerService managerService,
+                          UnitMaintenanceHistoryService historyService) {
         this.unitService = unitService;
         this.leaseService = leaseService;
         this.managerService = managerService;
-
-
+        this.historyService = historyService;
     }
 
     // --- LEER (Read) ---
@@ -155,6 +159,7 @@ public class UnitController {
         model.addAttribute("statusCalculated", status);
         model.addAttribute("activeLease", activeLease.orElse(null));
 
+
         return "units/details";
     }
 
@@ -186,6 +191,7 @@ public class UnitController {
         model.addAttribute("unit", unitDto);
         model.addAttribute("statusCalculated", status);
         model.addAttribute("activeLease", activeLease.orElse(null));
+
 
         return "units/details";
     }
@@ -241,6 +247,22 @@ public class UnitController {
     @GetMapping("/map")
     public String map() {
         return "units/map";
+    }
+
+    @GetMapping("/{id}/history")
+    public String maintenanceHistory(@PathVariable("id") Long id, Model model) {
+        var unit = unitService.get(id);
+
+        if (unit.isEmpty()) {
+            return "redirect:/units";
+        }
+
+        var unitDto = unit.get();
+
+        model.addAttribute("unit", unitDto);
+        model.addAttribute("historyList", historyService.getByUnitId(unitDto.getId()));
+
+        return "units/history";
     }
 
 

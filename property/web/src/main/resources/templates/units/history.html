@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Maintenance History</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link th:href="@{/css/home.css?v=10}" rel="stylesheet"/>
+</head>
+<body>
+
+<div class="page-shell mt-4">
+
+    <div class="sidebar-wrapper">
+        <div th:replace="~{fragments/sidebar :: sidebar}"></div>
+    </div>
+
+    <div class="content-wrapper">
+
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <div>
+                <h1 class="text-primary">Maintenance History</h1>
+                <p class="text-muted mb-0">
+                    Unit <strong th:text="${unit.unitNumber}"></strong>
+                    -
+                    <span th:text="${unit.address}"></span>
+                </p>
+            </div>
+
+            <a th:href="@{/unit-history/create/{unitId}(unitId=${unit.id})}"
+               class="btn btn-success">
+                Add Maintenance Record
+            </a>
+        </div>
+
+        <hr>
+
+        <div class="card shadow-sm">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0 text-center">
+                    <thead class="table-dark">
+                    <tr>
+                        <th>Date</th>
+                        <th>Category</th>
+                        <th>Item</th>
+                        <th>Notes</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <tr th:each="item : ${historyList}">
+                        <td th:text="${item.completedDate}"></td>
+                        <td th:text="${item.category}"></td>
+                        <td th:text="${item.itemName}"></td>
+                        <td th:text="${item.notes}"></td>
+                        <td>
+                            <a th:href="@{/unit-history/edit/{id}(id=${item.id})}"
+                               class="btn btn-sm btn-outline-primary">
+                                Edit
+                            </a>
+
+                            <a th:href="@{/unit-history/delete/{id}(id=${item.id})}"
+                               class="btn btn-sm btn-outline-danger ms-1">
+                                Delete
+                            </a>
+                        </td>
+                    </tr>
+
+                    <tr th:if="${#lists.isEmpty(historyList)}">
+                        <td colspan="5" class="text-muted py-4">
+                            No maintenance records yet.
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="mt-4">
+            <a th:href="@{/units/details/{id}(id=${unit.id})}"
+               class="btn btn-secondary">
+                Back to Unit
+            </a>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>

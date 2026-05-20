@@ -197,3 +197,31 @@
 .card-header h4 {
     line-height: 1;
 }
+
+.sidebar-dropdown {
+    position: relative;
+}
+
+.sidebar-submenu {
+    display: none;
+    padding-left: 15px;
+}
+
+.sidebar-dropdown:hover .sidebar-submenu {
+    display: block;
+}
+
+.sidebar-sublink {
+    display: block;
+    padding: 8px 15px;
+    color: #6c757d;
+    text-decoration: none;
+    border-radius: 8px;
+    margin-top: 4px;
+    transition: 0.2s;
+}
+
+.sidebar-sublink:hover {
+    background-color: #f1f3f5;
+    color: #000;
+}

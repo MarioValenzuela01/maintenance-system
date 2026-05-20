@@ -21,6 +21,10 @@
     <div class="content-wrapper">
 
         <h1 class="text-primary">Unit Details</h1>
+        <a th:href="@{/units/{id}/history(id=${unit.id})}"
+           class="btn btn-outline-info ms-2 px-4">
+            Maintenance History
+        </a>
         <hr/>
 
         <!-- TARJETA PRINCIPAL -->
@@ -43,6 +47,8 @@
                            class="btn btn-light btn-sm fw-semibold">
                             <span th:text="${activeLease.tenantName}"></span>
                         </a>
+
+
 
                         <button type="button"
                                 class="btn btn-warning btn-sm fw-semibold"
@@ -247,6 +253,10 @@
                 </p>
 
                 <hr>
+
+                <hr>
+
+
 
 
             </div>
