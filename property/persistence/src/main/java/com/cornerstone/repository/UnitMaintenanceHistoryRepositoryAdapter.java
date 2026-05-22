@@ -17,6 +17,15 @@ public class UnitMaintenanceHistoryRepositoryAdapter implements UnitMaintenanceH
     }
 
     @Override
+    public List<UnitMaintenanceHistoryDto> getAll() {
+
+        return jpaRepository.findAll()
+                .stream()
+                .map(UnitMaintenanceHistoryMapper::toDto)
+                .toList();
+    }
+
+    @Override
     public List<UnitMaintenanceHistoryDto> getByUnitId(Long unitId) {
         return jpaRepository.findByUnitIdOrderByCompletedDateDesc(unitId)
                 .stream()

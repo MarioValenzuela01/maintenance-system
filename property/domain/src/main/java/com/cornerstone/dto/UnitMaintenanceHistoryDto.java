@@ -10,6 +10,9 @@ public class UnitMaintenanceHistoryDto {
     private Long unitId;
     private String category;
     private String itemName;
+    private Long tenantIdAtTime;
+    private String tenantNameAtTime;
+    private String unitNumber;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate completedDate;
@@ -33,4 +36,25 @@ public class UnitMaintenanceHistoryDto {
 
     public String getNotes() { return notes; }
     public UnitMaintenanceHistoryDto setNotes(String notes) { this.notes = notes; return this; }
+
+    public Long getTenantIdAtTime() { return tenantIdAtTime; }
+    public UnitMaintenanceHistoryDto setTenantIdAtTime(Long tenantIdAtTime) {
+        this.tenantIdAtTime = tenantIdAtTime;
+        return this;
+    }
+
+    public String getTenantNameAtTime() { return tenantNameAtTime; }
+    public UnitMaintenanceHistoryDto setTenantNameAtTime(String tenantNameAtTime) {
+        this.tenantNameAtTime = tenantNameAtTime;
+        return this;
+    }
+
+    public String getUnitNumber() {
+        return unitNumber;
+    }
+
+    public UnitMaintenanceHistoryDto setUnitNumber(String unitNumber) {
+        this.unitNumber = unitNumber;
+        return this;
+    }
 }

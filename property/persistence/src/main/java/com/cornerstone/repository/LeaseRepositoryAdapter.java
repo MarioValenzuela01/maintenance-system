@@ -7,6 +7,7 @@ import com.cornerstone.entity.UnitEntity;    // AGREGADO
 import com.cornerstone.mapper.LeaseMapper;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -90,5 +91,31 @@ public class LeaseRepositoryAdapter implements LeaseRepository {
         return jpaRepository.existsByUnitIdAndEndDateIsNull(unitId);
     }
 
+    @Override
+    public Optional<LeaseDto> getLeaseByUnitAndDate(Long unitId, LocalDate date) {
 
-}
+        if (date == null) {
+            return Optional.empty();
+        }
+
+        return jpaRepository.findByUnitId(unitId)
+                .stream()
+                .filter(lease -> {
+
+                    if (lease.getStartDate() == null) {
+                        return false;
+                    }
+
+                    boolean started = !date.isBefore(lease.getStartDate());
+
+                    boolean notEnded = lease.getEndDate() == null
+                            || !date.isAfter(lease.getEndDate());
+
+                    return started && notEnded;
+                })
+                .findFirst()
+                .map(mapper::toDTO);
+    }
+    }
+
+

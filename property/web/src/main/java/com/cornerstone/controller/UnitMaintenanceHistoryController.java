@@ -1,19 +1,29 @@
 package com.cornerstone.controller;
 
 import com.cornerstone.dto.UnitMaintenanceHistoryDto;
+import com.cornerstone.service.LeaseService;
 import com.cornerstone.service.UnitMaintenanceHistoryService;
+import com.cornerstone.service.UnitService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/unit-history")
 public class UnitMaintenanceHistoryController {
 
     private final UnitMaintenanceHistoryService service;
+    private final LeaseService leaseService;
+    private final UnitService unitService;
 
-    public UnitMaintenanceHistoryController(UnitMaintenanceHistoryService service) {
+    public UnitMaintenanceHistoryController(UnitMaintenanceHistoryService service,
+                                            LeaseService leaseService,
+                                            UnitService unitService) {
         this.service = service;
+        this.leaseService = leaseService;
+        this.unitService = unitService;
     }
 
     @GetMapping("/create/{unitId}")
@@ -24,6 +34,16 @@ public class UnitMaintenanceHistoryController {
 
     @PostMapping("/create")
     public String create(@ModelAttribute("history") UnitMaintenanceHistoryDto dto) {
+
+        var activeLease = leaseService.getActiveLeaseByUnitId(dto.getUnitId());
+
+        if (activeLease.isPresent()) {
+            dto.setTenantIdAtTime(activeLease.get().getTenantId());
+            dto.setTenantNameAtTime(activeLease.get().getTenantName());
+        } else {
+            dto.setTenantNameAtTime("No tenant at this time");
+        }
+
         service.create(dto);
         return "redirect:/units/" + dto.getUnitId() + "/history";
     }
@@ -58,5 +78,23 @@ public class UnitMaintenanceHistoryController {
                                   @RequestParam("unitId") Long unitId) {
         service.delete(id);
         return "redirect:/units/" + unitId + "/history";
+    }
+
+    @GetMapping
+    public String list(Model model) {
+
+        List<UnitMaintenanceHistoryDto> historyList = service.getAll();
+
+        for (UnitMaintenanceHistoryDto item : historyList) {
+
+            unitService.get(item.getUnitId())
+                    .ifPresent(unit ->
+                            item.setUnitNumber(unit.getUnitNumber())
+                    );
+        }
+
+        model.addAttribute("historyList", historyList);
+
+        return "unit-history/list";
     }
 }

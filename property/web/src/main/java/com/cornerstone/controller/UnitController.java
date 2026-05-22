@@ -250,7 +250,10 @@ public class UnitController {
     }
 
     @GetMapping("/{id}/history")
-    public String maintenanceHistory(@PathVariable("id") Long id, Model model) {
+    public String maintenanceHistory(@PathVariable("id") Long id,
+                                     @RequestParam(name = "keyword", required = false) String keyword,
+                                     @RequestParam(name = "category", required = false) String category,
+                                     Model model) {
         var unit = unitService.get(id);
 
         if (unit.isEmpty()) {
@@ -259,8 +262,31 @@ public class UnitController {
 
         var unitDto = unit.get();
 
+        var historyList = historyService.getByUnitId(unitDto.getId());
+
+        if (category != null && !category.isBlank()) {
+            historyList = historyList.stream()
+                    .filter(h -> category.equalsIgnoreCase(h.getCategory()))
+                    .toList();
+        }
+
+        if (keyword != null && !keyword.isBlank()) {
+            String search = keyword.toLowerCase();
+
+            historyList = historyList.stream()
+                    .filter(h ->
+                            (h.getItemName() != null && h.getItemName().toLowerCase().contains(search)) ||
+                                    (h.getCategory() != null && h.getCategory().toLowerCase().contains(search)) ||
+                                    (h.getNotes() != null && h.getNotes().toLowerCase().contains(search)) ||
+                                    (h.getTenantNameAtTime() != null && h.getTenantNameAtTime().toLowerCase().contains(search))
+                    )
+                    .toList();
+        }
+
         model.addAttribute("unit", unitDto);
-        model.addAttribute("historyList", historyService.getByUnitId(unitDto.getId()));
+        model.addAttribute("historyList", historyList);
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("category", category);
 
         return "units/history";
     }

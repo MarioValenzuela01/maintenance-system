@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Work History</title>
+
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+
+    <link th:href="@{/css/home.css?v=10}" rel="stylesheet"/>
+</head>
+
+<body>
+
+<div class="page-shell mt-4">
+
+    <!-- SIDEBAR -->
+    <div class="sidebar-wrapper">
+        <div th:replace="~{fragments/sidebar :: sidebar}"></div>
+    </div>
+
+    <!-- CONTENT -->
+    <div class="content-wrapper">
+
+        <div class="d-flex justify-content-between align-items-center mb-3">
+
+            <div>
+                <h1 class="text-primary">Work History</h1>
+                <p class="text-muted mb-0">
+                    Search maintenance records across all units
+                </p>
+            </div>
+
+        </div>
+
+        <hr>
+
+        <!-- FILTERS -->
+
+        <div class="card shadow-sm p-3 mb-4">
+
+            <form th:action="@{/unit-history}" method="get">
+
+                <div class="row g-2">
+
+                    <div class="col-md-5">
+
+                        <input
+                                type="text"
+                                name="keyword"
+                                class="form-control"
+                                placeholder="Search unit, tenant, notes..."
+                                th:value="${keyword}">
+
+                    </div>
+
+                    <div class="col-md-3">
+
+                        <select name="category"
+                                class="form-select">
+
+                            <option value="">All Categories</option>
+
+                            <option value="Appliance">
+                                Appliance
+                            </option>
+
+                            <option value="Bathroom">
+                                Bathroom
+                            </option>
+
+                            <option value="Flooring">
+                                Flooring
+                            </option>
+
+                            <option value="Paint">
+                                Paint
+                            </option>
+
+                            <option value="Safety">
+                                Safety
+                            </option>
+
+                            <option value="Plumbing">
+                                Plumbing
+                            </option>
+
+                            <option value="Other">
+                                Other
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                    <div class="col-md-4">
+
+                        <button class="btn btn-primary">
+                            Search
+                        </button>
+
+                        <a th:href="@{/unit-history}"
+                           class="btn btn-secondary">
+                            Clear
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </form>
+
+        </div>
+
+        <!-- TABLE -->
+
+        <div class="card shadow-sm">
+
+            <div class="table-responsive">
+
+                <table class="table table-hover align-middle mb-0">
+
+                    <thead class="table-dark">
+
+                    <tr>
+
+                        <th>Date</th>
+
+                        <th>Unit</th>
+
+                        <th>Work Done</th>
+
+                        <th>Category</th>
+
+                        <th>Tenant</th>
+
+                        <th>Notes</th>
+
+                        <th>Actions</th>
+
+                    </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                    <tr th:each="item : ${historyList}">
+
+                        <td th:text="${item.completedDate}">
+                        </td>
+
+                        <td>
+
+                            <a th:href="@{/units/{id}/history(id=${item.unitId})}"
+                               class="text-decoration-none">
+
+                                <strong>
+                                    <span th:text="${item.unitNumber}">
+                                    </span>
+                                </strong>
+
+                            </a>
+
+                        </td>
+
+                        <td th:text="${item.itemName}">
+                        </td>
+
+                        <td>
+
+                            <span class="badge bg-light text-dark border"
+                                  th:text="${item.category}">
+                            </span>
+
+                        </td>
+
+                        <td>
+
+                            <span th:text="${item.tenantNameAtTime}">
+                            </span>
+
+                        </td>
+
+                        <td>
+
+                            <span th:text="${item.notes}">
+                            </span>
+
+                        </td>
+
+                        <td>
+
+                            <a th:href="@{/unit-history/edit/{id}(id=${item.id})}"
+                               class="btn btn-sm btn-outline-primary">
+
+                                Edit
+
+                            </a>
+
+                            <a th:href="@{/unit-history/delete/{id}(id=${item.id})}"
+                               class="btn btn-sm btn-outline-danger ms-1">
+
+                                Delete
+
+                            </a>
+
+                        </td>
+
+                    </tr>
+
+                    <tr th:if="${#lists.isEmpty(historyList)}">
+
+                        <td colspan="7"
+                            class="text-center text-muted py-5">
+
+                            No work history found.
+
+                        </td>
+
+                    </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>

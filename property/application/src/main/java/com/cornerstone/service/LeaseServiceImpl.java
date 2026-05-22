@@ -121,5 +121,10 @@ public class LeaseServiceImpl implements LeaseService {
                 .findFirst();
     }
 
+    @Override
+    public Optional<LeaseDto> getLeaseByUnitAndDate(Long unitId, LocalDate date) {
+        return leaseRepository.getLeaseByUnitAndDate(unitId, date);
+    }
+
 
 }

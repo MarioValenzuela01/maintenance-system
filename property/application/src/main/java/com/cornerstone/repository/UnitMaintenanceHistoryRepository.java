@@ -7,6 +7,8 @@ import java.util.Optional;
 
 public interface UnitMaintenanceHistoryRepository {
 
+    List<UnitMaintenanceHistoryDto> getAll();
+
     List<UnitMaintenanceHistoryDto> getByUnitId(Long unitId);
 
     Optional<UnitMaintenanceHistoryDto> get(Long id);

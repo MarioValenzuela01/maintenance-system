@@ -27,6 +27,13 @@ public class UnitMaintenanceHistoryEntity {
     @Column(length = 1000)
     private String notes;
 
+    @Column(name = "tenant_id_at_time")
+    private Long tenantIdAtTime;
+
+    @Column(name = "tenant_name_at_time")
+    private String tenantNameAtTime;
+
+
     public Long getId() { return id; }
     public UnitMaintenanceHistoryEntity setId(Long id) { this.id = id; return this; }
 
@@ -44,4 +51,16 @@ public class UnitMaintenanceHistoryEntity {
 
     public String getNotes() { return notes; }
     public UnitMaintenanceHistoryEntity setNotes(String notes) { this.notes = notes; return this; }
+
+    public Long getTenantIdAtTime() { return tenantIdAtTime; }
+    public UnitMaintenanceHistoryEntity setTenantIdAtTime(Long tenantIdAtTime) {
+        this.tenantIdAtTime = tenantIdAtTime;
+        return this;
+    }
+
+    public String getTenantNameAtTime() { return tenantNameAtTime; }
+    public UnitMaintenanceHistoryEntity setTenantNameAtTime(String tenantNameAtTime) {
+        this.tenantNameAtTime = tenantNameAtTime;
+        return this;
+    }
 }

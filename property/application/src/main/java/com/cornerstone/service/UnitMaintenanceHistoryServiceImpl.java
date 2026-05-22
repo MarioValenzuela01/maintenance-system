@@ -15,6 +15,10 @@ public class UnitMaintenanceHistoryServiceImpl implements UnitMaintenanceHistory
     public UnitMaintenanceHistoryServiceImpl(UnitMaintenanceHistoryRepository repository) {
         this.repository = repository;
     }
+    @Override
+    public List<UnitMaintenanceHistoryDto> getAll() {
+        return repository.getAll();
+    }
 
     @Override
     public List<UnitMaintenanceHistoryDto> getByUnitId(Long unitId) {
