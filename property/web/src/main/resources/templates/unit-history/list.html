@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
     <meta charset="UTF-8">
@@ -192,14 +194,16 @@
                         <td>
 
                             <a th:href="@{/unit-history/edit/{id}(id=${item.id})}"
-                               class="btn btn-sm btn-outline-primary">
+                               class="btn btn-sm btn-outline-primary"
+                               sec:authorize="hasAnyRole('SUPER_ADMIN','ADMIN','USER')">
 
                                 Edit
 
                             </a>
 
                             <a th:href="@{/unit-history/delete/{id}(id=${item.id})}"
-                               class="btn btn-sm btn-outline-danger ms-1">
+                               class="btn btn-sm btn-outline-danger ms-1"
+                               sec:authorize="hasRole('SUPER_ADMIN')">
 
                                 Delete
 

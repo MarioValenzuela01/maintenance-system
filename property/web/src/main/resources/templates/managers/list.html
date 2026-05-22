@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <title>Managers</title>
@@ -20,7 +22,7 @@
 
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h1 class="text-primary">Managers</h1>
-            <a th:href="@{/managers/create}" class="btn btn-success">+ Create Manager</a>
+            <a th:href="@{/managers/create}" class="btn btn-success" sec:authorize="hasRole('SUPER_ADMIN')">+ Create Manager</a>
         </div>
 
         <hr>
@@ -60,9 +62,14 @@
 
                         <td>
                             <a th:href="@{/managers/{id}/assign-units(id=${m.id})}"
-                               class="btn btn-sm btn-outline-primary">
+                               class="btn btn-sm btn-outline-primary" sec:authorize="hasRole('SUPER_ADMIN')">
                                 Assign
                             </a>
+
+                            <span class="text-muted small"
+                                  sec:authorize="!hasRole('SUPER_ADMIN')">
+                                    View only
+                            </span>
                         </td>
 
                     </tr>

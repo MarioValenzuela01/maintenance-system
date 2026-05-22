@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <title>Units List</title>
@@ -32,7 +34,8 @@
                     View Interactive Map
                 </button>
 
-                <a th:href="@{/units/create}" class="btn btn-success shadow-sm">
+                <a th:href="@{/units/create}" class="btn btn-success shadow-sm"
+                   sec:authorize="hasAnyRole('SUPER_ADMIN','ADMIN')">
                     + Add Unit
                 </a>
             </div>
@@ -262,10 +265,16 @@
                             <td>
                                 <div class="btn-group">
                                     <a th:href="@{/units/edit/{id}(id=${u.id})}"
-                                       class="btn btn-sm btn-outline-primary">Edit</a>
+                                       class="btn btn-sm btn-outline-primary"
+                                       sec:authorize="hasAnyRole('SUPER_ADMIN','ADMIN')">
+                                        Edit
+                                    </a>
 
                                     <a th:href="@{/units/delete/{id}(id=${u.id})}"
-                                       class="btn btn-sm btn-outline-danger">Delete</a>
+                                       class="btn btn-sm btn-outline-danger"
+                                       sec:authorize="hasAnyRole('SUPER_ADMIN','ADMIN')">
+                                        Delete
+                                    </a>
                                 </div>
                             </td>
 

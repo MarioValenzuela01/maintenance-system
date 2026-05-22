@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cornerstone - Maintenance Management Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-slate-50 font-sans antialiased text-slate-800">
+
+<div class="flex h-screen overflow-hidden">
+
+    <aside class="w-64 bg-slate-900 text-slate-200 flex flex-col justify-between hidden md:flex shadow-xl">
+        <div class="p-6">
+            <div class="flex items-center gap-3 border-b border-slate-800 pb-4">
+                <div class="p-2 bg-emerald-500 rounded-lg text-slate-900 shadow-md shadow-emerald-500/20">
+                    <i data-lucide="wrench" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold tracking-tight text-white leading-tight">Cornerstone</h1>
+                    <span class="text-xs text-emerald-400 font-medium tracking-wide uppercase">Maintenance</span>
+                </div>
+            </div>
+
+            <nav class="mt-6 space-y-1.5">
+                <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-slate-800 text-emerald-400 font-semibold shadow-xs transition-all duration-200">
+                    <i data-lucide="layout-dashboard" class="w-5 h-5"></i> Dashboard
+                </a>
+                <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-800/60 hover:text-slate-100 transition-all duration-200">
+                    <i data-lucide="clipboard-list" class="w-5 h-5"></i> Active Orders
+                </a>
+                <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-800/60 hover:text-slate-100 transition-all duration-200">
+                    <i data-lucide="history" class="w-5 h-5"></i> History
+                </a>
+            </nav>
+        </div>
+        <div class="p-4 border-t border-slate-800 text-center">
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/10 text-amber-400 text-xs font-medium border border-amber-500/20">
+                    <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span> Local Server Demo
+                </span>
+        </div>
+    </aside>
+
+    <main class="flex-1 flex flex-col overflow-y-auto">
+
+        <header class="bg-white border-b border-slate-200 px-8 py-4 flex justify-between items-center shadow-xs">
+            <div class="flex flex-col">
+                <h2 class="text-xl font-bold text-slate-900 tracking-tight">Maintenance Dashboard</h2>
+                <p class="text-xs text-slate-500">Monitoreo y asignación de tareas operativas sin información financiera.</p>
+            </div>
+            <div class="flex items-center gap-3 border-l border-slate-200 pl-4">
+                <div class="text-right hidden sm:block">
+                    <p class="text-sm font-semibold text-slate-900">Mario Valenzuela</p>
+                    <p class="text-xs text-slate-500 font-medium">Developer</p>
+                </div>
+                <div class="w-10 h-10 rounded-xl bg-slate-900 text-emerald-400 flex items-center justify-center font-bold text-sm shadow-md border border-slate-800">
+                    MV
+                </div>
+            </div>
+        </header>
+
+        <div class="p-8 space-y-8 max-w-7xl w-full mx-auto">
+
+            <section class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-white p-6 rounded-2xl shadow-xs border border-slate-100 border-l-4 border-l-amber-500 flex justify-between items-center hover:shadow-md transition-all duration-200">
+                    <div>
+                        <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">In Progress</p>
+                        <h3 class="text-3xl font-extrabold text-slate-900 mt-1">4 <span class="text-sm font-normal text-slate-500">tasks</span></h3>
+                    </div>
+                    <div class="bg-amber-50 p-3 rounded-xl text-amber-600 border border-amber-100"><i data-lucide="sliders" class="w-6 h-6"></i></div>
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl shadow-xs border border-slate-100 border-l-4 border-l-blue-500 flex justify-between items-center hover:shadow-md transition-all duration-200">
+                    <div>
+                        <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Pending</p>
+                        <h3 class="text-3xl font-extrabold text-slate-900 mt-1">2 <span class="text-sm font-normal text-slate-500">requests</span></h3>
+                    </div>
+                    <div class="bg-blue-50 p-3 rounded-xl text-blue-600 border border-blue-100"><i data-lucide="alert-circle" class="w-6 h-6"></i></div>
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl shadow-xs border border-slate-100 border-l-4 border-l-emerald-500 flex justify-between items-center hover:shadow-md transition-all duration-200">
+                    <div>
+                        <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Completed</p>
+                        <h3 class="text-3xl font-extrabold text-slate-900 mt-1">12 <span class="text-sm font-normal text-slate-500">this month</span></h3>
+                    </div>
+                    <div class="bg-emerald-50 p-3 rounded-xl text-emerald-600 border border-emerald-100"><i data-lucide="check-circle-2" class="w-6 h-6"></i></div>
+                </div>
+            </section>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+                <section class="bg-white p-6 rounded-2xl shadow-xs border border-slate-100 lg:col-span-1 flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-lg font-bold text-slate-900 mb-1 flex items-center gap-2">
+                            <i data-lucide="plus-circle" class="text-emerald-500 w-5 h-5"></i> New Activity
+                        </h3>
+                        <p class="text-xs text-slate-500 mb-6">Ingresa reportes directo a la base de datos.</p>
+
+                        <form onsubmit="event.preventDefault();" class="space-y-4">
+                            <div>
+                                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-1.5">Report Title</label>
+                                <input type="text" class="w-full px-3.5 py-2 border border-slate-200 bg-slate-50/50 rounded-xl focus:outline-hidden focus:bg-white focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all duration-150" placeholder="Ej: Water pump failure">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-1.5">Location / Area</label>
+                                <input type="text" class="w-full px-3.5 py-2 border border-slate-200 bg-slate-50/50 rounded-xl focus:outline-hidden focus:bg-white focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all duration-150" placeholder="Ej: Basement - Block B">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-1.5">Priority Level</label>
+                                <select class="w-full px-3.5 py-2 border border-slate-200 bg-slate-50/50 rounded-xl focus:outline-hidden focus:bg-white focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all duration-150 appearance-none bg-white">
+                                    <option value="Baja">Baja</option>
+                                    <option value="Media" selected>Media</option>
+                                    <option value="Alta">Alta</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-1.5">Technical Details</label>
+                                <textarea rows="3" class="w-full px-3.5 py-2 border border-slate-200 bg-slate-50/50 rounded-xl focus:outline-hidden focus:bg-white focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all duration-150 resize-none" placeholder="Especificaciones o refacciones necesarias..."></textarea>
+                            </div>
+                            <button type="button" class="w-full mt-2 bg-slate-900 hover:bg-slate-800 text-white font-semibold py-3 rounded-xl transition-all duration-150 shadow-md shadow-slate-900/10 flex justify-center items-center gap-2 cursor-pointer">
+                                <i data-lucide="save" class="w-4 h-4 text-emerald-400"></i> Save Record
+                            </button>
+                        </form>
+                    </div>
+                </section>
+
+                <section class="bg-white p-6 rounded-2xl shadow-xs border border-slate-100 lg:col-span-2 flex flex-col overflow-hidden">
+                    <div class="mb-5">
+                        <h3 class="text-lg font-bold text-slate-900 mb-1 flex items-center gap-2">
+                            <i data-lucide="list-todo" class="text-slate-700 w-5 h-5"></i> Real-Time Logs
+                        </h3>
+                        <p class="text-xs text-slate-500">Últimas actualizaciones registradas (Datos de demostración simulados).</p>
+                    </div>
+
+                    <div class="overflow-x-auto border border-slate-100 rounded-xl">
+                        <table class="w-full text-left text-sm text-slate-600 border-collapse">
+                            <thead class="bg-slate-50 text-xs font-bold text-slate-500 uppercase tracking-wider border-b border-slate-100">
+                            <tr>
+                                <th class="py-3.5 px-4">Task / Activity</th>
+                                <th class="py-3.5 px-4">Location</th>
+                                <th class="py-3.5 px-4 text-center">Priority</th>
+                                <th class="py-3.5 px-4 text-right">Status</th>
+                            </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-100">
+                            <tr class="hover:bg-slate-50/80 transition-colors duration-150">
+                                <td class="py-4 px-4 font-semibold text-slate-900">Main water pump ventilation repair</td>
+                                <td class="py-4 px-4 text-slate-500">Basement - Engine Room</td>
+                                <td class="py-4 px-4 text-center">
+                                            <span class="inline-block px-2.5 py-1 rounded-full text-xs font-bold border bg-rose-50 text-rose-700 border-rose-100">
+                                                Alta
+                                            </span>
+                                </td>
+                                <td class="py-4 px-4 text-right">
+                                            <span class="inline-flex items-center gap-1.5 font-semibold text-amber-600 text-xs bg-amber-50 px-2.5 py-1 rounded-lg border border-amber-100">
+                                                <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
+                                                In Progress
+                                            </span>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-slate-50/80 transition-colors duration-150">
+                                <td class="py-4 px-4 font-semibold text-slate-900">HVAC system filter replacement</td>
+                                <td class="py-4 px-4 text-slate-500">Main Office - Floor 2</td>
+                                <td class="py-4 px-4 text-center">
+                                            <span class="inline-block px-2.5 py-1 rounded-full text-xs font-bold border bg-amber-50 text-amber-700 border-amber-100">
+                                                Media
+                                            </span>
+                                </td>
+                                <td class="py-4 px-4 text-right">
+                                            <span class="inline-flex items-center gap-1.5 font-semibold text-blue-600 text-xs bg-blue-50 px-2.5 py-1 rounded-lg border border-blue-100">
+                                                <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
+                                                Pending
+                                            </span>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+            </div>
+        </div>
+    </main>
+</div>
+
+<script>
+    lucide.createIcons();
+</script>
+</body>
+</html>

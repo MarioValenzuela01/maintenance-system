@@ -11,4 +11,10 @@ public class HomeController {
         // Ahora devuelve directamente el diseño de la página de inicio
         return "home";
     }
+
+    @GetMapping("/dashboard")
+    public String mostrarDashboard() {
+        // Devuelve directamente el HTML estático para que lo puedas ver
+        return "dashboard";
+    }
 }

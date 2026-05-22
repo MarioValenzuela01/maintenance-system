@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Cornerstone Login</title>
+
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+
+    <style>
+
+        body{
+            min-height:100vh;
+            background:#f8fafc;
+
+            display:flex;
+            justify-content:center;
+            align-items:center;
+        }
+
+        .login-card{
+            width:420px;
+
+            background:white;
+
+            border-radius:22px;
+
+            padding:40px;
+
+            box-shadow:
+                    0 10px 30px rgba(0,0,0,.08);
+        }
+
+        .logo{
+            width:180px;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="login-card">
+
+    <div class="text-center mb-4">
+
+        <img src="/images/Cornestone-logo2.png"
+             class="logo">
+
+    </div>
+
+    <h2 class="fw-bold text-center mb-1">
+        Welcome
+    </h2>
+
+    <p class="text-center text-muted mb-4">
+        Cornerstone Property Management
+    </p>
+
+    <form th:action="@{/login}" method="post">
+
+        <div class="mb-3">
+
+            <label class="form-label">
+                Username
+            </label>
+
+            <input
+                    type="text"
+                    name="username"
+                    class="form-control form-control-lg"
+                    required>
+
+        </div>
+
+        <div class="mb-4">
+
+            <label class="form-label">
+                Password
+            </label>
+
+            <input
+                    type="password"
+                    name="password"
+                    class="form-control form-control-lg"
+                    required>
+
+        </div>
+
+        <div th:if="${param.error}"
+             class="alert alert-danger">
+
+            Invalid credentials
+
+        </div>
+
+        <div th:if="${param.logout}"
+             class="alert alert-success">
+
+            Session closed
+
+        </div>
+
+        <button
+                type="submit"
+                class="btn btn-dark w-100">
+
+            Sign In
+
+        </button>
+
+    </form>
+
+</div>
+
+</body>
+
+</html>

@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <title>Leases</title>
@@ -31,7 +33,10 @@
                class="btn btn-outline-primary">
                 View Active
             </a>
-            <a th:href="@{/leases/create}" class="btn btn-success">+ New Lease</a>
+            <a th:href="@{/leases/create}" class="btn btn-success"
+               sec:authorize="hasAnyRole('SUPER_ADMIN','ADMIN')">
+                + New Lease
+            </a>
         </div>
 
         <hr>
@@ -74,13 +79,17 @@
 
                         <td onclick="event.stopPropagation();">
                             <a th:href="@{/leases/edit/{id}(id=${lease.id})}"
-                               class="btn btn-sm btn-outline-primary">Edit</a>
+                               class="btn btn-sm btn-outline-primary"
+                               sec:authorize="hasAnyRole('SUPER_ADMIN','ADMIN')">
+                                Edit
+                            </a>
 
                             <form th:if="${lease.endDate == null}"
                                   th:action="@{/leases/end/{id}(id=${lease.id})}"
                                   method="post"
                                   class="d-inline">
-                                <button type="submit" class="btn btn-sm btn-danger">
+                                <button type="submit" class="btn btn-sm btn-danger"
+                                        sec:authorize="hasAnyRole('SUPER_ADMIN','ADMIN')">
                                     End
                                 </button>
                             </form>

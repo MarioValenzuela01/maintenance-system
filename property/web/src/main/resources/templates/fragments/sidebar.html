@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+        xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <body>
 
 <div th:fragment="sidebar">
@@ -15,6 +16,22 @@
 
         </div>
 
+        <div class="text-center mb-4">
+
+            <div class="fw-bold">
+                Welcome
+            </div>
+
+            <div class="text-primary"
+                 sec:authentication="name">
+            </div>
+
+            <div class="small text-muted"
+                 sec:authentication="principal.authorities">
+            </div>
+
+        </div>
+
 
         <a th:href="@{/units}" class="sidebar-link">🏘 Units</a>
         <a th:href="@{/tenants}" class="sidebar-link">👤 Tenants</a>
@@ -22,6 +39,16 @@
         <a th:href="@{/unit-history}" class="sidebar-link">🔧 Work History</a>
         <a th:href="@{/managers}" class="sidebar-link">🛠 Managers</a>
     </div>
+    <form th:action="@{/logout}" method="post">
+
+        <button type="submit"
+                class="sidebar-link border-0 w-100 text-start bg-transparent">
+
+            🚪 Logout
+
+        </button>
+
+    </form>
 
 </div>
 
