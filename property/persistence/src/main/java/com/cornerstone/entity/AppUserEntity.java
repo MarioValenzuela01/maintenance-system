@@ -16,6 +16,8 @@ public class AppUserEntity {
     @Column(name = "full_name")
     private String fullName;
 
+    private String email;
+
     private String role;
     private Boolean enabled;
 
@@ -30,6 +32,9 @@ public class AppUserEntity {
 
     public String getFullName() { return fullName; }
     public AppUserEntity setFullName(String fullName) { this.fullName = fullName; return this; }
+
+    public String getEmail() {return email;}
+    public AppUserEntity setEmail(String email) {this.email = email;return this;}
 
     public String getRole() { return role; }
     public AppUserEntity setRole(String role) { this.role = role; return this; }

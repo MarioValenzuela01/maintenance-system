@@ -30,7 +30,20 @@
                  sec:authentication="principal.authorities">
             </div>
 
+            <button type="submit"
+                    class="sidebar-link border-0 w-100 text-start bg-transparent">
+
+                🚪 Logout
+
+            </button>
+
         </div>
+
+        <a th:href="@{/users}"
+           class="sidebar-link"
+           sec:authorize="hasRole('SUPER_ADMIN')">
+            🔐 Users
+        </a>
 
 
         <a th:href="@{/units}" class="sidebar-link">🏘 Units</a>
@@ -41,12 +54,7 @@
     </div>
     <form th:action="@{/logout}" method="post">
 
-        <button type="submit"
-                class="sidebar-link border-0 w-100 text-start bg-transparent">
 
-            🚪 Logout
-
-        </button>
 
     </form>
 
