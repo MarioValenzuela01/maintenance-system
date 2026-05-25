@@ -24,18 +24,33 @@
 
             <div class="text-primary"
                  sec:authentication="name">
+
             </div>
+            <form th:action="@{/logout}" method="post" class="m-0">
+                <input type="hidden"
+                       th:name="${_csrf.parameterName}"
+                       th:value="${_csrf.token}" />
+
+                <button type="submit"
+                        class="sidebar-link border-0 w-100 text-center bg-transparent">
+                    🚪 Logout
+                </button>
+            </form>
 
             <div class="small text-muted"
                  sec:authentication="principal.authorities">
             </div>
 
-            <button type="submit"
-                    class="sidebar-link border-0 w-100 text-start bg-transparent">
+            <form th:action="@{/logout}" method="post" class="m-0">
+                <input type="hidden"
+                       th:name="${_csrf.parameterName}"
+                       th:value="${_csrf.token}" />
 
-                🚪 Logout
-
-            </button>
+                <button type="submit"
+                        class="sidebar-link border-0 w-100 text-start bg-transparent">
+                    🚪 Logout
+                </button>
+            </form>
 
         </div>
 
