@@ -34,7 +34,14 @@ public class UserController {
 
     @PostMapping("/create")
     public String create(@ModelAttribute("user") AppUserEntity user,
-                         @RequestParam("plainPassword") String plainPassword) {
+                         @RequestParam("plainPassword") String plainPassword,
+                         Model model) {
+
+        if (appUserRepository.existsByUsername(user.getUsername())) {
+            model.addAttribute("user", user);
+            model.addAttribute("usernameError", "Username already exists");
+            return "users/create";
+        }
 
         user.setPassword(passwordEncoder.encode(plainPassword));
         user.setEnabled(true);

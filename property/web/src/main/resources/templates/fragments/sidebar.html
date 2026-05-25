@@ -41,17 +41,6 @@
                  sec:authentication="principal.authorities">
             </div>
 
-            <form th:action="@{/logout}" method="post" class="m-0">
-                <input type="hidden"
-                       th:name="${_csrf.parameterName}"
-                       th:value="${_csrf.token}" />
-
-                <button type="submit"
-                        class="sidebar-link border-0 w-100 text-start bg-transparent">
-                    🚪 Logout
-                </button>
-            </form>
-
         </div>
 
         <a th:href="@{/users}"
