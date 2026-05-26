@@ -254,6 +254,7 @@ public class UnitController {
                                      @RequestParam(name = "keyword", required = false) String keyword,
                                      @RequestParam(name = "category", required = false) String category,
                                      Model model) {
+
         var unit = unitService.get(id);
 
         if (unit.isEmpty()) {
@@ -266,7 +267,8 @@ public class UnitController {
 
         if (category != null && !category.isBlank()) {
             historyList = historyList.stream()
-                    .filter(h -> category.equalsIgnoreCase(h.getCategory()))
+                    .filter(h -> h.getCategory() != null &&
+                            h.getCategory().equalsIgnoreCase(category))
                     .toList();
         }
 

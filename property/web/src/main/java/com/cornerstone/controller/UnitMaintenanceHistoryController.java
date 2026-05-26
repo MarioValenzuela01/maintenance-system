@@ -81,19 +81,41 @@ public class UnitMaintenanceHistoryController {
     }
 
     @GetMapping
-    public String list(Model model) {
+    public String list(@RequestParam(name = "keyword", required = false) String keyword,
+                       @RequestParam(name = "category", required = false) String category,
+                       Model model) {
 
         List<UnitMaintenanceHistoryDto> historyList = service.getAll();
 
         for (UnitMaintenanceHistoryDto item : historyList) {
-
             unitService.get(item.getUnitId())
-                    .ifPresent(unit ->
-                            item.setUnitNumber(unit.getUnitNumber())
-                    );
+                    .ifPresent(unit -> item.setUnitNumber(unit.getUnitNumber()));
+        }
+
+        if (category != null && !category.isBlank()) {
+            historyList = historyList.stream()
+                    .filter(h -> h.getCategory() != null &&
+                            h.getCategory().equalsIgnoreCase(category))
+                    .toList();
+        }
+
+        if (keyword != null && !keyword.isBlank()) {
+            String search = keyword.toLowerCase();
+
+            historyList = historyList.stream()
+                    .filter(h ->
+                            (h.getUnitNumber() != null && h.getUnitNumber().toLowerCase().contains(search)) ||
+                                    (h.getItemName() != null && h.getItemName().toLowerCase().contains(search)) ||
+                                    (h.getCategory() != null && h.getCategory().toLowerCase().contains(search)) ||
+                                    (h.getNotes() != null && h.getNotes().toLowerCase().contains(search)) ||
+                                    (h.getTenantNameAtTime() != null && h.getTenantNameAtTime().toLowerCase().contains(search))
+                    )
+                    .toList();
         }
 
         model.addAttribute("historyList", historyList);
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("category", category);
 
         return "unit-history/list";
     }
