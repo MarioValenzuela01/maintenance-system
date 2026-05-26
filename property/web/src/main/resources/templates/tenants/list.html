@@ -32,6 +32,13 @@
 
         <hr>
 
+        <div class="mb-3">
+            <input type="text"
+                   id="tenantSearchInput"
+                   class="form-control"
+                   placeholder="Search tenants by name, email, phone, or date...">
+        </div>
+
         <div class="card shadow-sm">
             <div class="table-responsive">
 
@@ -50,8 +57,8 @@
 
                     <tbody>
 
-                    <tr th:each="t : ${tenants}">
-                        <!--                        <td th:text="${t.id}"></td>-->
+                    <tr th:each="t : ${tenants}" class="tenant-row">
+
 
                         <td class="text-start ps-4">
                             <a th:href="@{/tenants/details/{id}(id=${t.id})}"
@@ -113,5 +120,6 @@
     </div>
 </div>
 
+<script th:src="@{/js/tenant-search.js}"></script>
 </body>
 </html>
