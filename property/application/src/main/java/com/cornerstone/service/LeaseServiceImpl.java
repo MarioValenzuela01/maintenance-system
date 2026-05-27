@@ -60,16 +60,13 @@ public class LeaseServiceImpl implements LeaseService {
     }
 
     @Override
-    public LeaseDto endLease(Long leaseId) {
-        Optional<LeaseDto> existingLease = leaseRepository.get(leaseId);
+    public LeaseDto endLease(Long leaseId, LocalDate endDate) {
+        LeaseDto lease = leaseRepository.get(leaseId)
+                .orElseThrow(() -> new RuntimeException("Lease not found"));
 
-        if (existingLease.isPresent()) {
-            LeaseDto lease = existingLease.get();
-            lease.setEndDate(LocalDate.now());
-            return leaseRepository.save(lease);
-        }
+        lease.setEndDate(endDate != null ? endDate : LocalDate.now());
 
-        throw new IllegalArgumentException("Contrato no encontrado");
+        return leaseRepository.save(lease);
     }
 
     @Override

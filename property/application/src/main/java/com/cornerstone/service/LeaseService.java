@@ -18,7 +18,7 @@ public interface LeaseService {
 
     LeaseDto update(Long id, LeaseDto lease);
 
-    LeaseDto endLease(Long leaseId);
+    LeaseDto endLease(Long leaseId, LocalDate endDate);
 
     List<TenantDto> getAvailableTenants();
 

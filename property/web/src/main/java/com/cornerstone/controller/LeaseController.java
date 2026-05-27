@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Controller
@@ -87,8 +88,16 @@ public class LeaseController {
 
     // Finalizar un contrato (La regla de negocio de no borrar, solo marcar fecha)
     @PostMapping("/end/{id}")
-    public String endLease(@PathVariable("id") Long id) {
-        leaseService.endLease(id);
+    public String endLease(@PathVariable("id") Long id,
+                           @RequestParam(name = "mode", defaultValue = "today") String mode,
+                           @RequestParam(name = "endDate", required = false) LocalDate endDate) {
+
+        LocalDate finalEndDate = "custom".equalsIgnoreCase(mode)
+                ? endDate
+                : LocalDate.now();
+
+        leaseService.endLease(id, finalEndDate);
+
         return "redirect:/leases";
     }
 
