@@ -32,6 +32,7 @@ public class LeaseController {
     // Mostrar todos los contratos
     @GetMapping
     public String list(@RequestParam(name = "showHistory", defaultValue = "false") boolean showHistory,
+                       @RequestParam(name = "keyword", required = false) String keyword,
                        Model model) {
 
         List<LeaseDto> leases = leaseService.getAll();
@@ -42,10 +43,29 @@ public class LeaseController {
                     .toList();
         }
 
+        if (keyword != null && !keyword.isBlank()) {
+            String search = keyword.trim().toLowerCase();
+
+            leases = leases.stream()
+                    .filter(l ->
+                            contains(l.getTenantName(), search)
+                                    || contains(l.getUnitNumber(), search)
+                                    || contains(l.getUnitDisplayLabel(), search)
+                                    || contains(l.getStartDate() == null ? null : l.getStartDate().toString(), search)
+                                    || contains(l.getEndDate() == null ? "current active" : "ended history", search)
+                    )
+                    .toList();
+        }
+
         model.addAttribute("leases", leases);
         model.addAttribute("showHistory", showHistory);
+        model.addAttribute("keyword", keyword);
 
         return "leases/list";
+    }
+
+    private boolean contains(String value, String search) {
+        return value != null && value.toLowerCase().contains(search);
     }
 
     // Mostrar formulario para nuevo contrato
