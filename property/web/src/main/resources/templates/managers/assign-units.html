@@ -19,6 +19,11 @@
                 Manager Name
             </h4>
 
+            <div th:if="${assignError != null}"
+                 class="alert alert-danger">
+                <span th:text="${assignError}"></span>
+            </div>
+
             <form th:action="@{/managers/{id}/assign-units(id=${manager.id})}" method="post">
 
                 <div class="mb-3">

@@ -1,6 +1,8 @@
 package com.cornerstone.controller;
 
 import com.cornerstone.dto.ManagerDto;
+import com.cornerstone.dto.UnitDto;
+import com.cornerstone.service.LeaseService;
 import com.cornerstone.service.ManagerService;
 import com.cornerstone.service.UnitService;
 import org.springframework.stereotype.Controller;
@@ -15,10 +17,14 @@ public class ManagerController {
 
     private final ManagerService managerService;
     private final UnitService unitService;
+    private final LeaseService leaseService;
 
-    public ManagerController(ManagerService managerService, UnitService unitService) {
+    public ManagerController(ManagerService managerService,
+                             UnitService unitService,
+                             LeaseService leaseService) {
         this.managerService = managerService;
         this.unitService = unitService;
+        this.leaseService = leaseService;
     }
 
     @GetMapping
@@ -41,17 +47,43 @@ public class ManagerController {
 
     @GetMapping("/{id}/assign-units")
     public String assignUnitsForm(@PathVariable("id") Long id, Model model) {
-        model.addAttribute("manager", managerService.get(id).orElseThrow());
-        model.addAttribute("units", unitService.getAll());
+        ManagerDto manager = managerService.get(id)
+                .orElseThrow(() -> new RuntimeException("Manager not found"));
+
+        model.addAttribute("manager", manager);
+        model.addAttribute("units", getAssignableUnits(manager));
+
         return "managers/assign-units";
     }
 
     @PostMapping("/{id}/assign-units")
-    public String assignUnits(
-            @PathVariable("id") Long id,
-            @RequestParam(name = "unitIds", required = false) List<Long> unitIds
-    ) {
-        managerService.assignUnits(id, unitIds);
-        return "redirect:/managers";
+    public String assignUnits(@PathVariable("id") Long id,
+                              @RequestParam(name = "unitIds", required = false) List<Long> unitIds,
+                              Model model) {
+
+        try {
+            managerService.assignUnits(id, unitIds);
+            return "redirect:/managers";
+
+        } catch (RuntimeException ex) {
+            ManagerDto manager = managerService.get(id)
+                    .orElseThrow(() -> new RuntimeException("Manager not found"));
+
+            model.addAttribute("manager", manager);
+            model.addAttribute("units", getAssignableUnits(manager));
+            model.addAttribute("assignError", ex.getMessage());
+
+            return "managers/assign-units";
+        }
+    }
+
+    private List<UnitDto> getAssignableUnits(ManagerDto manager) {
+        return unitService.getAll()
+                .stream()
+                .filter(unit ->
+                        manager.getUnitIds().contains(unit.getId())
+                                || leaseService.getActiveLeaseByUnitId(unit.getId()).isEmpty()
+                )
+                .toList();
     }
 }
