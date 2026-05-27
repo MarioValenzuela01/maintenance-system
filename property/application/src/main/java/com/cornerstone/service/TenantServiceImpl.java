@@ -5,9 +5,9 @@ import com.cornerstone.repository.LeaseRepository;
 import com.cornerstone.repository.TenantRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import java.time.LocalDateTime;
 
 @Service
 public class TenantServiceImpl implements TenantService {
@@ -15,7 +15,6 @@ public class TenantServiceImpl implements TenantService {
     private final TenantRepository tenantRepository;
     private final LeaseRepository leaseRepository;
 
-    // Inyección de dependencias
     public TenantServiceImpl(TenantRepository tenantRepository,
                              LeaseRepository leaseRepository) {
         this.tenantRepository = tenantRepository;
@@ -37,14 +36,8 @@ public class TenantServiceImpl implements TenantService {
 
     @Override
     public TenantDto create(TenantDto tenant) {
-        if (tenant.getEmail() != null && !tenant.getEmail().isBlank()) {
-
-            boolean exists = tenantRepository
-                    .existsByEmailAndActiveTrue(tenant.getEmail());
-
-            if (exists) {
-                throw new RuntimeException("Email already used by an active tenant");
-            }
+        if (tenant.getActive() == null) {
+            tenant.setActive(true);
         }
 
         tenant.setUpdatedAt(LocalDateTime.now());
@@ -53,25 +46,18 @@ public class TenantServiceImpl implements TenantService {
 
     @Override
     public TenantDto update(Long id, TenantDto tenant) {
-        if (tenant.getEmail() != null && !tenant.getEmail().isBlank()) {
+        tenant.setId(id);
 
-            boolean exists = tenantRepository
-                    .existsByEmailAndActiveTrueAndIdNot(tenant.getEmail(), id);
-
-            if (exists) {
-                throw new RuntimeException("Email already used by another active tenant");
-            }
+        if (tenant.getActive() == null) {
+            tenant.setActive(true);
         }
 
-
-        tenant.setId(id);
         tenant.setUpdatedAt(LocalDateTime.now());
         return tenantRepository.save(tenant);
     }
 
     @Override
     public void delete(Long id) {
-
         boolean hasActiveLease = leaseRepository.existsActiveLeaseByTenantId(id);
 
         if (hasActiveLease) {
@@ -85,5 +71,38 @@ public class TenantServiceImpl implements TenantService {
         tenant.setUpdatedAt(LocalDateTime.now());
 
         tenantRepository.save(tenant);
+    }
+
+    @Override
+    public Optional<TenantDto> findPossibleDuplicate(TenantDto tenant) {
+        if (tenant == null) {
+            return Optional.empty();
+        }
+
+        String firstName = normalize(tenant.getFirstName());
+        String lastName = normalize(tenant.getLastName());
+        String email = normalize(tenant.getEmail());
+        String phone = normalize(tenant.getPhone());
+
+        if (firstName.isBlank() || lastName.isBlank()) {
+            return Optional.empty();
+        }
+
+        return getAll()
+                .stream()
+                .filter(existing -> tenant.getId() == null || !tenant.getId().equals(existing.getId()))
+                .filter(existing ->
+                        normalize(existing.getFirstName()).equals(firstName)
+                                && normalize(existing.getLastName()).equals(lastName)
+                )
+                .filter(existing ->
+                        (!email.isBlank() && normalize(existing.getEmail()).equals(email))
+                                || (!phone.isBlank() && normalize(existing.getPhone()).equals(phone))
+                )
+                .findFirst();
+    }
+
+    private String normalize(String value) {
+        return value == null ? "" : value.trim().toLowerCase();
     }
 }

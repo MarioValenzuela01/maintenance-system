@@ -34,7 +34,20 @@ public class TenantController {
     }
 
     @PostMapping("/create")
-    public String create(TenantDto tenant) {
+    public String create(@ModelAttribute("tenant") TenantDto tenant,
+                         @RequestParam(name = "forceCreate", defaultValue = "false") boolean forceCreate,
+                         Model model) {
+
+        var possibleDuplicate = tenantService.findPossibleDuplicate(tenant);
+
+        if (possibleDuplicate.isPresent() && !forceCreate) {
+            model.addAttribute("tenant", tenant);
+            model.addAttribute("possibleDuplicate", possibleDuplicate.get());
+            model.addAttribute("duplicateWarning", true);
+
+            return "tenants/create";
+        }
+
         tenantService.create(tenant);
         return "redirect:/tenants";
     }

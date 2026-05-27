@@ -10,4 +10,5 @@ public interface TenantService {
     TenantDto create(TenantDto tenant);
     TenantDto update(Long id, TenantDto tenant);
     void delete(Long id);
+    Optional<TenantDto> findPossibleDuplicate(TenantDto tenant);
 }
