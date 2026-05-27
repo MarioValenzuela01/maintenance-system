@@ -18,13 +18,16 @@ public class LeaseServiceImpl implements LeaseService {
     private final LeaseRepository leaseRepository;
     private final TenantRepository tenantRepository;
     private final UnitRepository unitRepository;
+    private final ManagerService managerService;
 
     public LeaseServiceImpl(LeaseRepository leaseRepository,
                             TenantRepository tenantRepository,
-                            UnitRepository unitRepository) {
+                            UnitRepository unitRepository,
+                            ManagerService managerService) {
         this.leaseRepository = leaseRepository;
         this.tenantRepository = tenantRepository;
         this.unitRepository = unitRepository;
+        this.managerService = managerService;
     }
 
     @Override
@@ -95,9 +98,13 @@ public class LeaseServiceImpl implements LeaseService {
     // 🔥 NUEVO: unidades disponibles
     @Override
     public List<UnitDto> getAvailableUnits() {
+
+        List<Long> managedUnitIds = managerService.getManagedUnitIds();
+
         return unitRepository.getAll()
                 .stream()
                 .filter(u -> !leaseRepository.existsActiveLeaseByUnitId(u.getId()))
+                .filter(u -> !managedUnitIds.contains(u.getId()))
                 .toList();
     }
 

@@ -34,7 +34,8 @@ public class LeaseMapper implements EntityMapper<LeaseDto, LeaseEntity> {
                         entity.getTenant().getFirstName() + " " +
                                 entity.getTenant().getLastName()
                 )
-                .setUnitNumber(entity.getUnit().getUnitNumber());
+                .setUnitNumber(entity.getUnit().getUnitNumber())
+                .setUnitDisplayName(entity.getUnit().getDisplayName());
     }
 
     @Override

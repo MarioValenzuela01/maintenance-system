@@ -26,7 +26,8 @@ public class UnitMapper implements EntityMapper<UnitDto, UnitEntity> {
                 .setHasBasement(entity.getHasBasement())
                 // AGREGADO: mapeamos archived en ambas direcciones
                 .setArchived(entity.getArchived())
-                .setGoogleMapsUrl(entity.getGoogleMapsUrl());
+                .setGoogleMapsUrl(entity.getGoogleMapsUrl())
+                .setDisplayName(entity.getDisplayName());
     }
 
     @Override
@@ -48,6 +49,7 @@ public class UnitMapper implements EntityMapper<UnitDto, UnitEntity> {
                 .setHasBasement(dto.getHasBasement())
                 // AGREGADO: mapeamos archived en ambas direcciones
                 .setArchived(dto.getArchived())
-                .setGoogleMapsUrl(dto.getGoogleMapsUrl());
+                .setGoogleMapsUrl(dto.getGoogleMapsUrl())
+                .setDisplayName(dto.getDisplayName());
     }
 }

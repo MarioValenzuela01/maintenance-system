@@ -23,6 +23,8 @@ public class LeaseDto {
 
     private String programNotes;
 
+    private String unitDisplayName;
+
     public LeaseDto() {
     }
 
@@ -77,6 +79,19 @@ public class LeaseDto {
 
     public LeaseDto setUnitNumber(String unitNumber) {
         this.unitNumber = unitNumber;
+        return this;
+    }
+
+    public String getUnitDisplayLabel() {
+        if (unitDisplayName != null && !unitDisplayName.trim().isEmpty()) {
+            return unitDisplayName;
+        }
+
+        return unitNumber;
+    }
+
+    public LeaseDto setUnitDisplayName(String unitDisplayName) {
+        this.unitDisplayName = unitDisplayName;
         return this;
     }
 }

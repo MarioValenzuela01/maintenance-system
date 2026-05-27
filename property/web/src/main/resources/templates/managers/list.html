@@ -22,7 +22,8 @@
 
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h1 class="text-primary">Managers</h1>
-            <a th:href="@{/managers/create}" class="btn btn-success" sec:authorize="hasRole('SUPER_ADMIN')">+ Create Manager</a>
+            <a th:href="@{/managers/create}" class="btn btn-success" sec:authorize="hasRole('SUPER_ADMIN')">+ Create
+                Manager</a>
         </div>
 
         <hr>
@@ -58,6 +59,7 @@
                                     <span th:text="${unitNumber}"></span>
                                 </a>
                             </span>
+
                         </td>
 
                         <td>

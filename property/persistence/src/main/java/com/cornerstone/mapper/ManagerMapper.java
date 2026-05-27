@@ -24,7 +24,12 @@ public class ManagerMapper {
         dto.setUnitNumbers(
                 entity.getUnits()
                         .stream()
-                        .map(UnitEntity::getUnitNumber)
+                        .map(unit -> {
+                            if (unit.getDisplayName() != null && !unit.getDisplayName().isBlank()) {
+                                return unit.getDisplayName();
+                            }
+                            return unit.getUnitNumber();
+                        })
                         .toList()
         );
 

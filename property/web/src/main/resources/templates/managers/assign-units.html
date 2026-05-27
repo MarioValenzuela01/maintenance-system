@@ -36,8 +36,10 @@
 
                             <label class="form-check-label"
                                    th:for="'unit-' + ${unit.id}"
-                                   th:text="${unit.unitNumber + ' - ' + unit.address}">
-                                Unit Number - Address
+                                   th:text="${unit.displayName != null && !unit.displayName.isBlank()
+            ? unit.displayName
+            : unit.unitNumber + ' - ' + unit.address}">
+                                Unit Name - Address
                             </label>
                         </div>
 

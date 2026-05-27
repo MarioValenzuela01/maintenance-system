@@ -34,8 +34,16 @@
                 <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
 
                     <h4 class="mb-0">
-                        Unit Number
-                        <span th:text="${unit.unitNumber}"></span>
+    <span th:text="${unit.displayName != null && !unit.displayName.isBlank()
+        ? unit.displayName
+        : 'Unit Number ' + unit.unitNumber}">
+    </span>
+
+                        <small th:if="${unit.displayName != null && !unit.displayName.isBlank()}"
+                               class="d-block text-white-50 mt-1">
+                            Unit Number:
+                            <span th:text="${unit.unitNumber}"></span>
+                        </small>
                     </h4>
 
                     <div th:if="${activeLease != null}"
@@ -73,7 +81,10 @@
 
                         <p class="mb-3">
                             <strong>Address:</strong>
-                            <span th:text="|${unit.unitNumber} ${unit.address}|"></span>
+                            <span th:text="${unit.displayName != null && !unit.displayName.isBlank()
+    ? unit.displayName
+    : unit.unitNumber + ' ' + unit.address}">
+</span>
                         </p>
 
                         <p class="mb-3">

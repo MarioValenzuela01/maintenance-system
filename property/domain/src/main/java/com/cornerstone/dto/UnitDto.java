@@ -14,6 +14,7 @@ public class UnitDto {
     private Integer bathrooms;
     private Integer floors;
     private Boolean hasBasement;
+    private String displayName;
 
     // AGREGADO: campo archived para reflejar el soft delete en el DTO
     private Boolean archived = false;
@@ -65,4 +66,7 @@ public class UnitDto {
     public String getGoogleMapsUrl() {return googleMapsUrl;}
     public UnitDto setGoogleMapsUrl(String googleMapsUrl) {this.googleMapsUrl = googleMapsUrl; return this;
     }
+
+    public String getDisplayName() {return displayName;}
+    public UnitDto setDisplayName(String displayName) {this.displayName = displayName;return this;}
 }

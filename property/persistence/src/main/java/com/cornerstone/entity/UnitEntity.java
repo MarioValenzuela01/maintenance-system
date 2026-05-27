@@ -50,6 +50,9 @@ public class UnitEntity {
     @Column(nullable = false)
     private Boolean archived = false;
 
+    @Column(name = "display_name")
+    private String displayName;
+
     public Long getId() { return id; }
     public UnitEntity setId(Long id) { this.id = id; return this; }
 
@@ -98,4 +101,7 @@ public class UnitEntity {
         this.googleMapsUrl = googleMapsUrl;
         return this;
     }
+
+    public String getDisplayName() {return displayName;}
+    public UnitEntity setDisplayName(String displayName) {this.displayName = displayName;return this;}
 }

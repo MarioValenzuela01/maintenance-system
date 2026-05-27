@@ -20,16 +20,24 @@ public class UnitServiceImpl implements UnitService {
     // AGREGADO: extrae el número al inicio del unitNumber para ordenar numéricamente
     // Ejemplos: "9" -> 9, "100" -> 100, "140-1" -> 140, "Shed" -> Integer.MAX_VALUE (va al final)
     private int extractLeadingNumber(String unitNumber) {
-        if (unitNumber == null) return Integer.MAX_VALUE;
-        try {
-            // toma solo la parte numérica inicial antes de cualquier letra o guión
-            String numeric = unitNumber.split("[^0-9]")[0];
-            if (numeric.isEmpty()) return Integer.MAX_VALUE;
-            return Integer.parseInt(numeric);
-        } catch (NumberFormatException e) {
-            // si no tiene número (ej: "Shed", "C-Can") va al final
+
+        if (unitNumber == null || unitNumber.isBlank()) {
             return Integer.MAX_VALUE;
         }
+
+        String number =
+                unitNumber.replaceAll("[^0-9].*", "");
+
+        if (number.isBlank()) {
+            return Integer.MAX_VALUE;
+        }
+
+        try {
+            return Integer.parseInt(number);
+        } catch (NumberFormatException e) {
+            return Integer.MAX_VALUE;
+        }
+
     }
 
     @Override

@@ -21,7 +21,6 @@ public class UnitRepositoryAdapter implements UnitRepository {
 
     @Override
     public List<UnitDto> getAll() {
-        // CAMBIADO: antes era findAll(), ahora solo trae las no archivadas
         return mapper.toDTO(jpaRepository.findByArchivedFalse());
     }
 
@@ -32,22 +31,53 @@ public class UnitRepositoryAdapter implements UnitRepository {
 
     @Override
     public UnitDto save(UnitDto unit) {
-        UnitEntity savedEntity = jpaRepository.save(mapper.toEntity(unit));
+
+        UnitEntity entity;
+
+        if (unit.getId() != null) {
+            entity = jpaRepository.findById(unit.getId())
+                    .orElseThrow(() -> new RuntimeException("Unit not found"));
+
+            entity.setUnitNumber(unit.getUnitNumber())
+                    .setAddress(unit.getAddress())
+                    .setStatus(unit.getStatus())
+                    .setOwnershipType(unit.getOwnershipType())
+                    .setProgramType(unit.getProgramType())
+                    .setManagedByCornerstone(unit.getManagedByCornerstone())
+                    .setNotes(unit.getNotes())
+                    .setBedrooms(unit.getBedrooms())
+                    .setBathrooms(unit.getBathrooms())
+                    .setFloors(unit.getFloors())
+                    .setHasBasement(unit.getHasBasement())
+                    .setGoogleMapsUrl(unit.getGoogleMapsUrl())
+                    .setDisplayName(unit.getDisplayName());
+
+            if (unit.getArchived() != null) {
+                entity.setArchived(unit.getArchived());
+            }
+
+        } else {
+            entity = mapper.toEntity(unit);
+
+            if (entity.getArchived() == null) {
+                entity.setArchived(false);
+            }
+        }
+
+        UnitEntity savedEntity = jpaRepository.save(entity);
         return mapper.toDTO(savedEntity);
     }
 
     @Override
     public void delete(Long id) {
-        // CAMBIADO: antes borraba físico, ahora hace soft delete
         jpaRepository.findById(id).ifPresent(unit -> {
-            unit.setArchived(true); // AGREGADO: marcamos como archivada
+            unit.setArchived(true);
             jpaRepository.save(unit);
         });
     }
 
     @Override
     public Optional<UnitDto> getByUnitNumber(String unitNumber) {
-        // CAMBIADO: solo busca entre las no archivadas
         return mapper.toDTO(jpaRepository.findByUnitNumberAndArchivedFalse(unitNumber));
     }
 

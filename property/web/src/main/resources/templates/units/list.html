@@ -88,7 +88,7 @@
                             <a th:href="@{/units/details/by-number/80}" class="unit-btn" style="top: 765px; left: 248px;"></a>
                             <a th:href="@{/units/details/by-number/82}" class="unit-btn" style="top: 742px; left: 246px;"></a>
 
-                            <a th:href="@{/units/details/by-number/83}" class="unit-btn" style="top: 709px; left: 200px;"></a>
+                            <a th:href="@{/units/details/by-number/83-1}" class="unit-btn" style="top: 709px; left: 200px;"></a>
                             <a th:href="@{/units/details/by-number/83-1}" class="unit-btn" style="top: 690px; left: 187px;"></a>
                             <a th:href="@{/units/details/by-number/84}" class="unit-btn" style="top: 654px; left: 229px;"></a>
                             <a th:href="@{/units/details/by-number/86}" class="unit-btn" style="top: 631px; left: 227px;"></a>
@@ -220,6 +220,7 @@
         </div>
 
         <!-- TABLA -->
+        <!-- TABLA -->
         <div id="unitsTableContainer" th:fragment="unitsTable">
 
             <div th:if="${#lists.isEmpty(units)}"
@@ -234,7 +235,7 @@
 
                         <thead class="table-dark">
                         <tr>
-                            <th>Unit Number</th>
+                            <th>Unit</th>
                             <th>Address</th>
                             <th>Status</th>
                             <th>Actions</th>
@@ -246,20 +247,22 @@
 
                             <td class="fw-bold">
                                 <a th:href="@{/units/details/{id}(id=${u.id})}"
-                                   th:text="${u.unitNumber}"
-                                   class="text-decoration-none">
+                                   class="text-decoration-none"
+                                   th:text="${u.displayName != null && !u.displayName.isBlank()
+                                ? u.displayName
+                                : u.unitNumber}">
                                 </a>
                             </td>
 
                             <td th:text="${u.address}"></td>
 
                             <td>
-                                <span th:text="${u.status}"
-                                      class="badge rounded-pill px-3"
-                                      th:classappend="
-                                        ${u.status == 'Occupied'} ? 'bg-danger' :
-                                        (${u.status == 'Managed'} ? 'bg-primary' : 'bg-success')">
-                                </span>
+                        <span th:text="${u.status}"
+                              class="badge rounded-pill px-3"
+                              th:classappend="
+                                ${u.status == 'Occupied'} ? 'bg-danger' :
+                                (${u.status == 'Managed'} ? 'bg-primary' : 'bg-success')">
+                        </span>
                             </td>
 
                             <td>
@@ -296,9 +299,9 @@
                 </button>
 
                 <span class="mx-2 text-muted">
-                    Page <strong th:text="${currentPage + 1}"></strong>
-                    of <strong th:text="${totalPages}"></strong>
-                </span>
+            Page <strong th:text="${currentPage + 1}"></strong>
+            of <strong th:text="${totalPages}"></strong>
+        </span>
 
                 <button type="button"
                         class="btn btn-outline-primary btn-sm ms-2"
