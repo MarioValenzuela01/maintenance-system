@@ -19,6 +19,8 @@ public class UnitMaintenanceHistoryDto {
 
     private String notes;
 
+    private String unitDisplayName;
+
     public Long getId() { return id; }
     public UnitMaintenanceHistoryDto setId(Long id) { this.id = id; return this; }
 
@@ -55,6 +57,15 @@ public class UnitMaintenanceHistoryDto {
 
     public UnitMaintenanceHistoryDto setUnitNumber(String unitNumber) {
         this.unitNumber = unitNumber;
+        return this;
+    }
+
+    public String getUnitDisplayName() {
+        return unitDisplayName;
+    }
+
+    public UnitMaintenanceHistoryDto setUnitDisplayName(String unitDisplayName) {
+        this.unitDisplayName = unitDisplayName;
         return this;
     }
 }

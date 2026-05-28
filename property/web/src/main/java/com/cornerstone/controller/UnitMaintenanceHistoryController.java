@@ -89,7 +89,15 @@ public class UnitMaintenanceHistoryController {
 
         for (UnitMaintenanceHistoryDto item : historyList) {
             unitService.get(item.getUnitId())
-                    .ifPresent(unit -> item.setUnitNumber(unit.getUnitNumber()));
+                    .ifPresent(unit -> {
+                        item.setUnitNumber(unit.getUnitNumber());
+
+                        if (unit.getDisplayName() != null && !unit.getDisplayName().isBlank()) {
+                            item.setUnitDisplayName(unit.getDisplayName());
+                        } else {
+                            item.setUnitDisplayName(unit.getUnitNumber());
+                        }
+                    });
         }
 
         if (category != null && !category.isBlank()) {
@@ -105,6 +113,7 @@ public class UnitMaintenanceHistoryController {
             historyList = historyList.stream()
                     .filter(h ->
                             (h.getUnitNumber() != null && h.getUnitNumber().toLowerCase().contains(search)) ||
+                                    (h.getUnitDisplayName() != null && h.getUnitDisplayName().toLowerCase().contains(search)) ||
                                     (h.getItemName() != null && h.getItemName().toLowerCase().contains(search)) ||
                                     (h.getCategory() != null && h.getCategory().toLowerCase().contains(search)) ||
                                     (h.getNotes() != null && h.getNotes().toLowerCase().contains(search)) ||
