@@ -1,19 +1,19 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-        xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
 <body>
 
 <div th:fragment="sidebar">
 
     <div class="sidebar-card shadow-sm">
-        <div class="text-center mb-3">
 
+        <div class="text-center mb-3">
             <a th:href="@{/}">
                 <img src="/images/Cornestone-logo2.png"
                      alt="Cornerstone"
                      style="max-width: 180px; height: auto;">
             </a>
-
         </div>
 
         <div class="text-center mb-4">
@@ -24,9 +24,10 @@
 
             <div class="text-primary"
                  sec:authentication="name">
-
             </div>
+
             <form th:action="@{/logout}" method="post" class="m-0">
+
                 <input type="hidden"
                        th:name="${_csrf.parameterName}"
                        th:value="${_csrf.token}" />
@@ -35,6 +36,7 @@
                         class="sidebar-link border-0 w-100 text-center bg-transparent">
                     🚪 Logout
                 </button>
+
             </form>
 
             <div class="small text-muted"
@@ -49,18 +51,17 @@
             🔐 Users
         </a>
 
-
         <a th:href="@{/units}" class="sidebar-link">🏘 Units</a>
         <a th:href="@{/tenants}" class="sidebar-link">👤 Tenants</a>
         <a th:href="@{/leases}" class="sidebar-link">📄 Leases</a>
         <a th:href="@{/unit-history}" class="sidebar-link">🔧 Work History</a>
         <a th:href="@{/managers}" class="sidebar-link">🛠 Managers</a>
+
     </div>
-    <form th:action="@{/logout}" method="post">
 
 
 
-    </form>
+    <script th:src="@{/js/loading.js}"></script>
 
 </div>
 

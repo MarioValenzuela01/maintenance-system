@@ -33,6 +33,18 @@ public class UnitMaintenanceHistoryEntity {
     @Column(name = "tenant_name_at_time")
     private String tenantNameAtTime;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "unit_id", insertable = false, updatable = false)
+    private UnitEntity unit;
+
+    public UnitEntity getUnit() {
+        return unit;
+    }
+
+    public void setUnit(UnitEntity unit) {
+        this.unit = unit;
+    }
+
 
     public Long getId() { return id; }
     public UnitMaintenanceHistoryEntity setId(Long id) { this.id = id; return this; }

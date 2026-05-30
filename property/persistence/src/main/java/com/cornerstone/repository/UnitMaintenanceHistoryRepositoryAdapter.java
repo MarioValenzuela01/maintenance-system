@@ -10,6 +10,8 @@ import java.util.Optional;
 @Repository
 public class UnitMaintenanceHistoryRepositoryAdapter implements UnitMaintenanceHistoryRepository {
 
+
+
     private final UnitMaintenanceHistoryJpaRepository jpaRepository;
 
     public UnitMaintenanceHistoryRepositoryAdapter(UnitMaintenanceHistoryJpaRepository jpaRepository) {

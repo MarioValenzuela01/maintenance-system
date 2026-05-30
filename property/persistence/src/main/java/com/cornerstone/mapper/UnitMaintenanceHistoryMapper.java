@@ -5,11 +5,10 @@ import com.cornerstone.entity.UnitMaintenanceHistoryEntity;
 
 public class UnitMaintenanceHistoryMapper {
 
-
     public static UnitMaintenanceHistoryDto toDto(UnitMaintenanceHistoryEntity entity) {
         if (entity == null) return null;
 
-        return new UnitMaintenanceHistoryDto()
+        UnitMaintenanceHistoryDto dto = new UnitMaintenanceHistoryDto()
                 .setId(entity.getId())
                 .setUnitId(entity.getUnitId())
                 .setCategory(entity.getCategory())
@@ -18,6 +17,19 @@ public class UnitMaintenanceHistoryMapper {
                 .setNotes(entity.getNotes())
                 .setTenantIdAtTime(entity.getTenantIdAtTime())
                 .setTenantNameAtTime(entity.getTenantNameAtTime());
+
+        if (entity.getUnit() != null) {
+            dto.setUnitNumber(entity.getUnit().getUnitNumber());
+
+            if (entity.getUnit().getDisplayName() != null &&
+                    !entity.getUnit().getDisplayName().isBlank()) {
+                dto.setUnitDisplayName(entity.getUnit().getDisplayName());
+            } else {
+                dto.setUnitDisplayName(entity.getUnit().getUnitNumber());
+            }
+        }
+
+        return dto;
     }
 
     public static UnitMaintenanceHistoryEntity toEntity(UnitMaintenanceHistoryDto dto) {
