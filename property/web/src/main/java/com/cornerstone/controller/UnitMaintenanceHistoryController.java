@@ -95,18 +95,7 @@ public class UnitMaintenanceHistoryController {
 
         List<UnitMaintenanceHistoryDto> historyList = service.getAll();
 
-        for (UnitMaintenanceHistoryDto item : historyList) {
-            unitService.get(item.getUnitId())
-                    .ifPresent(unit -> {
-                        item.setUnitNumber(unit.getUnitNumber());
 
-                        if (unit.getDisplayName() != null && !unit.getDisplayName().isBlank()) {
-                            item.setUnitDisplayName(unit.getDisplayName());
-                        } else {
-                            item.setUnitDisplayName(unit.getUnitNumber());
-                        }
-                    });
-        }
 
         if (category != null && !category.isBlank()) {
             historyList = historyList.stream()

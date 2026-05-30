@@ -10,8 +10,6 @@ import java.util.Optional;
 @Repository
 public class UnitMaintenanceHistoryRepositoryAdapter implements UnitMaintenanceHistoryRepository {
 
-
-
     private final UnitMaintenanceHistoryJpaRepository jpaRepository;
 
     public UnitMaintenanceHistoryRepositoryAdapter(UnitMaintenanceHistoryJpaRepository jpaRepository) {
@@ -21,9 +19,19 @@ public class UnitMaintenanceHistoryRepositoryAdapter implements UnitMaintenanceH
     @Override
     public List<UnitMaintenanceHistoryDto> getAll() {
 
-        return jpaRepository.findAll()
+        return jpaRepository.findAllForList()
                 .stream()
-                .map(UnitMaintenanceHistoryMapper::toDto)
+                .map(p -> new UnitMaintenanceHistoryDto()
+                        .setId(p.getId())
+                        .setUnitId(p.getUnitId())
+                        .setCategory(p.getCategory())
+                        .setItemName(p.getItemName())
+                        .setCompletedDate(p.getCompletedDate())
+                        .setNotes(p.getNotes())
+                        .setTenantIdAtTime(p.getTenantIdAtTime())
+                        .setTenantNameAtTime(p.getTenantNameAtTime())
+                        .setUnitNumber(p.getUnitNumber())
+                        .setUnitDisplayName(p.getUnitDisplayName()))
                 .toList();
     }
 
