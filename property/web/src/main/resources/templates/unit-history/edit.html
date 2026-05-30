@@ -33,23 +33,9 @@
                 <div class="row">
 
                     <div class="col-md-6 mb-3">
-                        <label class="form-label fw-bold">Category</label>
+                        <label class="form-label fw-bold">Item Type</label>
                         <select th:field="*{category}" class="form-select" required>
-                            <option value="">-- Select Category --</option>
-                            <option value="Appliance">Appliance</option>
-                            <option value="Bathroom">Bathroom</option>
-                            <option value="Flooring">Flooring</option>
-                            <option value="Paint">Paint</option>
-                            <option value="Safety">Safety</option>
-                            <option value="Plumbing">Plumbing</option>
-                            <option value="Other">Other</option>
-                        </select>
-                    </div>
-
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label fw-bold">Item</label>
-                        <select th:field="*{itemName}" class="form-select" required>
-                            <option value="">-- Select Item --</option>
+                            <option value="">-- Select Item Type --</option>
                             <option value="Fridge">Fridge</option>
                             <option value="Stove">Stove</option>
                             <option value="Tub">Tub</option>
@@ -58,10 +44,20 @@
                             <option value="Reno Bathroom">Reno Bathroom</option>
                             <option value="Flooring">Flooring</option>
                             <option value="Sump Pump">Sump Pump</option>
-                            <option value="Smoke Alarm Battery">Smoke Alarm Battery</option>
+                            <option value="Smoke Alarm Battery 10 years Warranty">
+                                Smoke Alarm Battery 10 years Warranty
+                            </option>
                             <option value="Smoke Alarm Hard Wire">Smoke Alarm Hard Wire</option>
-                            <option value="Other">Other</option>
                         </select>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold">Work Done / Details</label>
+                        <input type="text"
+                               th:field="*{itemName}"
+                               class="form-control"
+                               placeholder="Example: replaced, repaired, checked, warranty info"
+                               required>
                     </div>
 
                 </div>

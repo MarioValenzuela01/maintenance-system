@@ -60,7 +60,15 @@ public class UnitMaintenanceHistoryController {
     @PostMapping("/edit/{id}")
     public String edit(@PathVariable("id") Long id,
                        @ModelAttribute("history") UnitMaintenanceHistoryDto dto) {
+
+        UnitMaintenanceHistoryDto existing = service.get(id)
+                .orElseThrow(() -> new RuntimeException("Maintenance record not found"));
+
+        dto.setTenantIdAtTime(existing.getTenantIdAtTime());
+        dto.setTenantNameAtTime(existing.getTenantNameAtTime());
+
         service.update(id, dto);
+
         return "redirect:/units/" + dto.getUnitId() + "/history";
     }
 

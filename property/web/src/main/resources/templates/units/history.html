@@ -51,14 +51,26 @@
 
                     <div class="col-md-3">
                         <select name="category" class="form-select">
-                            <option value="">All Categories</option>
-                            <option value="Appliance" th:selected="${category == 'Appliance'}">Appliance</option>
-                            <option value="Bathroom" th:selected="${category == 'Bathroom'}">Bathroom</option>
+
+                            <option value="">All Item Types</option>
+
+                            <option value="Fridge" th:selected="${category == 'Fridge'}">Fridge</option>
+                            <option value="Stove" th:selected="${category == 'Stove'}">Stove</option>
+                            <option value="Tub" th:selected="${category == 'Tub'}">Tub</option>
+                            <option value="Toilet" th:selected="${category == 'Toilet'}">Toilet</option>
+                            <option value="Painted" th:selected="${category == 'Painted'}">Painted</option>
+                            <option value="Reno Bathroom" th:selected="${category == 'Reno Bathroom'}">Reno Bathroom</option>
                             <option value="Flooring" th:selected="${category == 'Flooring'}">Flooring</option>
-                            <option value="Paint" th:selected="${category == 'Paint'}">Paint</option>
-                            <option value="Safety" th:selected="${category == 'Safety'}">Safety</option>
-                            <option value="Plumbing" th:selected="${category == 'Plumbing'}">Plumbing</option>
-                            <option value="Other" th:selected="${category == 'Other'}">Other</option>
+                            <option value="Sump Pump" th:selected="${category == 'Sump Pump'}">Sump Pump</option>
+                            <option value="Smoke Alarm Battery 10 years Warranty"
+                                    th:selected="${category == 'Smoke Alarm Battery 10 years Warranty'}">
+                                Smoke Alarm Battery 10 years Warranty
+                            </option>
+                            <option value="Smoke Alarm Hard Wire"
+                                    th:selected="${category == 'Smoke Alarm Hard Wire'}">
+                                Smoke Alarm Hard Wire
+                            </option>
+
                         </select>
                     </div>
 
@@ -73,19 +85,40 @@
             </form>
 
             <div class="mt-3">
+
                 <a th:href="@{/units/{id}/history(id=${unit.id})}"
                    class="btn btn-sm btn-outline-dark">
                     All
                 </a>
 
-                <a th:href="@{/units/{id}/history(id=${unit.id}, category='Appliance')}"
+                <a th:href="@{/units/{id}/history(id=${unit.id}, category='Fridge')}"
                    class="btn btn-sm btn-outline-primary">
-                    Appliances
+                    Fridge
                 </a>
 
-                <a th:href="@{/units/{id}/history(id=${unit.id}, category='Bathroom')}"
+                <a th:href="@{/units/{id}/history(id=${unit.id}, category='Stove')}"
                    class="btn btn-sm btn-outline-primary">
-                    Bathroom
+                    Stove
+                </a>
+
+                <a th:href="@{/units/{id}/history(id=${unit.id}, category='Tub')}"
+                   class="btn btn-sm btn-outline-primary">
+                    Tub
+                </a>
+
+                <a th:href="@{/units/{id}/history(id=${unit.id}, category='Toilet')}"
+                   class="btn btn-sm btn-outline-primary">
+                    Toilet
+                </a>
+
+                <a th:href="@{/units/{id}/history(id=${unit.id}, category='Painted')}"
+                   class="btn btn-sm btn-outline-primary">
+                    Painted
+                </a>
+
+                <a th:href="@{/units/{id}/history(id=${unit.id}, category='Reno Bathroom')}"
+                   class="btn btn-sm btn-outline-primary">
+                    Reno Bathroom
                 </a>
 
                 <a th:href="@{/units/{id}/history(id=${unit.id}, category='Flooring')}"
@@ -93,15 +126,21 @@
                     Flooring
                 </a>
 
-                <a th:href="@{/units/{id}/history(id=${unit.id}, category='Paint')}"
+                <a th:href="@{/units/{id}/history(id=${unit.id}, category='Sump Pump')}"
                    class="btn btn-sm btn-outline-primary">
-                    Paint
+                    Sump Pump
                 </a>
 
-                <a th:href="@{/units/{id}/history(id=${unit.id}, category='Safety')}"
+                <a th:href="@{/units/{id}/history(id=${unit.id}, category='Smoke Alarm Battery 10 years Warranty')}"
                    class="btn btn-sm btn-outline-primary">
-                    Safety
+                    Smoke Alarm Battery
                 </a>
+
+                <a th:href="@{/units/{id}/history(id=${unit.id}, category='Smoke Alarm Hard Wire')}"
+                   class="btn btn-sm btn-outline-primary">
+                    Smoke Alarm Hard Wire
+                </a>
+
             </div>
 
         </div>
@@ -114,7 +153,7 @@
                     <tr>
                         <th>Date</th>
                         <th>Work Done</th>
-                        <th>Category</th>
+                        <th>Item Type</th>
                         <th>Tenant at that time</th>
                         <th>Notes</th>
                         <th>Actions</th>
@@ -126,7 +165,9 @@
                         <td th:text="${item.completedDate}"></td>
                         <td th:text="${item.itemName}"></td>
                         <td th:text="${item.category}"></td>
-                        <td th:text="${item.tenantNameAtTime}"></td>
+                        <td th:text="${item.tenantNameAtTime != null and !item.tenantNameAtTime.isBlank()
+                        ? item.tenantNameAtTime
+                        : 'No tenant recorded'}"></td>
                         <td th:text="${item.notes}"></td>
                         <td>
                             <a th:href="@{/unit-history/edit/{id}(id=${item.id})}"

@@ -60,37 +60,25 @@
 
                     <div class="col-md-3">
 
-                        <select name="category"
-                                class="form-select">
+                        <select name="category" class="form-select">
 
-                            <option value="">All Categories</option>
+                            <option value="">All Item Types</option>
 
-                            <option value="Appliance">
-                                Appliance
+                            <option value="Fridge" th:selected="${category == 'Fridge'}">Fridge</option>
+                            <option value="Stove" th:selected="${category == 'Stove'}">Stove</option>
+                            <option value="Tub" th:selected="${category == 'Tub'}">Tub</option>
+                            <option value="Toilet" th:selected="${category == 'Toilet'}">Toilet</option>
+                            <option value="Painted" th:selected="${category == 'Painted'}">Painted</option>
+                            <option value="Reno Bathroom" th:selected="${category == 'Reno Bathroom'}">Reno Bathroom</option>
+                            <option value="Flooring" th:selected="${category == 'Flooring'}">Flooring</option>
+                            <option value="Sump Pump" th:selected="${category == 'Sump Pump'}">Sump Pump</option>
+                            <option value="Smoke Alarm Battery 10 years Warranty"
+                                    th:selected="${category == 'Smoke Alarm Battery 10 years Warranty'}">
+                                Smoke Alarm Battery 10 years Warranty
                             </option>
-
-                            <option value="Bathroom">
-                                Bathroom
-                            </option>
-
-                            <option value="Flooring">
-                                Flooring
-                            </option>
-
-                            <option value="Paint">
-                                Paint
-                            </option>
-
-                            <option value="Safety">
-                                Safety
-                            </option>
-
-                            <option value="Plumbing">
-                                Plumbing
-                            </option>
-
-                            <option value="Other">
-                                Other
+                            <option value="Smoke Alarm Hard Wire"
+                                    th:selected="${category == 'Smoke Alarm Hard Wire'}">
+                                Smoke Alarm Hard Wire
                             </option>
 
                         </select>
@@ -134,7 +122,7 @@
 
                         <th>Work Done</th>
 
-                        <th>Category</th>
+                        <th>Item Type</th>
 
                         <th>Tenant</th>
 
@@ -180,8 +168,9 @@
 
                         <td>
 
-                            <span th:text="${item.tenantNameAtTime}">
-                            </span>
+                            <span th:text="${item.tenantNameAtTime != null and !item.tenantNameAtTime.isBlank()
+                            ? item.tenantNameAtTime
+                            : 'No tenant recorded'}"></span>
 
                         </td>
 
