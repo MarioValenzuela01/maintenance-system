@@ -43,6 +43,8 @@
 
         <hr/>
 
+
+
         <!-- MAPA -->
         <div id="inlineMapContainer" style="display: none; margin-bottom: 30px;">
             <div class="card shadow border-primary">
@@ -217,11 +219,49 @@
                     </div>
                 </div>
             </div>
+            <hr>
         </div>
 
-        <!-- TABLA -->
+
+        <!-- SEARCH BAR -->
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+
+                <div class="row g-2 align-items-center">
+
+                    <div class="col-12 col-md-9">
+                        <input type="text"
+                               id="unitSearchInput"
+                               class="form-control"
+                               placeholder="Search by unit number, display name, address, or status..."
+                               th:value="${keyword}">
+                    </div>
+
+                    <div class="col-12 col-md-3 d-grid">
+                        <button type="button"
+                                id="clearUnitSearchBtn"
+                                class="btn btn-outline-secondary">
+                            Clear Search
+                        </button>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
         <!-- TABLA -->
         <div id="unitsTableContainer" th:fragment="unitsTable">
+
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <div class="text-muted small">
+                    <span th:text="${totalMatchingUnits}">0</span> result(s) found
+                </div>
+
+                <div class="text-muted small" th:if="${keyword != null && !keyword.isBlank()}">
+                    Filter:
+                    <strong th:text="${keyword}"></strong>
+                </div>
+            </div>
 
             <div th:if="${#lists.isEmpty(units)}"
                  class="alert alert-info text-center shadow-sm">
@@ -288,8 +328,9 @@
                 </div>
             </div>
 
-            <!-- PAGINACIÓN -->
-            <div class="d-flex justify-content-center align-items-center mt-3 pb-4">
+            <!-- PAGINATION -->
+            <div class="d-flex justify-content-center align-items-center mt-3 pb-4"
+                 th:if="${totalPages > 1}">
 
                 <button type="button"
                         class="btn btn-outline-primary btn-sm me-2"
@@ -299,9 +340,9 @@
                 </button>
 
                 <span class="mx-2 text-muted">
-            Page <strong th:text="${currentPage + 1}"></strong>
-            of <strong th:text="${totalPages}"></strong>
-        </span>
+        Page <strong th:text="${currentPage + 1}"></strong>
+        of <strong th:text="${totalPages}"></strong>
+    </span>
 
                 <button type="button"
                         class="btn btn-outline-primary btn-sm ms-2"
@@ -317,22 +358,11 @@
     </div>
 </div>
 
-<!-- SCRIPTS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://unpkg.com/@panzoom/panzoom@4.6.0/dist/panzoom.min.js"></script>
-<script th:src="@{/js/map.js}"></script>
-
-<script>
-    function loadUnitsPage(page) {
-        if (page < 0) return;
-
-        fetch('/units/table?page=' + page)
-            .then(response => response.text())
-            .then(html => {
-                document.getElementById('unitsTableContainer').outerHTML = html;
-            });
-    }
-</script>
+<script th:src="@{/js/map.js?v=3}"></script>
+<script th:src="@{/js/units-search.js?v=1}"></script>
+<script th:src="@{/js/loading.js?v=3}"></script>
 
 </body>
 </html>

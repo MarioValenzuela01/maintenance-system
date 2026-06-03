@@ -1,8 +1,9 @@
 package com.cornerstone.controller;
 
 import com.cornerstone.dto.LeaseDto;
-import com.cornerstone.dto.UnitMaintenanceHistoryDto;
+import com.cornerstone.dto.TenantDto;
 import com.cornerstone.dto.UnitDto;
+import com.cornerstone.dto.UnitMaintenanceHistoryDto;
 import com.cornerstone.service.LeaseService;
 import com.cornerstone.service.ManagerService;
 import com.cornerstone.service.TenantService;
@@ -14,7 +15,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import java.time.LocalDate;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -43,9 +46,20 @@ public class HomeController {
     @GetMapping("/")
     public String home(Model model) {
 
+        LocalDate today = LocalDate.now();
+        LocalDate next90Days = today.plusDays(90);
+
         List<UnitDto> units = unitService.getAll();
+        List<TenantDto> tenants = tenantService.getAll();
         List<LeaseDto> leases = leaseService.getAll();
         List<UnitMaintenanceHistoryDto> historyList = historyService.getAll();
+
+        /*
+         * En tu sistema estamos usando managedUnitIds como unidades internas /
+         * no rentables, por ejemplo bodegas o espacios bajo responsabilidad
+         * de Cornerstone que no deberían afectar la ocupación.
+         */
+        List<Long> internalUnitIds = managerService.getManagedUnitIds();
 
         List<LeaseDto> activeLeases = leases.stream()
                 .filter(lease -> lease.getEndDate() == null)
@@ -56,40 +70,63 @@ public class HomeController {
                 .filter(Objects::nonNull)
                 .collect(Collectors.toSet());
 
-        List<Long> managedUnitIds = managerService.getManagedUnitIds();
-
         long totalUnits = units.size();
-        long occupiedUnits = units.stream()
+
+        long internalUnits = units.stream()
+                .filter(unit -> internalUnitIds.contains(unit.getId()))
+                .count();
+
+        long rentableUnits = units.stream()
+                .filter(unit -> !internalUnitIds.contains(unit.getId()))
+                .count();
+
+        long occupiedRentableUnits = units.stream()
+                .filter(unit -> !internalUnitIds.contains(unit.getId()))
                 .filter(unit -> occupiedUnitIds.contains(unit.getId()))
                 .count();
 
-        long managedUnits = units.stream()
-                .filter(unit -> managedUnitIds.contains(unit.getId()))
-                .count();
-
-        long availableUnits = units.stream()
+        long availableForRent = units.stream()
+                .filter(unit -> !internalUnitIds.contains(unit.getId()))
                 .filter(unit -> !occupiedUnitIds.contains(unit.getId()))
-                .filter(unit -> !managedUnitIds.contains(unit.getId()))
                 .count();
 
-        long totalTenants = tenantService.getAll().size();
-        long totalManagers = managerService.getAll().size();
-        long totalLeases = leases.size();
-        long totalHistoryRecords = historyList.size();
-
-        int occupancyRate = totalUnits == 0
+        int occupancyRate = rentableUnits == 0
                 ? 0
-                : (int) Math.round((occupiedUnits * 100.0) / totalUnits);
+                : (int) Math.round((occupiedRentableUnits * 100.0) / rentableUnits);
 
-        long endedLeases = leases.stream()
-                .filter(lease -> lease.getEndDate() != null)
-                .count();
+        int vacancyRate = rentableUnits == 0
+                ? 0
+                : (int) Math.round((availableForRent * 100.0) / rentableUnits);
 
         long maintenanceThisMonth = historyList.stream()
                 .filter(item -> item.getCompletedDate() != null)
-                .filter(item -> item.getCompletedDate().getMonth() == LocalDate.now().getMonth())
-                .filter(item -> item.getCompletedDate().getYear() == LocalDate.now().getYear())
+                .filter(item -> item.getCompletedDate().getMonth() == today.getMonth())
+                .filter(item -> item.getCompletedDate().getYear() == today.getYear())
                 .count();
+
+        long leasesEndingSoon = leases.stream()
+                .filter(lease -> lease.getEndDate() != null)
+                .filter(lease -> !lease.getEndDate().isBefore(today))
+                .filter(lease -> !lease.getEndDate().isAfter(next90Days))
+                .count();
+
+        long tenantsMissingEmail = tenants.stream()
+                .filter(tenant -> isBlank(tenant.getEmail()))
+                .count();
+
+        long tenantsMissingEmergencyContact = tenants.stream()
+                .filter(tenant ->
+                        isBlank(tenant.getEmergencyContactName())
+                                || isBlank(tenant.getEmergencyContactPhone()))
+                .count();
+
+        long leasesMissingStartDate = leases.stream()
+                .filter(lease -> lease.getStartDate() == null)
+                .count();
+
+        long totalDataIssues = tenantsMissingEmail
+                + tenantsMissingEmergencyContact
+                + leasesMissingStartDate;
 
         List<UnitMaintenanceHistoryDto> recentHistory = historyList.stream()
                 .filter(item -> item.getCompletedDate() != null)
@@ -103,24 +140,44 @@ public class HomeController {
                 .limit(5)
                 .toList();
 
+        List<Map<String, Object>> topMaintenanceUnits = historyList.stream()
+                .collect(Collectors.groupingBy(
+                        this::getMaintenanceUnitLabel,
+                        Collectors.counting()
+                ))
+                .entrySet()
+                .stream()
+                .sorted(Map.Entry.<String, Long>comparingByValue().reversed())
+                .limit(5)
+                .map(entry -> {
+                    Map<String, Object> row = new HashMap<>();
+                    row.put("unit", entry.getKey());
+                    row.put("records", entry.getValue());
+                    return row;
+                })
+                .toList();
+
         model.addAttribute("totalUnits", totalUnits);
-        model.addAttribute("occupiedUnits", occupiedUnits);
-        model.addAttribute("availableUnits", availableUnits);
-        model.addAttribute("managedUnits", managedUnits);
+        model.addAttribute("rentableUnits", rentableUnits);
+        model.addAttribute("internalUnits", internalUnits);
 
-        model.addAttribute("totalTenants", totalTenants);
-        model.addAttribute("totalManagers", totalManagers);
-
-        model.addAttribute("totalLeases", totalLeases);
-        model.addAttribute("activeLeasesCount", activeLeases.size());
-        model.addAttribute("endedLeases", endedLeases);
-
-        model.addAttribute("totalHistoryRecords", totalHistoryRecords);
-        model.addAttribute("maintenanceThisMonth", maintenanceThisMonth);
+        model.addAttribute("occupiedRentableUnits", occupiedRentableUnits);
+        model.addAttribute("availableForRent", availableForRent);
 
         model.addAttribute("occupancyRate", occupancyRate);
+        model.addAttribute("vacancyRate", vacancyRate);
+
+        model.addAttribute("maintenanceThisMonth", maintenanceThisMonth);
+        model.addAttribute("leasesEndingSoon", leasesEndingSoon);
+
+        model.addAttribute("tenantsMissingEmail", tenantsMissingEmail);
+        model.addAttribute("tenantsMissingEmergencyContact", tenantsMissingEmergencyContact);
+        model.addAttribute("leasesMissingStartDate", leasesMissingStartDate);
+        model.addAttribute("totalDataIssues", totalDataIssues);
+
         model.addAttribute("recentHistory", recentHistory);
         model.addAttribute("recentActiveLeases", recentActiveLeases);
+        model.addAttribute("topMaintenanceUnits", topMaintenanceUnits);
 
         return "home";
     }
@@ -128,5 +185,21 @@ public class HomeController {
     @GetMapping("/dashboard")
     public String dashboardRedirect() {
         return "redirect:/";
+    }
+
+    private boolean isBlank(String value) {
+        return value == null || value.trim().isEmpty();
+    }
+
+    private String getMaintenanceUnitLabel(UnitMaintenanceHistoryDto item) {
+        if (!isBlank(item.getUnitDisplayName())) {
+            return item.getUnitDisplayName();
+        }
+
+        if (!isBlank(item.getUnitNumber())) {
+            return "Unit " + item.getUnitNumber();
+        }
+
+        return "Unknown Unit";
     }
 }
