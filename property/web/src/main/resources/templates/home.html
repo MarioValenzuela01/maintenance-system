@@ -170,20 +170,23 @@
                     <div class="dashboard-panel h-100">
                         <h4 class="panel-title mb-3">Data Quality</h4>
 
-                        <div class="data-quality-row">
+                        <a th:href="@{/dashboard/data-quality(type='email')}"
+                           class="data-quality-row text-decoration-none">
                             <span>Tenants Missing Email</span>
                             <strong th:text="${tenantsMissingEmail}">0</strong>
-                        </div>
+                        </a>
 
-                        <div class="data-quality-row">
+                        <a th:href="@{/dashboard/data-quality(type='emergency')}"
+                           class="data-quality-row text-decoration-none">
                             <span>Missing Emergency Contact</span>
                             <strong th:text="${tenantsMissingEmergencyContact}">0</strong>
-                        </div>
+                        </a>
 
-                        <div class="data-quality-row">
+                        <a th:href="@{/dashboard/data-quality(type='lease-start')}"
+                           class="data-quality-row text-decoration-none">
                             <span>Leases Missing Start Date</span>
                             <strong th:text="${leasesMissingStartDate}">0</strong>
-                        </div>
+                        </a>
 
                         <div class="mt-3">
                             <a th:href="@{/tenants}" class="btn btn-outline-primary w-100">

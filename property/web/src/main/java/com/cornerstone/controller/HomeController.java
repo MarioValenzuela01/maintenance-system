@@ -12,14 +12,10 @@ import com.cornerstone.service.UnitService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDate;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Controller
@@ -201,5 +197,102 @@ public class HomeController {
         }
 
         return "Unknown Unit";
+    }
+
+    @GetMapping("/dashboard/data-quality")
+    public String dataQualityDetails(
+            @RequestParam(name = "type", defaultValue = "all") String type,
+            Model model) {
+
+        List<TenantDto> tenants = tenantService.getAll();
+        List<LeaseDto> leases = leaseService.getAll();
+
+        List<Map<String, Object>> tenantIssues = tenants.stream()
+                .map(tenant -> {
+                    Map<String, Object> row = new HashMap<String, Object>();
+
+                    boolean missingEmail = isBlank(tenant.getEmail());
+                    boolean missingEmergencyName = isBlank(tenant.getEmergencyContactName());
+                    boolean missingEmergencyPhone = isBlank(tenant.getEmergencyContactPhone());
+
+                    if ("email".equalsIgnoreCase(type) && !missingEmail) {
+                        return null;
+                    }
+
+                    if ("emergency".equalsIgnoreCase(type)
+                            && !missingEmergencyName
+                            && !missingEmergencyPhone) {
+                        return null;
+                    }
+
+                    if ("lease-start".equalsIgnoreCase(type)) {
+                        return null;
+                    }
+
+                    if (!"all".equalsIgnoreCase(type)
+                            && !"email".equalsIgnoreCase(type)
+                            && !"emergency".equalsIgnoreCase(type)) {
+                        return null;
+                    }
+
+                    if (!missingEmail && !missingEmergencyName && !missingEmergencyPhone) {
+                        return null;
+                    }
+
+                    row.put("id", tenant.getId());
+                    row.put("name", tenant.getFirstName() + " " + tenant.getLastName());
+                    row.put("type", "Tenant");
+
+                    List<String> missingFields = new ArrayList<>();
+
+                    if (missingEmail) {
+                        missingFields.add("Email");
+                    }
+
+                    if (missingEmergencyName) {
+                        missingFields.add("Emergency Contact Name");
+                    }
+
+                    if (missingEmergencyPhone) {
+                        missingFields.add("Emergency Contact Phone");
+                    }
+
+                    row.put("missingFields", String.join(", ", missingFields));
+                    row.put("detailsUrl", "/tenants/details/" + tenant.getId());
+
+                    return row;
+                })
+                .filter(Objects::nonNull)
+                .toList();
+
+        List<Map<String, Object>> leaseIssues = leases.stream()
+                .map(lease -> {
+                    if (!"all".equalsIgnoreCase(type) && !"lease-start".equalsIgnoreCase(type)) {
+                        return null;
+                    }
+
+                    if (lease.getStartDate() != null) {
+                        return null;
+                    }
+
+                    Map<String, Object> row = new HashMap<String, Object>();
+
+                    row.put("id", lease.getId());
+                    row.put("name", lease.getTenantName());
+                    row.put("type", "Lease");
+                    row.put("unit", lease.getUnitDisplayLabel());
+                    row.put("missingFields", "Start Date");
+                    row.put("detailsUrl", "/leases/details/" + lease.getId());
+
+                    return row;
+                })
+                .filter(Objects::nonNull)
+                .toList();
+
+        model.addAttribute("tenantIssues", tenantIssues);
+        model.addAttribute("leaseIssues", leaseIssues);
+        model.addAttribute("type", type);
+
+        return "dashboard/data-quality";
     }
 }
