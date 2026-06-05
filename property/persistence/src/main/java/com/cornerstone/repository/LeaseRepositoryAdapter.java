@@ -116,6 +116,17 @@ public class LeaseRepositoryAdapter implements LeaseRepository {
                 .findFirst()
                 .map(mapper::toDTO);
     }
+    @Override
+    public List<Long> getActiveTenantIds() {
+        return jpaRepository.findActiveTenantIds();
     }
+
+    @Override
+    public List<Long> getActiveUnitIds() {
+        return jpaRepository.findActiveUnitIds();
+    }
+    }
+
+
 
 

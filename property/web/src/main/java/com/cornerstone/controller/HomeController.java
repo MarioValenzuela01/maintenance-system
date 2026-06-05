@@ -245,16 +245,28 @@ public class HomeController {
 
                     List<String> missingFields = new ArrayList<>();
 
-                    if (missingEmail) {
+                    if ("email".equalsIgnoreCase(type)) {
                         missingFields.add("Email");
-                    }
+                    } else if ("emergency".equalsIgnoreCase(type)) {
+                        if (missingEmergencyName) {
+                            missingFields.add("Emergency Contact Name");
+                        }
 
-                    if (missingEmergencyName) {
-                        missingFields.add("Emergency Contact Name");
-                    }
+                        if (missingEmergencyPhone) {
+                            missingFields.add("Emergency Contact Phone");
+                        }
+                    } else {
+                        if (missingEmail) {
+                            missingFields.add("Email");
+                        }
 
-                    if (missingEmergencyPhone) {
-                        missingFields.add("Emergency Contact Phone");
+                        if (missingEmergencyName) {
+                            missingFields.add("Emergency Contact Name");
+                        }
+
+                        if (missingEmergencyPhone) {
+                            missingFields.add("Emergency Contact Phone");
+                        }
                     }
 
                     row.put("missingFields", String.join(", ", missingFields));

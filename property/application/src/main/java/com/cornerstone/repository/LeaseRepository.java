@@ -27,5 +27,9 @@ public interface LeaseRepository {
 
     Optional<LeaseDto> getLeaseByUnitAndDate(Long unitId, LocalDate date);
 
+    List<Long> getActiveTenantIds();
+
+    List<Long> getActiveUnitIds();
+
 
 }

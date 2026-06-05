@@ -9,8 +9,10 @@ import com.cornerstone.repository.UnitRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class LeaseServiceImpl implements LeaseService {
@@ -49,12 +51,7 @@ public class LeaseServiceImpl implements LeaseService {
 
         lease.setEndDate(null);
 
-        if (lease.getAdultsCount() == null) lease.setAdultsCount(0);
-        if (lease.getChildrenCount() == null) lease.setChildrenCount(0);
-        if (lease.getSeniorsCount() == null) lease.setSeniorsCount(0);
-        if (lease.getPetsCount() == null) lease.setPetsCount(0);
-        if (lease.getCarsCount() == null) lease.setCarsCount(0);
-        if (lease.getSmokers() == null) lease.setSmokers(false);
+
 
         return leaseRepository.save(lease);
     }
@@ -73,12 +70,7 @@ public class LeaseServiceImpl implements LeaseService {
     public LeaseDto update(Long id, LeaseDto lease) {
         lease.setId(id);
 
-        if (lease.getAdultsCount() == null) lease.setAdultsCount(0);
-        if (lease.getChildrenCount() == null) lease.setChildrenCount(0);
-        if (lease.getSeniorsCount() == null) lease.setSeniorsCount(0);
-        if (lease.getPetsCount() == null) lease.setPetsCount(0);
-        if (lease.getCarsCount() == null) lease.setCarsCount(0);
-        if (lease.getSmokers() == null) lease.setSmokers(false);
+
 
         return leaseRepository.save(lease);
     }
@@ -86,43 +78,39 @@ public class LeaseServiceImpl implements LeaseService {
     // 🔥 NUEVO: tenants disponibles
     @Override
     public List<TenantDto> getAvailableTenants() {
+        Set<Long> activeTenantIds = new HashSet<>(leaseRepository.getActiveTenantIds());
+
         return tenantRepository.getAll()
                 .stream()
-                .filter(t -> !leaseRepository.existsActiveLeaseByTenantId(t.getId()))
+                .filter(tenant -> Boolean.TRUE.equals(tenant.getActive()))
+                .filter(tenant -> tenant.getId() != null)
+                .filter(tenant -> !activeTenantIds.contains(tenant.getId()))
                 .toList();
     }
+
 
     // 🔥 NUEVO: unidades disponibles
     @Override
     public List<UnitDto> getAvailableUnits() {
-
-        List<Long> managedUnitIds = managerService.getManagedUnitIds();
+        Set<Long> activeUnitIds = new HashSet<>(leaseRepository.getActiveUnitIds());
+        Set<Long> managedUnitIds = new HashSet<>(managerService.getManagedUnitIds());
 
         return unitRepository.getAll()
                 .stream()
-                .filter(u -> !leaseRepository.existsActiveLeaseByUnitId(u.getId()))
-                .filter(u -> !managedUnitIds.contains(u.getId()))
+                .filter(unit -> unit.getId() != null)
+                .filter(unit -> !activeUnitIds.contains(unit.getId()))
+                .filter(unit -> !managedUnitIds.contains(unit.getId()))
                 .toList();
     }
 
     @Override
     public Optional<LeaseDto> getActiveLeaseByUnitId(Long unitId) {
-        return leaseRepository.getAll()
-                .stream()
-                .filter(l -> l.getUnitId() != null)
-                .filter(l -> l.getUnitId().equals(unitId))
-                .filter(l -> l.getEndDate() == null)
-                .findFirst();
+        return leaseRepository.getActiveLeaseByUnitId(unitId);
     }
 
     @Override
     public Optional<LeaseDto> getActiveLeaseByTenantId(Long tenantId) {
-        return leaseRepository.getAll()
-                .stream()
-                .filter(l -> l.getTenantId() != null)
-                .filter(l -> l.getTenantId().equals(tenantId))
-                .filter(l -> l.getEndDate() == null)
-                .findFirst();
+        return leaseRepository.getActiveLeaseByTenantId(tenantId);
     }
 
     @Override

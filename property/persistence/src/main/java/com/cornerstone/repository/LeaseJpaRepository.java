@@ -3,6 +3,7 @@ package com.cornerstone.repository;
 import com.cornerstone.entity.LeaseEntity;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -27,4 +28,10 @@ public interface LeaseJpaRepository extends JpaRepository<LeaseEntity, Long> {
     boolean existsByTenantIdAndEndDateIsNull(Long tenantId);
 
     boolean existsByUnitIdAndEndDateIsNull(Long unitId);
+
+    @Query("select l.tenant.id from LeaseEntity l where l.endDate is null")
+    List<Long> findActiveTenantIds();
+
+    @Query("select l.unit.id from LeaseEntity l where l.endDate is null")
+    List<Long> findActiveUnitIds();
 }

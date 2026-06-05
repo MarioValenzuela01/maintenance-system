@@ -142,21 +142,21 @@
 
                         <div class="alert-list">
 
-                            <a th:href="@{/units}" class="alert-item text-decoration-none">
+                            <div th:href="@{/units}" class="data-quality-row text-decoration-none">
                                 <div>
                                     <div class="alert-title">Available For Rent</div>
                                     <div class="alert-subtitle">Rentable units without active lease</div>
                                 </div>
                                 <span class="alert-number" th:text="${availableForRent}">0</span>
-                            </a>
+                            </div>
 
-                            <a th:href="@{/tenants}" class="alert-item text-decoration-none">
+                            <div th:href="@{/tenants}" class="data-quality-row text-decoration-none">
                                 <div>
                                     <div class="alert-title">Data Issues</div>
                                     <div class="alert-subtitle">Missing tenant or lease information</div>
                                 </div>
                                 <span class="alert-number" th:text="${totalDataIssues}">0</span>
-                            </a>
+                            </div>
 
                         </div>
                     </div>
@@ -171,19 +171,19 @@
                         <h4 class="panel-title mb-3">Data Quality</h4>
 
                         <a th:href="@{/dashboard/data-quality(type='email')}"
-                           class="data-quality-row text-decoration-none">
+                           class="alert-item text-decoration-none">
                             <span>Tenants Missing Email</span>
                             <strong th:text="${tenantsMissingEmail}">0</strong>
                         </a>
 
                         <a th:href="@{/dashboard/data-quality(type='emergency')}"
-                           class="data-quality-row text-decoration-none">
+                           class="alert-item text-decoration-none">
                             <span>Missing Emergency Contact</span>
                             <strong th:text="${tenantsMissingEmergencyContact}">0</strong>
                         </a>
 
                         <a th:href="@{/dashboard/data-quality(type='lease-start')}"
-                           class="data-quality-row text-decoration-none">
+                           class="alert-item text-decoration-none">
                             <span>Leases Missing Start Date</span>
                             <strong th:text="${leasesMissingStartDate}">0</strong>
                         </a>

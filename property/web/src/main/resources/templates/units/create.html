@@ -1,85 +1,130 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <title>Create Unit</title>
+
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link th:href="@{/css/home.css?v=7}" rel="stylesheet"/>
 </head>
-<body class="container mt-4">
 
-<h1 class="text-primary">Registrar Nueva Unidad</h1>
-<hr/>
+<body>
 
-<div class="row">
-    <div class="col-md-7">
-        <div class="card shadow-sm p-4">
-            <form th:action="@{/units/create}" th:object="${unit}" method="post">
+<div class="page-shell mt-4">
 
-                <h5 class="mb-3">Basic Information</h5>
-
-                <div class="form-group mb-3">
-                    <label class="control-label fw-bold">Unit Number *</label>
-                    <input type="text" th:field="*{unitNumber}" class="form-control" placeholder="Ej. Apt 101" required />
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label fw-bold">Display Name</label>
-                    <input type="text"
-                           th:field="*{displayName}"
-                           class="form-control"
-                           placeholder="Example: Shed, Accessible Shed">
-                    <small class="text-muted">
-                        Optional. If empty, the system will show the Unit Number.
-                    </small>
-                </div>
-
-                <div class="form-group mb-3">
-                    <label class="control-label fw-bold">Address *</label>
-                    <input type="text" th:field="*{address}" class="form-control" placeholder="Ej. 220 Mapleton Rd" required />
-                </div>
-
-                <hr/>
-
-                <h5 class="mb-3">Unit Characteristics</h5>
-
-                <div class="row">
-                    <div class="col-md-4 mb-3">
-                        <label class="control-label fw-bold">Bedrooms</label>
-                        <input type="number" th:field="*{bedrooms}" class="form-control" min="0" placeholder="2" />
-                    </div>
-
-                    <div class="col-md-4 mb-3">
-                        <label class="control-label fw-bold">Bathrooms</label>
-                        <input type="number" th:field="*{bathrooms}" class="form-control" min="0" placeholder="1" />
-                    </div>
-
-                    <div class="col-md-4 mb-3">
-                        <label class="control-label fw-bold">Floors</label>
-                        <input type="number" th:field="*{floors}" class="form-control" min="1" placeholder="1" />
-                    </div>
-                </div>
-
-                <div class="form-check mb-3">
-                    <input type="checkbox" th:field="*{hasBasement}" class="form-check-input" id="hasBasement">
-                    <label class="form-check-label fw-bold" for="hasBasement">
-                        Has Basement
-                    </label>
-                </div>
-
-                <div class="form-group mb-3">
-                    <label class="control-label fw-bold">Notes</label>
-                    <textarea th:field="*{notes}" class="form-control" rows="3"
-                              placeholder="Additional information about the unit"></textarea>
-                </div>
-
-                <div class="form-group mt-4">
-                    <button type="submit" class="btn btn-primary px-4">Guardar</button>
-                    <a th:href="@{/units}" class="btn btn-secondary ms-2">Cancelar</a>
-                </div>
-
-            </form>
-        </div>
+    <!-- SIDEBAR -->
+    <div class="sidebar-wrapper">
+        <div th:replace="~{fragments/sidebar :: sidebar}"></div>
     </div>
+
+    <!-- CONTENT -->
+    <div class="content-wrapper">
+
+        <h1 class="text-primary">Registrar Nueva Unidad</h1>
+        <hr/>
+
+        <div class="row">
+            <div class="col-md-7">
+                <div class="card shadow-sm p-4">
+
+                    <form th:action="@{/units/create}" th:object="${unit}" method="post">
+
+                        <h5 class="mb-3">Basic Information</h5>
+
+                        <div class="form-group mb-3">
+                            <label class="control-label fw-bold">Unit Number *</label>
+                            <input type="text"
+                                   th:field="*{unitNumber}"
+                                   class="form-control"
+                                   placeholder="Ej. Apt 101"
+                                   required/>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Display Name</label>
+                            <input type="text"
+                                   th:field="*{displayName}"
+                                   class="form-control"
+                                   placeholder="Example: Shed, Accessible Shed">
+                            <small class="text-muted">
+                                Optional. If empty, the system will show the Unit Number.
+                            </small>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label class="control-label fw-bold">Address *</label>
+                            <input type="text"
+                                   th:field="*{address}"
+                                   class="form-control"
+                                   placeholder="Ej. 220 Mapleton Rd"
+                                   required/>
+                        </div>
+
+                        <hr/>
+
+                        <h5 class="mb-3">Unit Characteristics</h5>
+
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label class="control-label fw-bold">Bedrooms</label>
+                                <input type="number"
+                                       th:field="*{bedrooms}"
+                                       class="form-control"
+                                       min="0"
+                                       placeholder="2"/>
+                            </div>
+
+                            <div class="col-md-4 mb-3">
+                                <label class="control-label fw-bold">Bathrooms</label>
+                                <input type="number"
+                                       th:field="*{bathrooms}"
+                                       class="form-control"
+                                       min="0"
+                                       placeholder="1"/>
+                            </div>
+
+                            <div class="col-md-4 mb-3">
+                                <label class="control-label fw-bold">Floors</label>
+                                <input type="number"
+                                       th:field="*{floors}"
+                                       class="form-control"
+                                       min="1"
+                                       placeholder="1"/>
+                            </div>
+                        </div>
+
+                        <div class="form-check mb-3">
+                            <input type="checkbox"
+                                   th:field="*{hasBasement}"
+                                   class="form-check-input"
+                                   id="hasBasement">
+                            <label class="form-check-label fw-bold" for="hasBasement">
+                                Has Basement
+                            </label>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label class="control-label fw-bold">Notes</label>
+                            <textarea th:field="*{notes}"
+                                      class="form-control"
+                                      rows="3"
+                                      placeholder="Additional information about the unit"></textarea>
+                        </div>
+
+                        <div class="form-group mt-4">
+                            <button type="submit" class="btn btn-primary px-4">Guardar</button>
+                            <a th:href="@{/units}" class="btn btn-secondary ms-2">Cancelar</a>
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
 </div>
 
 </body>
