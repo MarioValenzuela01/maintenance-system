@@ -11,15 +11,13 @@
 
 <body>
 
-<div class="page-shell mt-4">
+<!-- SIDEBAR -->
+<div th:replace="~{fragments/sidebar :: sidebar}"></div>
 
-    <!-- SIDEBAR -->
-    <div class="sidebar-wrapper">
-        <div th:replace="~{fragments/sidebar :: sidebar}"></div>
-    </div>
-
-    <!-- CONTENT -->
-    <div class="content-wrapper">
+<!-- PAGE CONTENT -->
+<main class="app-main">
+    <div class="page-shell mt-4">
+        <div class="content-wrapper">
 
         <h1 class="text-primary">Registrar Nueva Unidad</h1>
         <hr/>
@@ -126,6 +124,8 @@
     </div>
 
 </div>
+</main>
 
+<script th:src="@{/js/sidebar.js}"></script>
 </body>
 </html>

@@ -5,88 +5,134 @@
 
 <body>
 
-<nav th:fragment="sidebar" class="app-sidebar">
+<th:block th:fragment="sidebar">
 
+    <!-- MOBILE TOP BAR -->
+    <div class="mobile-sidebar-topbar">
+        <button type="button" class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open menu">
+            ☰
+        </button>
 
-    <div class="sidebar-brand">
-        <div class="brand-logo">
-            <a th:href="@{/}">
-            <img th:src="@{/images/Cornestone-small.png}" alt="Cornerstone logo">
+        <div class="mobile-brand-text">
+            Cornerstone
+        </div>
+    </div>
+
+    <!-- SIDEBAR -->
+    <nav class="app-sidebar" id="appSidebar">
+
+        <div class="sidebar-brand">
+            <div class="brand-logo">
+                <a th:href="@{/}">
+                    <img th:src="@{/images/Cornestone-small.png}" alt="Cornerstone logo">
+                </a>
+            </div>
+
+            <div>
+                <div class="brand-title">Cornerstone</div>
+                <div class="brand-subtitle">Maintenance System</div>
+            </div>
+        </div>
+
+        <div class="sidebar-section">
+            <div class="sidebar-section-title">Main</div>
+
+            <a th:href="@{/}" class="sidebar-link">
+                <span class="sidebar-icon">⌂</span>
+                <span>Dashboard</span>
+            </a>
+
+            <a th:href="@{/units}" class="sidebar-link">
+                <span class="sidebar-icon">▦</span>
+                <span>Units</span>
+            </a>
+
+            <a th:href="@{/units/map}" class="sidebar-link">
+                <span class="sidebar-icon">⌖</span>
+                <span>Map</span>
+            </a>
+
+            <a th:href="@{/tenants}" class="sidebar-link">
+                <span class="sidebar-icon">👥</span>
+                <span>Tenants</span>
+            </a>
+
+            <a th:href="@{/leases}" class="sidebar-link">
+                <span class="sidebar-icon">▤</span>
+                <span>Leases</span>
             </a>
         </div>
-        <div>
-            <div class="brand-title">Cornerstone</div>
-            <div class="brand-subtitle">Maintenance System</div>
-        </div>
-    </div>
 
+        <div class="sidebar-section">
+            <div class="sidebar-section-title">Operations</div>
 
-    <div class="sidebar-section">
-        <div class="sidebar-section-title">Main</div>
+            <a th:href="@{/unit-history}" class="sidebar-link">
+                <span class="sidebar-icon">✦</span>
+                <span>Maintenance History</span>
+            </a>
 
-        <a th:href="@{/}" class="sidebar-link">
-            <span class="sidebar-icon">⌂</span>
-            <span>Dashboard</span>
-        </a>
+            <a th:href="@{/managers}" class="sidebar-link">
+                <span class="sidebar-icon">◉</span>
+                <span>Managers</span>
+            </a>
 
-        <a th:href="@{/units}" class="sidebar-link">
-            <span class="sidebar-icon">▦</span>
-            <span>Units</span>
-        </a>
-
-        <a th:href="@{/units/map}" class="sidebar-link">
-            <span class="sidebar-icon">⌖</span>
-            <span>Map</span>
-        </a>
-
-        <a th:href="@{/tenants}" class="sidebar-link">
-            <span class="sidebar-icon">👥</span>
-            <span>Tenants</span>
-        </a>
-
-        <a th:href="@{/leases}" class="sidebar-link">
-            <span class="sidebar-icon">▤</span>
-            <span>Leases</span>
-        </a>
-    </div>
-
-    <div class="sidebar-section">
-        <div class="sidebar-section-title">Operations</div>
-
-        <a th:href="@{/unit-history}" class="sidebar-link">
-            <span class="sidebar-icon">✦</span>
-            <span>Maintenance History</span>
-        </a>
-
-        <a th:href="@{/managers}" class="sidebar-link">
-            <span class="sidebar-icon">◉</span>
-            <span>Managers</span>
-        </a>
-
-        <a th:href="@{/users}" class="sidebar-link"
-           sec:authorize="hasRole('SUPER_ADMIN')">
-            <span class="sidebar-icon">⚙</span>
-            <span>Users</span>
-        </a>
-    </div>
-
-    <div class="sidebar-footer">
-        <div class="sidebar-user">
-            <div class="small text-muted">Signed in as</div>
-            <div class="fw-bold" sec:authentication="name">User</div>
+            <a th:href="@{/users}" class="sidebar-link"
+               sec:authorize="hasRole('SUPER_ADMIN')">
+                <span class="sidebar-icon">⚙</span>
+                <span>Users</span>
+            </a>
         </div>
 
-        <form th:action="@{/logout}" method="post">
-            <input type="hidden"
-                   th:name="${_csrf.parameterName}"
-                   th:value="${_csrf.token}">
-            <button type="submit" class="btn btn-outline-danger btn-sm w-100">
-                Logout
-            </button>
-        </form>
-    </div>
+        <div class="sidebar-footer">
 
-</nav>
+            <div class="sidebar-user-card">
 
+                <div class="sidebar-user-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                         width="22"
+                         height="22"
+                         fill="currentColor"
+                         viewBox="0 0 16 16">
+                        <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+                        <path d="M14 14s-1-4-6-4-6 4-6 4 1 1 6 1 6-1 6-1z"/>
+                    </svg>
+                </div>
+
+                <div class="sidebar-user-info">
+                    <div class="sidebar-user-label">Signed in as</div>
+
+                    <div class="sidebar-user-name"
+                         sec:authentication="name">
+                        username
+                    </div>
+
+                    <div class="sidebar-user-role">
+                        <span sec:authorize="hasRole('SUPER_ADMIN')">Super Admin</span>
+                        <span sec:authorize="hasRole('ADMIN') and !hasRole('SUPER_ADMIN')">Admin</span>
+                        <span sec:authorize="hasRole('USER') and !hasRole('ADMIN') and !hasRole('SUPER_ADMIN')">User</span>
+                    </div>
+                </div>
+
+            </div>
+
+            <form th:action="@{/logout}" method="post" class="mt-3">
+                <input type="hidden"
+                       th:name="${_csrf.parameterName}"
+                       th:value="${_csrf.token}">
+
+                <button type="submit" class="sidebar-logout-btn">
+                    Logout
+                </button>
+            </form>
+
+        </div>
+
+    </nav>
+
+    <div class="sidebar-mobile-backdrop" id="sidebarBackdrop"></div>
+
+</th:block>
+
+<script th:src="@{/js/sidebar.js}"></script>
 </body>
 </html>

@@ -545,6 +545,7 @@ body {
     left: 0;
     width: 280px;
     height: 100vh;
+    max-height: 100vh;
     background: #0f172a;
     color: white;
     padding: 22px 18px;
@@ -552,6 +553,25 @@ body {
     flex-direction: column;
     z-index: 1000;
     box-shadow: 8px 0 24px rgba(15, 23, 42, 0.16);
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.app-sidebar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.app-sidebar::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.app-sidebar::-webkit-scrollbar-thumb {
+    background: rgba(148, 163, 184, 0.35);
+    border-radius: 999px;
+}
+
+.app-sidebar::-webkit-scrollbar-thumb:hover {
+    background: rgba(148, 163, 184, 0.55);
 }
 
 .app-main {
@@ -643,23 +663,165 @@ body {
     border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.sidebar-user {
-    background: rgba(255, 255, 255, 0.06);
-    border-radius: 14px;
-    padding: 12px;
+.sidebar-user-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.05));
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 18px;
+    padding: 14px;
     margin-bottom: 12px;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.16);
+}
+
+.sidebar-user-icon {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(59, 130, 246, 0.22);
+    color: #93c5fd;
+}
+
+.sidebar-user-info {
+    min-width: 0;
+    line-height: 1.2;
+}
+
+.sidebar-user-label {
+    font-size: 0.72rem;
+    color: #94a3b8;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-bottom: 3px;
+}
+
+.sidebar-user-name {
+    color: #ffffff;
+    font-size: 0.95rem;
+    font-weight: 800;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.sidebar-user-role {
+    margin-top: 4px;
+    color: #cbd5e1;
+    font-size: 0.78rem;
+    font-weight: 700;
+}
+
+.sidebar-logout-btn {
+    width: 100%;
+    border: 1px solid rgba(248, 113, 113, 0.45);
+    background: rgba(239, 68, 68, 0.12);
+    color: #fecaca;
+    border-radius: 14px;
+    padding: 10px 12px;
+    font-weight: 800;
+    transition: background 0.16s ease, color 0.16s ease, transform 0.16s ease;
+}
+
+.sidebar-logout-btn:hover {
+    background: rgba(239, 68, 68, 0.22);
+    color: #ffffff;
+    transform: translateY(-1px);
+}
+
+/* ================================
+   Mobile Sidebar
+================================ */
+
+.mobile-sidebar-topbar {
+    display: none;
+}
+
+.sidebar-mobile-backdrop {
+    display: none;
 }
 
 @media (max-width: 992px) {
-    .app-sidebar {
-        position: relative;
+
+    .mobile-sidebar-topbar {
+        position: sticky;
+        top: 0;
         width: 100%;
-        height: auto;
-        box-shadow: none;
+        height: 64px;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        background: #0f172a;
+        color: white;
+        padding: 0 16px;
+        z-index: 1200;
+        box-shadow: 0 8px 22px rgba(15, 23, 42, 0.18);
+    }
+
+    .mobile-menu-btn {
+        width: 44px;
+        height: 44px;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.08);
+        color: white;
+        font-size: 1.5rem;
+        font-weight: 900;
+        line-height: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+    }
+
+    .mobile-menu-btn:hover {
+        background: rgba(255, 255, 255, 0.14);
+    }
+
+    .mobile-brand-text {
+        font-weight: 900;
+        font-size: 1.05rem;
+        letter-spacing: -0.02em;
+    }
+
+    .app-sidebar {
+        left: -290px;
+        z-index: 1300;
+        transition: left 0.22s ease;
+        box-shadow: 10px 0 28px rgba(15, 23, 42, 0.24);
+    }
+
+    .app-sidebar.sidebar-open {
+        left: 0;
+    }
+
+    .sidebar-mobile-backdrop {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(15, 23, 42, 0.45);
+        z-index: 1250;
+    }
+
+    .sidebar-mobile-backdrop.show {
+        display: block;
     }
 
     .app-main {
         margin-left: 0;
+    }
+
+    .page-shell {
+        width: 95%;
+    }
+
+    body.sidebar-mobile-open {
+        overflow: hidden;
     }
 }
 
@@ -766,3 +928,4 @@ body {
     justify-content: center;
     font-weight: 900;
 }
+
