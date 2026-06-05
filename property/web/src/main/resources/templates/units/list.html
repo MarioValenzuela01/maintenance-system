@@ -12,358 +12,352 @@
 
 <body>
 
-<div class="page-shell mt-4">
+<!-- SIDEBAR -->
+<div th:replace="~{fragments/sidebar :: sidebar}"></div>
 
-    <!-- SIDEBAR -->
-    <div class="sidebar-wrapper">
-        <div th:replace="~{fragments/sidebar :: sidebar}"></div>
-    </div>
+<!-- PAGE CONTENT -->
+<main class="app-main">
+    <div class="page-shell mt-4">
+        <div class="content-wrapper">
 
-    <!-- CONTENIDO PRINCIPAL -->
-    <div class="content-wrapper">
+            <!-- HEADER -->
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h1 class="text-primary">Units Management</h1>
 
-        <!-- HEADER -->
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <h1 class="text-primary">Units Management</h1>
+                <div>
+                    <button type="button"
+                            class="btn btn-outline-success me-2"
+                            onclick="toggleMap()"
+                            id="mapToggleBtn">
+                        View Interactive Map
+                    </button>
 
-            <div>
-                <button type="button"
-                        class="btn btn-outline-success me-2"
-                        onclick="toggleMap()"
-                        id="mapToggleBtn">
-                    View Interactive Map
-                </button>
-
-                <a th:href="@{/units/create}" class="btn btn-success shadow-sm"
-                   sec:authorize="hasAnyRole('SUPER_ADMIN','ADMIN')">
-                    + Add Unit
-                </a>
-            </div>
-        </div>
-
-        <hr/>
-
-
-
-        <!-- MAPA -->
-        <div id="inlineMapContainer" style="display: none; margin-bottom: 30px;">
-            <div class="card shadow border-primary">
-
-                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0">Interactive Unit Map</h5>
-                    <button type="button" class="btn-close btn-close-white" onclick="toggleMap()"></button>
+                    <a th:href="@{/units/create}" class="btn btn-success shadow-sm"
+                       sec:authorize="hasAnyRole('SUPER_ADMIN','ADMIN')">
+                        + Add Unit
+                    </a>
                 </div>
+            </div>
 
-                <div class="card-body p-0" style="overflow: hidden; background: #eee;">
-                    <div id="mapWrapper" style="height: 65vh; width: 100%; position: relative;">
+            <hr/>
 
-                        <div id="mapLoader"
-                             style="display:none; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); z-index:20;">
-                            <div class="spinner-border text-success"></div>
-                        </div>
+            <!-- MAP -->
+            <div id="inlineMapContainer" style="display: none; margin-bottom: 30px;">
+                <div class="card shadow border-primary">
 
-                        <div id="mapContent"
-                             style="width:1000px; height:1065px; position:absolute; visibility:hidden;">
+                    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">Interactive Unit Map</h5>
+                        <button type="button" class="btn-close btn-close-white" onclick="toggleMap()"></button>
+                    </div>
 
-                            <img src="/images/CorneStoneMap.png"
-                                 id="unitMap"
-                                 style="width:1000px; height:1065px; display:block;">
+                    <div class="card-body p-0" style="overflow: hidden; background: #eee;">
+                        <div id="mapWrapper" style="height: 65vh; width: 100%; position: relative;">
 
-                            <!-- 🔴 TODOS TUS BOTONES DEL MAPA SE MANTIENEN IGUAL -->
-                            <!-- (no los toco porque ya funcionan con coordenadas) -->
+                            <div id="mapLoader"
+                                 style="display:none; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); z-index:20;">
+                                <div class="spinner-border text-success"></div>
+                            </div>
 
-                            <!-- Botones de Unidades (Coordenadas originales preservadas) -->
-                            <a th:href="@{/units/details/by-number/09}" class="unit-btn" style="top: 954px; left: 81px;"></a>
-                            <a th:href="@{/units/details/by-number/306}" class="unit-btn" style="top: 997px; left: 82px;"></a>
-                            <a th:href="@{/units/details/by-number/308}" class="unit-btn-v" style="top: 986px; left: 147px;"></a>
-                            <a th:href="@{/units/details/by-number/310}" class="unit-btn-v" style="top: 986px; left: 176px;"></a>
-                            <a th:href="@{/units/details/by-number/312}" class="unit-btn-v" style="top: 986px; left: 216px;"></a>
-                            <a th:href="@{/units/details/by-number/314}" class="unit-btn-v" style="top: 987px; left: 244px;"></a>
-                            <a th:href="@{/units/details/by-number/316}" class="unit-btn" style="top: 992px; left: 295px;"></a>
-                            <a th:href="@{/units/details/by-number/60}" class="unit-btn" style="top: 957px; left: 296px;"></a>
+                            <div id="mapContent"
+                                 style="width:1000px; height:1065px; position:absolute; visibility:hidden;">
 
-                            <a th:href="@{/units/details/by-number/70}" class="unit-btn" style="top: 898px; left: 256px;"></a>
-                            <a th:href="@{/units/details/by-number/72}" class="unit-btn" style="top: 876px; left: 256px;"></a>
-                            <a th:href="@{/units/details/by-number/74}" class="unit-btn" style="top: 854px; left: 256px;"></a>
-                            <a th:href="@{/units/details/by-number/76}" class="unit-btn" style="top: 832px; left: 256px;"></a>
-                            <a th:href="@{/units/details/by-number/78}" class="unit-btn" style="top: 786px; left: 252px;"></a>
-                            <a th:href="@{/units/details/by-number/80}" class="unit-btn" style="top: 765px; left: 248px;"></a>
-                            <a th:href="@{/units/details/by-number/82}" class="unit-btn" style="top: 742px; left: 246px;"></a>
+                                <img src="/images/CorneStoneMap.png"
+                                     id="unitMap"
+                                     style="width:1000px; height:1065px; display:block;">
 
-                            <a th:href="@{/units/details/by-number/83-1}" class="unit-btn" style="top: 709px; left: 200px;"></a>
-                            <a th:href="@{/units/details/by-number/83-1}" class="unit-btn" style="top: 690px; left: 187px;"></a>
-                            <a th:href="@{/units/details/by-number/84}" class="unit-btn" style="top: 654px; left: 229px;"></a>
-                            <a th:href="@{/units/details/by-number/86}" class="unit-btn" style="top: 631px; left: 227px;"></a>
-                            <a th:href="@{/units/details/by-number/88}" class="unit-btn" style="top: 611px; left: 225px;"></a>
-                            <a th:href="@{/units/details/by-number/90}" class="unit-btn" style="top: 588px; left: 223px;"></a>
-                            <a th:href="@{/units/details/by-number/92}" class="unit-btn" style="top: 539px; left: 217px;"></a>
-                            <a th:href="@{/units/details/by-number/94}" class="unit-btn" style="top: 518px; left: 218px;"></a>
-                            <a th:href="@{/units/details/by-number/96}" class="unit-btn" style="top: 494px; left: 219px;"></a>
-                            <a th:href="@{/units/details/by-number/98}" class="unit-btn" style="top: 474px; left: 218px;"></a>
+                                <!-- Unit Buttons -->
+                                <a th:href="@{/units/details/by-number/09}" class="unit-btn" style="top: 954px; left: 81px;"></a>
+                                <a th:href="@{/units/details/by-number/306}" class="unit-btn" style="top: 997px; left: 82px;"></a>
+                                <a th:href="@{/units/details/by-number/308}" class="unit-btn-v" style="top: 986px; left: 147px;"></a>
+                                <a th:href="@{/units/details/by-number/310}" class="unit-btn-v" style="top: 986px; left: 176px;"></a>
+                                <a th:href="@{/units/details/by-number/312}" class="unit-btn-v" style="top: 986px; left: 216px;"></a>
+                                <a th:href="@{/units/details/by-number/314}" class="unit-btn-v" style="top: 987px; left: 244px;"></a>
+                                <a th:href="@{/units/details/by-number/316}" class="unit-btn" style="top: 992px; left: 295px;"></a>
+                                <a th:href="@{/units/details/by-number/60}" class="unit-btn" style="top: 957px; left: 296px;"></a>
 
-                            <a th:href="@{/units/details/by-number/100}" class="unit-btn" style="top: 420px; left: 199px;"></a>
-                            <a th:href="@{/units/details/by-number/102}" class="unit-btn" style="top: 399px; left: 193px;"></a>
-                            <a th:href="@{/units/details/by-number/104}" class="unit-btn" style="top: 379px; left: 187px;"></a>
-                            <a th:href="@{/units/details/by-number/106}" class="unit-btn" style="top: 358px; left: 181px;"></a>
+                                <a th:href="@{/units/details/by-number/70}" class="unit-btn" style="top: 898px; left: 256px;"></a>
+                                <a th:href="@{/units/details/by-number/72}" class="unit-btn" style="top: 876px; left: 256px;"></a>
+                                <a th:href="@{/units/details/by-number/74}" class="unit-btn" style="top: 854px; left: 256px;"></a>
+                                <a th:href="@{/units/details/by-number/76}" class="unit-btn" style="top: 832px; left: 256px;"></a>
+                                <a th:href="@{/units/details/by-number/78}" class="unit-btn" style="top: 786px; left: 252px;"></a>
+                                <a th:href="@{/units/details/by-number/80}" class="unit-btn" style="top: 765px; left: 248px;"></a>
+                                <a th:href="@{/units/details/by-number/82}" class="unit-btn" style="top: 742px; left: 246px;"></a>
 
-                            <a th:href="@{/units/details/by-number/114}" class="unit-btn-v" style="top: 193px; left: 338px;"></a>
-                            <a th:href="@{/units/details/by-number/116}" class="unit-btn-v" style="top: 193px; left: 360px;"></a>
-                            <a th:href="@{/units/details/by-number/118}" class="unit-btn-v" style="top: 192px; left: 383px;"></a>
+                                <a th:href="@{/units/details/by-number/83-1}" class="unit-btn" style="top: 709px; left: 200px;"></a>
+                                <a th:href="@{/units/details/by-number/83-1}" class="unit-btn" style="top: 690px; left: 187px;"></a>
+                                <a th:href="@{/units/details/by-number/84}" class="unit-btn" style="top: 654px; left: 229px;"></a>
+                                <a th:href="@{/units/details/by-number/86}" class="unit-btn" style="top: 631px; left: 227px;"></a>
+                                <a th:href="@{/units/details/by-number/88}" class="unit-btn" style="top: 611px; left: 225px;"></a>
+                                <a th:href="@{/units/details/by-number/90}" class="unit-btn" style="top: 588px; left: 223px;"></a>
+                                <a th:href="@{/units/details/by-number/92}" class="unit-btn" style="top: 539px; left: 217px;"></a>
+                                <a th:href="@{/units/details/by-number/94}" class="unit-btn" style="top: 518px; left: 218px;"></a>
+                                <a th:href="@{/units/details/by-number/96}" class="unit-btn" style="top: 494px; left: 219px;"></a>
+                                <a th:href="@{/units/details/by-number/98}" class="unit-btn" style="top: 474px; left: 218px;"></a>
 
-                            <a th:href="@{/units/details/by-number/120}" class="unit-btn-v" style="top: 157px; left: 462px;"></a>
-                            <a th:href="@{/units/details/by-number/122}" class="unit-btn-v" style="top: 158px; left: 484px;"></a>
-                            <a th:href="@{/units/details/by-number/124}" class="unit-btn-v" style="top: 158px; left: 504px;"></a>
-                            <a th:href="@{/units/details/by-number/126}" class="unit-btn-v" style="top: 158px; left: 526px;"></a>
+                                <a th:href="@{/units/details/by-number/100}" class="unit-btn" style="top: 420px; left: 199px;"></a>
+                                <a th:href="@{/units/details/by-number/102}" class="unit-btn" style="top: 399px; left: 193px;"></a>
+                                <a th:href="@{/units/details/by-number/104}" class="unit-btn" style="top: 379px; left: 187px;"></a>
+                                <a th:href="@{/units/details/by-number/106}" class="unit-btn" style="top: 358px; left: 181px;"></a>
 
-                            <a th:href="@{/units/details/by-number/128}" class="unit-btn-v" style="top: 128px; left: 587px;"></a>
-                            <a th:href="@{/units/details/by-number/130}" class="unit-btn-v" style="top: 128px; left: 609px;"></a>
-                            <a th:href="@{/units/details/by-number/132}" class="unit-btn-v" style="top: 128px; left: 632px;"></a>
-                            <a th:href="@{/units/details/by-number/134}" class="unit-btn-v" style="top: 128px; left: 654px;"></a>
+                                <a th:href="@{/units/details/by-number/114}" class="unit-btn-v" style="top: 193px; left: 338px;"></a>
+                                <a th:href="@{/units/details/by-number/116}" class="unit-btn-v" style="top: 193px; left: 360px;"></a>
+                                <a th:href="@{/units/details/by-number/118}" class="unit-btn-v" style="top: 192px; left: 383px;"></a>
 
-                            <a th:href="@{/units/details/by-number/140-1}" class="unit-btn unit-btn-diagonal" style="top: 184px; left: 728px;"></a>
-                            <a th:href="@{/units/details/by-number/140-2}" class="unit-btn unit-btn-diagonal" style="top: 167px; left: 741px;"></a>
-                            <a th:href="@{/units/details/by-number/140-3}" class="unit-btn unit-btn-diagonal" style="top: 149px; left: 757px;"></a>
-                            <a th:href="@{/units/details/by-number/140-4}" class="unit-btn unit-btn-diagonal" style="top: 135px; left: 774px;"></a>
-                            <a th:href="@{/units/details/by-number/140-5}" class="unit-btn unit-btn-diagonal" style="top: 120px; left: 788px;"></a>
+                                <a th:href="@{/units/details/by-number/120}" class="unit-btn-v" style="top: 157px; left: 462px;"></a>
+                                <a th:href="@{/units/details/by-number/122}" class="unit-btn-v" style="top: 158px; left: 484px;"></a>
+                                <a th:href="@{/units/details/by-number/124}" class="unit-btn-v" style="top: 158px; left: 504px;"></a>
+                                <a th:href="@{/units/details/by-number/126}" class="unit-btn-v" style="top: 158px; left: 526px;"></a>
 
-                            <a th:href="@{/units/details/by-number/146-1}" class="unit-btn unit-btn-diagonal-v" style="top: 84px; left: 837px;"></a>
-                            <a th:href="@{/units/details/by-number/146-2}" class="unit-btn unit-btn-diagonal-v" style="top: 103px; left: 859px;"></a>
-                            <a th:href="@{/units/details/by-number/146-3}" class="unit-btn unit-btn-diagonal-v" style="top: 123px; left: 881px;"></a>
-                            <a th:href="@{/units/details/by-number/146-4}" class="unit-btn unit-btn-diagonal-v" style="top: 144px; left: 902px;"></a>
-                            <a th:href="@{/units/details/by-number/146}" class="unit-btn" style="top: 175px; left: 915px;"></a>
+                                <a th:href="@{/units/details/by-number/128}" class="unit-btn-v" style="top: 128px; left: 587px;"></a>
+                                <a th:href="@{/units/details/by-number/130}" class="unit-btn-v" style="top: 128px; left: 609px;"></a>
+                                <a th:href="@{/units/details/by-number/132}" class="unit-btn-v" style="top: 128px; left: 632px;"></a>
+                                <a th:href="@{/units/details/by-number/134}" class="unit-btn-v" style="top: 128px; left: 654px;"></a>
 
-                            <a th:href="@{/units/details/by-number/150-1}" class="unit-btn unit-btn-diagonal" style="top: 205px; left: 889px;"></a>
-                            <a th:href="@{/units/details/by-number/150-2}" class="unit-btn unit-btn-diagonal" style="top: 221px; left: 874px;"></a>
-                            <a th:href="@{/units/details/by-number/150-3}" class="unit-btn unit-btn-diagonal" style="top: 238px; left: 859px;"></a>
-                            <a th:href="@{/units/details/by-number/150-4}" class="unit-btn unit-btn-diagonal" style="top: 256px; left: 844px;"></a>
-                            <a th:href="@{/units/details/by-number/150-5}" class="unit-btn unit-btn-diagonal" style="top: 274px; left: 829px;"></a>
+                                <a th:href="@{/units/details/by-number/140-1}" class="unit-btn unit-btn-diagonal" style="top: 184px; left: 728px;"></a>
+                                <a th:href="@{/units/details/by-number/140-2}" class="unit-btn unit-btn-diagonal" style="top: 167px; left: 741px;"></a>
+                                <a th:href="@{/units/details/by-number/140-3}" class="unit-btn unit-btn-diagonal" style="top: 149px; left: 757px;"></a>
+                                <a th:href="@{/units/details/by-number/140-4}" class="unit-btn unit-btn-diagonal" style="top: 135px; left: 774px;"></a>
+                                <a th:href="@{/units/details/by-number/140-5}" class="unit-btn unit-btn-diagonal" style="top: 120px; left: 788px;"></a>
 
-                            <a th:href="@{/units/details/by-number/156}" class="unit-btn-hall" style="top: 452px; left: 885px;"></a>
-                            <a th:href="@{/units/details/by-number/158}" class="unit-btn" style="top: 484px; left: 873px;"></a>
-                            <a th:href="@{/units/details/by-number/160}" class="unit-btn" style="top: 520px; left: 873px;"></a>
-                            <a th:href="@{/units/details/by-number/162}" class="unit-btn" style="top: 570px; left: 872px;"></a>
-                            <a th:href="@{/units/details/by-number/164}" class="unit-btn" style="top: 595px; left: 871px;"></a>
-                            <a th:href="@{/units/details/by-number/166}" class="unit-btn" style="top: 621px; left: 871px;"></a>
-                            <a th:href="@{/units/details/by-number/168}" class="unit-btn" style="top: 661px; left: 871px;"></a>
-                            <a th:href="@{/units/details/by-number/170}" class="unit-btn" style="top: 693px; left: 870px;"></a>
-                            <a th:href="@{/units/details/by-number/172}" class="unit-btn" style="top: 708px; left: 870px;"></a>
-                            <a th:href="@{/units/details/by-number/174}" class="unit-btn" style="top: 736px; left: 870px;"></a>
-                            <a th:href="@{/units/details/by-number/176}" class="unit-btn" style="top: 774px; left: 872px;"></a>
-                            <a th:href="@{/units/details/by-number/178}" class="unit-btn" style="top: 799px; left: 870px;"></a>
-                            <a th:href="@{/units/details/by-number/180}" class="unit-btn" style="top: 825px; left: 870px;"></a>
+                                <a th:href="@{/units/details/by-number/146-1}" class="unit-btn unit-btn-diagonal-v" style="top: 84px; left: 837px;"></a>
+                                <a th:href="@{/units/details/by-number/146-2}" class="unit-btn unit-btn-diagonal-v" style="top: 103px; left: 859px;"></a>
+                                <a th:href="@{/units/details/by-number/146-3}" class="unit-btn unit-btn-diagonal-v" style="top: 123px; left: 881px;"></a>
+                                <a th:href="@{/units/details/by-number/146-4}" class="unit-btn unit-btn-diagonal-v" style="top: 144px; left: 902px;"></a>
+                                <a th:href="@{/units/details/by-number/146}" class="unit-btn" style="top: 175px; left: 915px;"></a>
 
+                                <a th:href="@{/units/details/by-number/150-1}" class="unit-btn unit-btn-diagonal" style="top: 205px; left: 889px;"></a>
+                                <a th:href="@{/units/details/by-number/150-2}" class="unit-btn unit-btn-diagonal" style="top: 221px; left: 874px;"></a>
+                                <a th:href="@{/units/details/by-number/150-3}" class="unit-btn unit-btn-diagonal" style="top: 238px; left: 859px;"></a>
+                                <a th:href="@{/units/details/by-number/150-4}" class="unit-btn unit-btn-diagonal" style="top: 256px; left: 844px;"></a>
+                                <a th:href="@{/units/details/by-number/150-5}" class="unit-btn unit-btn-diagonal" style="top: 274px; left: 829px;"></a>
 
-                            <a th:href="@{/units/details/by-number/184}" class="unit-btn" style="top: 891px; left: 837px;"></a>
-                            <a th:href="@{/units/details/by-number/186}" class="unit-btn" style="top: 920px; left: 836px;"></a>
-                            <a th:href="@{/units/details/by-number/188}" class="unit-btn" style="top: 944px; left: 837px;"></a>
-                            <a th:href="@{/units/details/by-number/190}" class="unit-btn" style="top: 966px; left: 837px;"></a>
+                                <a th:href="@{/units/details/by-number/156}" class="unit-btn-hall" style="top: 452px; left: 885px;"></a>
+                                <a th:href="@{/units/details/by-number/158}" class="unit-btn" style="top: 484px; left: 873px;"></a>
+                                <a th:href="@{/units/details/by-number/160}" class="unit-btn" style="top: 520px; left: 873px;"></a>
+                                <a th:href="@{/units/details/by-number/162}" class="unit-btn" style="top: 570px; left: 872px;"></a>
+                                <a th:href="@{/units/details/by-number/164}" class="unit-btn" style="top: 595px; left: 871px;"></a>
+                                <a th:href="@{/units/details/by-number/166}" class="unit-btn" style="top: 621px; left: 871px;"></a>
+                                <a th:href="@{/units/details/by-number/168}" class="unit-btn" style="top: 661px; left: 871px;"></a>
+                                <a th:href="@{/units/details/by-number/170}" class="unit-btn" style="top: 693px; left: 870px;"></a>
+                                <a th:href="@{/units/details/by-number/172}" class="unit-btn" style="top: 708px; left: 870px;"></a>
+                                <a th:href="@{/units/details/by-number/174}" class="unit-btn" style="top: 736px; left: 870px;"></a>
+                                <a th:href="@{/units/details/by-number/176}" class="unit-btn" style="top: 774px; left: 872px;"></a>
+                                <a th:href="@{/units/details/by-number/178}" class="unit-btn" style="top: 799px; left: 870px;"></a>
+                                <a th:href="@{/units/details/by-number/180}" class="unit-btn" style="top: 825px; left: 870px;"></a>
 
-                            <a th:href="@{/units/details/by-number/193}" class="unit-btn" style="top: 965px; left: 660px;"></a>
-                            <a th:href="@{/units/details/by-number/191}" class="unit-btn" style="top: 943px; left: 660px;"></a>
-                            <a th:href="@{/units/details/by-number/189}" class="unit-btn" style="top: 920px; left: 660px;"></a>
-                            <a th:href="@{/units/details/by-number/187}" class="unit-btn" style="top: 897px; left: 660px;"></a>
+                                <a th:href="@{/units/details/by-number/184}" class="unit-btn" style="top: 891px; left: 837px;"></a>
+                                <a th:href="@{/units/details/by-number/186}" class="unit-btn" style="top: 920px; left: 836px;"></a>
+                                <a th:href="@{/units/details/by-number/188}" class="unit-btn" style="top: 944px; left: 837px;"></a>
+                                <a th:href="@{/units/details/by-number/190}" class="unit-btn" style="top: 966px; left: 837px;"></a>
 
-                            <a th:href="@{/units/details/by-number/181}" class="unit-btn" style="top: 836px; left: 624px;"></a>
-                            <a th:href="@{/units/details/by-number/179}" class="unit-btn" style="top: 815px; left: 624px;"></a>
-                            <a th:href="@{/units/details/by-number/177}" class="unit-btn" style="top: 792px; left: 624px;"></a>
-                            <a th:href="@{/units/details/by-number/175}" class="unit-btn" style="top: 770px; left: 625px;"></a>
-                            <a th:href="@{/units/details/by-number/173}" class="unit-btn" style="top: 728px; left: 626px;"></a>
-                            <a th:href="@{/units/details/by-number/171}" class="unit-btn" style="top: 706px; left: 626px;"></a>
-                            <a th:href="@{/units/details/by-number/169}" class="unit-btn" style="top: 682px; left: 626px;"></a>
-                            <a th:href="@{/units/details/by-number/167}" class="unit-btn" style="top: 628px; left: 626px;"></a>
-                            <a th:href="@{/units/details/by-number/165}" class="unit-btn" style="top: 606px; left: 625px;"></a>
-                            <a th:href="@{/units/details/by-number/163}" class="unit-btn" style="top: 583px; left: 625px;"></a>
-                            <a th:href="@{/units/details/by-number/161}" class="unit-btn" style="top: 561px; left: 625px;"></a>
+                                <a th:href="@{/units/details/by-number/193}" class="unit-btn" style="top: 965px; left: 660px;"></a>
+                                <a th:href="@{/units/details/by-number/191}" class="unit-btn" style="top: 943px; left: 660px;"></a>
+                                <a th:href="@{/units/details/by-number/189}" class="unit-btn" style="top: 920px; left: 660px;"></a>
+                                <a th:href="@{/units/details/by-number/187}" class="unit-btn" style="top: 897px; left: 660px;"></a>
 
-                            <a th:href="@{/units/details/by-number/157}" class="unit-btn" style="top: 489px; left: 656px;"></a>
-                            <a th:href="@{/units/details/by-number/155}" class="unit-btn" style="top: 466px; left: 656px;"></a>
-                            <a th:href="@{/units/details/by-number/153}" class="unit-btn" style="top: 444px; left: 656px;"></a>
-                            <a th:href="@{/units/details/by-number/151}" class="unit-btn" style="top: 422px; left: 656px;"></a>
+                                <a th:href="@{/units/details/by-number/181}" class="unit-btn" style="top: 836px; left: 624px;"></a>
+                                <a th:href="@{/units/details/by-number/179}" class="unit-btn" style="top: 815px; left: 624px;"></a>
+                                <a th:href="@{/units/details/by-number/177}" class="unit-btn" style="top: 792px; left: 624px;"></a>
+                                <a th:href="@{/units/details/by-number/175}" class="unit-btn" style="top: 770px; left: 625px;"></a>
+                                <a th:href="@{/units/details/by-number/173}" class="unit-btn" style="top: 728px; left: 626px;"></a>
+                                <a th:href="@{/units/details/by-number/171}" class="unit-btn" style="top: 706px; left: 626px;"></a>
+                                <a th:href="@{/units/details/by-number/169}" class="unit-btn" style="top: 682px; left: 626px;"></a>
+                                <a th:href="@{/units/details/by-number/167}" class="unit-btn" style="top: 628px; left: 626px;"></a>
+                                <a th:href="@{/units/details/by-number/165}" class="unit-btn" style="top: 606px; left: 625px;"></a>
+                                <a th:href="@{/units/details/by-number/163}" class="unit-btn" style="top: 583px; left: 625px;"></a>
+                                <a th:href="@{/units/details/by-number/161}" class="unit-btn" style="top: 561px; left: 625px;"></a>
 
-                            <a th:href="@{/units/details/by-number/131}" class="unit-btn-v" style="top: 335px; left: 583px;"></a>
-                            <a th:href="@{/units/details/by-number/129}" class="unit-btn-v" style="top: 335px; left: 561px;"></a>
-                            <a th:href="@{/units/details/by-number/127}" class="unit-btn-v" style="top: 335px; left: 538px;"></a>
-                            <a th:href="@{/units/details/by-number/125}" class="unit-btn-v" style="top: 335px; left: 516px;"></a>
+                                <a th:href="@{/units/details/by-number/157}" class="unit-btn" style="top: 489px; left: 656px;"></a>
+                                <a th:href="@{/units/details/by-number/155}" class="unit-btn" style="top: 466px; left: 656px;"></a>
+                                <a th:href="@{/units/details/by-number/153}" class="unit-btn" style="top: 444px; left: 656px;"></a>
+                                <a th:href="@{/units/details/by-number/151}" class="unit-btn" style="top: 422px; left: 656px;"></a>
 
-                            <a th:href="@{/units/details/by-number/107}" class="unit-btn" style="top: 340px; left: 437px;"></a>
-                            <a th:href="@{/units/details/by-number/105}" class="unit-btn" style="top: 364px; left: 437px;"></a>
-                            <a th:href="@{/units/details/by-number/103}" class="unit-btn" style="top: 388px; left: 436px;"></a>
+                                <a th:href="@{/units/details/by-number/131}" class="unit-btn-v" style="top: 335px; left: 583px;"></a>
+                                <a th:href="@{/units/details/by-number/129}" class="unit-btn-v" style="top: 335px; left: 561px;"></a>
+                                <a th:href="@{/units/details/by-number/127}" class="unit-btn-v" style="top: 335px; left: 538px;"></a>
+                                <a th:href="@{/units/details/by-number/125}" class="unit-btn-v" style="top: 335px; left: 516px;"></a>
 
-                            <a th:href="@{/units/details/by-number/101}" class="unit-btn-v" style="top: 464px; left: 422px;"></a>
-                            <a th:href="@{/units/details/by-number/99}" class="unit-btn-v" style="top: 464px; left: 443px;"></a>
-                            <a th:href="@{/units/details/by-number/97}" class="unit-btn-v" style="top: 464px; left: 464px;"></a>
-                            <a th:href="@{/units/details/by-number/95}" class="unit-btn-v" style="top: 464px; left: 486px;"></a>
+                                <a th:href="@{/units/details/by-number/107}" class="unit-btn" style="top: 340px; left: 437px;"></a>
+                                <a th:href="@{/units/details/by-number/105}" class="unit-btn" style="top: 364px; left: 437px;"></a>
+                                <a th:href="@{/units/details/by-number/103}" class="unit-btn" style="top: 388px; left: 436px;"></a>
 
-                            <a th:href="@{/units/details/by-number/87}" class="unit-btn-v" style="top: 611px; left: 443px;"></a>
-                            <a th:href="@{/units/details/by-number/89}" class="unit-btn-v" style="top: 611px; left: 465px;"></a>
-                            <a th:href="@{/units/details/by-number/91}" class="unit-btn-v" style="top: 611px; left: 486px;"></a>
-                            <a th:href="@{/units/details/by-number/93}" class="unit-btn-v" style="top: 610px; left: 507px;"></a>
+                                <a th:href="@{/units/details/by-number/101}" class="unit-btn-v" style="top: 464px; left: 422px;"></a>
+                                <a th:href="@{/units/details/by-number/99}" class="unit-btn-v" style="top: 464px; left: 443px;"></a>
+                                <a th:href="@{/units/details/by-number/97}" class="unit-btn-v" style="top: 464px; left: 464px;"></a>
+                                <a th:href="@{/units/details/by-number/95}" class="unit-btn-v" style="top: 464px; left: 486px;"></a>
 
-                            <a th:href="@{/units/details/by-number/85}" class="unit-btn" style="top: 698px; left: 494px;"></a>
-                            <a th:href="@{/units/details/by-number/83}" class="unit-btn" style="top: 719px; left: 494px;"></a>
-                            <a th:href="@{/units/details/by-number/81}" class="unit-btn" style="top: 740px; left: 494px;"></a>
+                                <a th:href="@{/units/details/by-number/87}" class="unit-btn-v" style="top: 611px; left: 443px;"></a>
+                                <a th:href="@{/units/details/by-number/89}" class="unit-btn-v" style="top: 611px; left: 465px;"></a>
+                                <a th:href="@{/units/details/by-number/91}" class="unit-btn-v" style="top: 611px; left: 486px;"></a>
+                                <a th:href="@{/units/details/by-number/93}" class="unit-btn-v" style="top: 610px; left: 507px;"></a>
 
-                            <a th:href="@{/units/details/by-number/79}" class="unit-btn-v" style="top: 821px; left: 459px;"></a>
-                            <a th:href="@{/units/details/by-number/77}" class="unit-btn-v" style="top: 821px; left: 480px;"></a>
-                            <a th:href="@{/units/details/by-number/75}" class="unit-btn-v" style="top: 821px; left: 502px;"></a>
-                            <a th:href="@{/units/details/by-number/73}" class="unit-btn-v" style="top: 820px; left: 522px;"></a>
+                                <a th:href="@{/units/details/by-number/85}" class="unit-btn" style="top: 698px; left: 494px;"></a>
+                                <a th:href="@{/units/details/by-number/83}" class="unit-btn" style="top: 719px; left: 494px;"></a>
+                                <a th:href="@{/units/details/by-number/81}" class="unit-btn" style="top: 740px; left: 494px;"></a>
 
-                            <a th:href="@{/units/details/by-number/71}" class="unit-btn-v" style="top: 968px; left: 528px;"></a>
-                            <a th:href="@{/units/details/by-number/69}" class="unit-btn-v" style="top: 968px; left: 507px;"></a>
-                            <a th:href="@{/units/details/by-number/67}" class="unit-btn-v" style="top: 967px; left: 486px;"></a>
-                            <a th:href="@{/units/details/by-number/65}" class="unit-btn-v" style="top: 967px; left: 465px;"></a>
+                                <a th:href="@{/units/details/by-number/79}" class="unit-btn-v" style="top: 821px; left: 459px;"></a>
+                                <a th:href="@{/units/details/by-number/77}" class="unit-btn-v" style="top: 821px; left: 480px;"></a>
+                                <a th:href="@{/units/details/by-number/75}" class="unit-btn-v" style="top: 821px; left: 502px;"></a>
+                                <a th:href="@{/units/details/by-number/73}" class="unit-btn-v" style="top: 820px; left: 522px;"></a>
 
-                            <!-- ... (resto de tus botones EXACTOS aquí, sin cambios) -->
+                                <a th:href="@{/units/details/by-number/71}" class="unit-btn-v" style="top: 968px; left: 528px;"></a>
+                                <a th:href="@{/units/details/by-number/69}" class="unit-btn-v" style="top: 968px; left: 507px;"></a>
+                                <a th:href="@{/units/details/by-number/67}" class="unit-btn-v" style="top: 967px; left: 486px;"></a>
+                                <a th:href="@{/units/details/by-number/65}" class="unit-btn-v" style="top: 967px; left: 465px;"></a>
 
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <hr>
-        </div>
 
-
-        <!-- SEARCH BAR -->
-        <div class="card shadow-sm mb-4">
-            <div class="card-body">
-
-                <div class="row g-2 align-items-center">
-
-                    <div class="col-12 col-md-9">
-                        <input type="text"
-                               id="unitSearchInput"
-                               class="form-control"
-                               placeholder="Search by unit number, display name, address, or status..."
-                               th:value="${keyword}">
-                    </div>
-
-                    <div class="col-12 col-md-3 d-grid">
-                        <button type="button"
-                                id="clearUnitSearchBtn"
-                                class="btn btn-outline-secondary">
-                            Clear Search
-                        </button>
-                    </div>
-
-                </div>
-
-            </div>
-        </div>
-        <!-- TABLA -->
-        <div id="unitsTableContainer" th:fragment="unitsTable">
-
-            <div class="d-flex justify-content-between align-items-center mb-2">
-                <div class="text-muted small">
-                    <span th:text="${totalMatchingUnits}">0</span> result(s) found
-                </div>
-
-                <div class="text-muted small" th:if="${keyword != null && !keyword.isBlank()}">
-                    Filter:
-                    <strong th:text="${keyword}"></strong>
-                </div>
+                <hr>
             </div>
 
-            <div th:if="${#lists.isEmpty(units)}"
-                 class="alert alert-info text-center shadow-sm">
-                No units available.
-            </div>
-
+            <!-- SEARCH BAR -->
             <div class="card shadow-sm mb-4">
-                <div class="table-responsive">
+                <div class="card-body">
 
-                    <table class="table table-hover align-middle mb-0 text-center">
+                    <div class="row g-2 align-items-center">
 
-                        <thead class="table-dark">
-                        <tr>
-                            <th>Unit</th>
-                            <th>Address</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-                        </tr>
-                        </thead>
+                        <div class="col-12 col-md-9">
+                            <input type="text"
+                                   id="unitSearchInput"
+                                   class="form-control"
+                                   placeholder="Search by unit number, display name, address, or status..."
+                                   th:value="${keyword}">
+                        </div>
 
-                        <tbody>
-                        <tr th:each="u : ${units}">
+                        <div class="col-12 col-md-3 d-grid">
+                            <button type="button"
+                                    id="clearUnitSearchBtn"
+                                    class="btn btn-outline-secondary">
+                                Clear Search
+                            </button>
+                        </div>
 
-                            <td class="fw-bold">
-                                <a th:href="@{/units/details/{id}(id=${u.id})}"
-                                   class="text-decoration-none"
-                                   th:text="${u.displayName != null && !u.displayName.isBlank()
-                                ? u.displayName
-                                : u.unitNumber}">
-                                </a>
-                            </td>
+                    </div>
 
-                            <td th:text="${u.address}"></td>
-
-                            <td>
-                        <span th:text="${u.status}"
-                              class="badge rounded-pill px-3"
-                              th:classappend="
-                                ${u.status == 'Occupied'} ? 'bg-danger' :
-                                (${u.status == 'Managed'} ? 'bg-primary' : 'bg-success')">
-                        </span>
-                            </td>
-
-                            <td>
-                                <div class="btn-group">
-                                    <a th:href="@{/units/edit/{id}(id=${u.id})}"
-                                       class="btn btn-sm btn-outline-primary"
-                                       sec:authorize="hasAnyRole('SUPER_ADMIN','ADMIN')">
-                                        Edit
-                                    </a>
-
-                                    <a th:href="@{/units/delete/{id}(id=${u.id})}"
-                                       class="btn btn-sm btn-outline-danger"
-                                       sec:authorize="hasAnyRole('SUPER_ADMIN','ADMIN')">
-                                        Delete
-                                    </a>
-                                </div>
-                            </td>
-
-                        </tr>
-                        </tbody>
-
-                    </table>
                 </div>
             </div>
 
-            <!-- PAGINATION -->
-            <div class="d-flex justify-content-center align-items-center mt-3 pb-4"
-                 th:if="${totalPages > 1}">
+            <!-- TABLE -->
+            <div id="unitsTableContainer" th:fragment="unitsTable">
 
-                <button type="button"
-                        class="btn btn-outline-primary btn-sm me-2"
-                        th:classappend="${currentPage == 0} ? ' disabled'"
-                        th:onclick="'loadUnitsPage(' + ${currentPage - 1} + ')'">
-                    &laquo; Prev
-                </button>
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <div class="text-muted small">
+                        <span th:text="${totalMatchingUnits}">0</span> result(s) found
+                    </div>
 
-                <span class="mx-2 text-muted">
-        Page <strong th:text="${currentPage + 1}"></strong>
-        of <strong th:text="${totalPages}"></strong>
-    </span>
+                    <div class="text-muted small" th:if="${keyword != null && !keyword.isBlank()}">
+                        Filter:
+                        <strong th:text="${keyword}"></strong>
+                    </div>
+                </div>
 
-                <button type="button"
-                        class="btn btn-outline-primary btn-sm ms-2"
-                        th:classappend="${currentPage + 1 >= totalPages} ? ' disabled'"
-                        th:onclick="'loadUnitsPage(' + ${currentPage + 1} + ')'">
-                    Next &raquo;
-                </button>
+                <div th:if="${#lists.isEmpty(units)}"
+                     class="alert alert-info text-center shadow-sm">
+                    No units available.
+                </div>
+
+                <div class="card shadow-sm mb-4">
+                    <div class="table-responsive">
+
+                        <table class="table table-hover align-middle mb-0 text-center">
+
+                            <thead class="table-dark">
+                            <tr>
+                                <th>Unit</th>
+                                <th>Address</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                            </thead>
+
+                            <tbody>
+                            <tr th:each="u : ${units}">
+
+                                <td class="fw-bold">
+                                    <a th:href="@{/units/details/{id}(id=${u.id})}"
+                                       class="text-decoration-none"
+                                       th:text="${u.displayName != null && !u.displayName.isBlank()
+                                            ? u.displayName
+                                            : u.unitNumber}">
+                                    </a>
+                                </td>
+
+                                <td th:text="${u.address}"></td>
+
+                                <td>
+                                    <span th:text="${u.status}"
+                                          class="badge rounded-pill px-3"
+                                          th:classappend="
+                                            ${u.status == 'Occupied'} ? 'bg-danger' :
+                                            (${u.status == 'Managed'} ? 'bg-primary' : 'bg-success')">
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <div class="btn-group">
+                                        <a th:href="@{/units/edit/{id}(id=${u.id})}"
+                                           class="btn btn-sm btn-outline-primary"
+                                           sec:authorize="hasAnyRole('SUPER_ADMIN','ADMIN')">
+                                            Edit
+                                        </a>
+
+                                        <a th:href="@{/units/delete/{id}(id=${u.id})}"
+                                           class="btn btn-sm btn-outline-danger"
+                                           sec:authorize="hasAnyRole('SUPER_ADMIN','ADMIN')">
+                                            Delete
+                                        </a>
+                                    </div>
+                                </td>
+
+                            </tr>
+                            </tbody>
+
+                        </table>
+                    </div>
+                </div>
+
+                <!-- PAGINATION -->
+                <div class="d-flex justify-content-center align-items-center mt-3 pb-4"
+                     th:if="${totalPages > 1}">
+
+                    <button type="button"
+                            class="btn btn-outline-primary btn-sm me-2"
+                            th:classappend="${currentPage == 0} ? ' disabled'"
+                            th:onclick="'loadUnitsPage(' + ${currentPage - 1} + ')'">
+                        &laquo; Prev
+                    </button>
+
+                    <span class="mx-2 text-muted">
+                        Page <strong th:text="${currentPage + 1}"></strong>
+                        of <strong th:text="${totalPages}"></strong>
+                    </span>
+
+                    <button type="button"
+                            class="btn btn-outline-primary btn-sm ms-2"
+                            th:classappend="${currentPage + 1 >= totalPages} ? ' disabled'"
+                            th:onclick="'loadUnitsPage(' + ${currentPage + 1} + ')'">
+                        Next &raquo;
+                    </button>
+
+                </div>
 
             </div>
 
         </div>
-
     </div>
-</div>
+</main>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://unpkg.com/@panzoom/panzoom@4.6.0/dist/panzoom.min.js"></script>
 <script th:src="@{/js/map.js?v=3}"></script>
 <script th:src="@{/js/units-search.js?v=1}"></script>
 <script th:src="@{/js/loading.js?v=3}"></script>
-<script th:src="@{/js/sidebar.js}"></script>
+
+<!-- SIDEBAR SCRIPT -->
+<script th:src="@{/js/sidebar.js?v=1}"></script>
 
 </body>
 </html>
