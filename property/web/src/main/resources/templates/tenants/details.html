@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <title>Tenant Details</title>
@@ -10,227 +12,229 @@
 
 <body>
 
-<div class="page-shell mt-4">
+<!-- SIDEBAR -->
+<div th:replace="~{fragments/sidebar :: sidebar}"></div>
 
-    <div class="sidebar-wrapper">
-        <div th:replace="~{fragments/sidebar :: sidebar}"></div>
-    </div>
+<!-- PAGE CONTENT -->
+<main class="app-main">
+    <div class="page-shell mt-4">
+        <div class="content-wrapper">
 
-    <div class="content-wrapper">
+            <h2 class="text-primary">Tenant Details</h2>
 
-        <h2 class="text-primary">Tenant Details</h2>
-        <p>
-            <strong>Last Updated:</strong>
-            <span th:text="${tenant.updatedAt != null ? #temporals.format(tenant.updatedAt, 'yyyy-MM-dd HH:mm') : 'Never'}"></span>
-        </p>
-        <hr/>
+            <p>
+                <strong>Last Updated:</strong>
+                <span th:text="${tenant.updatedAt != null ? #temporals.format(tenant.updatedAt, 'yyyy-MM-dd HH:mm') : 'Never'}"></span>
+            </p>
 
-        <div class="card shadow-sm mb-4">
-            <div class="card-header bg-primary text-white">
+            <hr/>
 
-                <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-primary text-white">
 
-                    <!-- TENANT NAME -->
-                    <h4 class="mb-0"
-                        th:text="${tenant.firstName + ' ' + tenant.lastName}">
-                        Tenant Name
-                    </h4>
+                    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
 
-                    <!-- BUTTONS -->
-                    <div th:if="${activeLease != null}"
-                         class="d-flex gap-2 flex-wrap">
+                        <h4 class="mb-0"
+                            th:text="${tenant.firstName + ' ' + tenant.lastName}">
+                            Tenant Name
+                        </h4>
 
-                        <!-- UNIT BUTTON -->
-                        <a th:href="@{/units/details/{id}(id=${activeLease.unitId})}"
-                           class="btn btn-light btn-sm fw-semibold">
+                        <div th:if="${activeLease != null}"
+                             class="d-flex gap-2 flex-wrap">
 
-                            Unit
-                            <span th:text="${activeLease.unitNumber}"></span>
+                            <a th:href="@{/units/details/{id}(id=${activeLease.unitId})}"
+                               class="btn btn-light btn-sm fw-semibold">
+                                Unit
+                                <span th:text="${activeLease.unitNumber}"></span>
+                            </a>
 
+                            <button type="button"
+                                    class="btn btn-warning btn-sm fw-semibold"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#leaseDetailsModal">
+                                Lease Details
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="card-body">
+
+                    <h5 class="text-secondary border-bottom pb-2 mb-3">Basic Information</h5>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <strong>Phone:</strong>
+                            <span th:text="${tenant.phone} ?: 'Not specified'"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <strong>Email:</strong>
+                            <span th:text="${tenant.email} ?: 'Not specified'"></span>
+                        </div>
+                    </div>
+
+                    <h5 class="text-secondary border-bottom pb-2 mb-3">
+                        Secondary Tenant / Additional Contact
+                    </h5>
+
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <strong>Name:</strong>
+                            <span th:text="${tenant.secondaryTenantName ?: 'Not specified'}"></span>
+                        </div>
+
+                        <div class="col-md-4">
+                            <strong>Phone:</strong>
+                            <span th:text="${tenant.secondaryTenantPhone ?: 'Not specified'}"></span>
+                        </div>
+
+                        <div class="col-md-4">
+                            <strong>Email:</strong>
+                            <span th:text="${tenant.secondaryTenantEmail ?: 'Not specified'}"></span>
+                        </div>
+                    </div>
+
+                    <hr/>
+
+                    <h5 class="text-secondary border-bottom pb-2 mb-3">Emergency Contact</h5>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <strong>Name:</strong>
+                            <span th:text="${tenant.emergencyContactName} ?: 'Not specified'"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <strong>Phone:</strong>
+                            <span th:text="${tenant.emergencyContactPhone} ?: 'Not specified'"></span>
+                        </div>
+                    </div>
+
+                    <hr/>
+
+                    <h5 class="text-secondary border-bottom pb-2 mb-3">Household Information</h5>
+
+                    <div class="row text-center">
+                        <div class="col-md-3 mb-3">
+                            <div class="border rounded p-3">
+                                <strong>Children</strong>
+                                <div th:text="${tenant.childrenCount} ?: 0"></div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3 mb-3">
+                            <div class="border rounded p-3">
+                                <strong>Youth</strong>
+                                <div th:text="${tenant.youthCount} ?: 0"></div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3 mb-3">
+                            <div class="border rounded p-3">
+                                <strong>Adults</strong>
+                                <div th:text="${tenant.adultsCount} ?: 0"></div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3 mb-3">
+                            <div class="border rounded p-3">
+                                <strong>Seniors</strong>
+                                <div th:text="${tenant.seniorsCount} ?: 0"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr/>
+
+                    <h5 class="text-secondary border-bottom pb-2 mb-3">Pets</h5>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <strong>Dogs:</strong>
+                            <span th:text="${tenant.dogsCount} ?: 0"></span>
+
+                            <div class="mt-2">
+                                <span class="badge bg-primary me-1"
+                                      th:each="dog : ${#strings.arraySplit(tenant.dogInfo ?: '', ',')}"
+                                      th:if="${!#strings.isEmpty(#strings.trim(dog))}"
+                                      th:text="${#strings.trim(dog)}">
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <strong>Cats:</strong>
+                            <span th:text="${tenant.catsCount} ?: 0"></span>
+
+                            <div class="mt-2">
+                                <span class="badge bg-info text-dark me-1"
+                                      th:each="cat : ${#strings.arraySplit(tenant.catNames ?: '', ',')}"
+                                      th:if="${!#strings.isEmpty(#strings.trim(cat))}"
+                                      th:text="${#strings.trim(cat)}">
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <strong>Other Pets:</strong>
+                        <span th:text="${tenant.otherPets} ?: 'None'"></span>
+                    </div>
+
+                    <hr/>
+
+                    <h5 class="text-secondary border-bottom pb-2 mb-3">Vehicles & Lifestyle</h5>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <strong>Cars:</strong>
+                            <span th:text="${tenant.carsCount} ?: 0"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <strong>Smokers:</strong>
+                            <span class="badge bg-warning text-dark"
+                                  th:text="${tenant.smokers} ? 'Yes' : 'No'">
+                            </span>
+                        </div>
+                    </div>
+
+                    <hr/>
+
+                    <h5 class="text-secondary border-bottom pb-2 mb-3">Notes</h5>
+
+                    <p class="text-muted" th:text="${tenant.notes} ?: 'No notes available.'"></p>
+
+                    <div class="mt-4 border-top pt-3">
+                        <a th:href="@{/tenants/edit/{id}(id=${tenant.id})}"
+                           class="btn btn-primary px-4"
+                           sec:authorize="hasRole('SUPER_ADMIN')">
+                            Edit Tenant
                         </a>
 
-                        <!-- LEASE BUTTON -->
-                        <button type="button"
-                                class="btn btn-warning btn-sm fw-semibold"
-                                data-bs-toggle="modal"
-                                data-bs-target="#leaseDetailsModal">
-
-                            Lease Details
-
-                        </button>
-
+                        <a th:href="@{/tenants}" class="btn btn-secondary ms-2 px-4">
+                            Back
+                        </a>
                     </div>
 
                 </div>
-
             </div>
 
-            <div class="card-body">
-
-                <h5 class="text-secondary border-bottom pb-2 mb-3">Basic Information</h5>
-
-                <div class="row mb-3">
-                    <div class="col-md-6">
-                        <strong>Phone:</strong>
-                        <span th:text="${tenant.phone} ?: 'Not specified'"></span>
-                    </div>
-
-                    <div class="col-md-6">
-                        <strong>Email:</strong>
-                        <span th:text="${tenant.email} ?: 'Not specified'"></span>
-                    </div>
-                </div>
-
-                <h5 class="text-secondary border-bottom pb-2 mb-3">Secondary Tenant / Additional Contact</h5>
-
-                <div class="row mb-3">
-                    <div class="col-md-4">
-                        <strong>Name:</strong>
-                        <span th:text="${tenant.secondaryTenantName ?: 'Not specified'}"></span>
-                    </div>
-
-                    <div class="col-md-4">
-                        <strong>Phone:</strong>
-                        <span th:text="${tenant.secondaryTenantPhone ?: 'Not specified'}"></span>
-                    </div>
-
-                    <div class="col-md-4">
-                        <strong>Email:</strong>
-                        <span th:text="${tenant.secondaryTenantEmail ?: 'Not specified'}"></span>
-                    </div>
-                </div>
-
-                <hr/>
-
-                <h5 class="text-secondary border-bottom pb-2 mb-3">Emergency Contact</h5>
-
-                <div class="row mb-3">
-                    <div class="col-md-6">
-                        <strong>Name:</strong>
-                        <span th:text="${tenant.emergencyContactName} ?: 'Not specified'"></span>
-                    </div>
-
-                    <div class="col-md-6">
-                        <strong>Phone:</strong>
-                        <span th:text="${tenant.emergencyContactPhone} ?: 'Not specified'"></span>
-                    </div>
-                </div>
-
-                <hr/>
-
-                <h5 class="text-secondary border-bottom pb-2 mb-3">Household Information</h5>
-
-                <div class="row text-center">
-                    <div class="col-md-3 mb-3">
-                        <div class="border rounded p-3">
-                            <strong>Children</strong>
-                            <div th:text="${tenant.childrenCount} ?: 0"></div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-3 mb-3">
-                        <div class="border rounded p-3">
-                            <strong>Youth</strong>
-                            <div th:text="${tenant.youthCount} ?: 0"></div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-3 mb-3">
-                        <div class="border rounded p-3">
-                            <strong>Adults</strong>
-                            <div th:text="${tenant.adultsCount} ?: 0"></div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-3 mb-3">
-                        <div class="border rounded p-3">
-                            <strong>Seniors</strong>
-                            <div th:text="${tenant.seniorsCount} ?: 0"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <hr/>
-
-                <h5 class="text-secondary border-bottom pb-2 mb-3">Pets</h5>
-
-                <div class="row mb-3">
-                    <div class="col-md-6">
-                        <strong>Dogs:</strong>
-                        <span th:text="${tenant.dogsCount} ?: 0"></span>
-
-                        <div class="mt-2">
-                            <span class="badge bg-primary me-1"
-                                  th:each="dog : ${#strings.arraySplit(tenant.dogInfo ?: '', ',')}"
-                                  th:if="${!#strings.isEmpty(#strings.trim(dog))}"
-                                  th:text="${#strings.trim(dog)}">
-                            </span>
-                        </div>
-                    </div>
-
-                    <div class="col-md-6">
-                        <strong>Cats:</strong>
-                        <span th:text="${tenant.catsCount} ?: 0"></span>
-
-                        <div class="mt-2">
-                            <span class="badge bg-info text-dark me-1"
-                                  th:each="cat : ${#strings.arraySplit(tenant.catNames ?: '', ',')}"
-                                  th:if="${!#strings.isEmpty(#strings.trim(cat))}"
-                                  th:text="${#strings.trim(cat)}">
-                            </span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="mb-3">
-                    <strong>Other Pets:</strong>
-                    <span th:text="${tenant.otherPets} ?: 'None'"></span>
-                </div>
-
-                <hr/>
-
-                <h5 class="text-secondary border-bottom pb-2 mb-3">Vehicles & Lifestyle</h5>
-
-                <div class="row mb-3">
-                    <div class="col-md-6">
-                        <strong>Cars:</strong>
-                        <span th:text="${tenant.carsCount} ?: 0"></span>
-                    </div>
-
-                    <div class="col-md-6">
-                        <strong>Smokers:</strong>
-                        <span class="badge bg-warning text-dark"
-                              th:text="${tenant.smokers} ? 'Yes' : 'No'">
-                        </span>
-                    </div>
-                </div>
-
-                <hr/>
-
-                <h5 class="text-secondary border-bottom pb-2 mb-3">Notes</h5>
-
-                <p class="text-muted" th:text="${tenant.notes} ?: 'No notes available.'"></p>
-
-                <div class="mt-4 border-top pt-3">
-                    <a th:href="@{/tenants/edit/{id}(id=${tenant.id})}"
-                       class="btn btn-primary px-4"
-                       sec:authorize="hasRole('SUPER_ADMIN')"
-                    >
-                        Edit Tenant
-                    </a>
-
-                    <a th:href="@{/tenants}" class="btn btn-secondary ms-2 px-4">
-                        Back
-                    </a>
-                </div>
-
-            </div>
         </div>
-
     </div>
-</div>
-<div class="modal fade" id="leaseDetailsModal" tabindex="-1" aria-labelledby="leaseDetailsModalLabel" aria-hidden="true"
+</main>
+
+<div class="modal fade"
+     id="leaseDetailsModal"
+     tabindex="-1"
+     aria-labelledby="leaseDetailsModalLabel"
+     aria-hidden="true"
      th:if="${activeLease != null}">
+
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
 
@@ -238,7 +242,12 @@
                 <h5 class="modal-title fw-bold" id="leaseDetailsModalLabel">
                     Lease Details
                 </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close">
+                </button>
             </div>
 
             <div class="modal-body">
@@ -309,9 +318,9 @@
             </div>
 
             <div class="modal-footer">
-
-
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                <button type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal">
                     Close
                 </button>
             </div>
@@ -321,5 +330,9 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- SIDEBAR SCRIPT -->
+<script th:src="@{/js/sidebar.js?v=1}"></script>
+
 </body>
 </html>

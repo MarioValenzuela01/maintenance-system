@@ -10,274 +10,260 @@
 
 <body>
 
-<div class="page-shell mt-4">
+<!-- SIDEBAR -->
+<div th:replace="~{fragments/sidebar :: sidebar}"></div>
 
-    <!-- SIDEBAR -->
-    <div class="sidebar-wrapper">
-        <div th:replace="~{fragments/sidebar :: sidebar}"></div>
-    </div>
+<!-- PAGE CONTENT -->
+<main class="app-main">
+    <div class="page-shell mt-4">
+        <div class="content-wrapper">
 
-    <!-- CONTENT -->
-    <div class="content-wrapper">
+            <h2 class="text-primary">Create Tenant</h2>
+            <hr/>
 
-        <h2 class="text-primary">Create Tenant</h2>
-        <hr/>
+            <div class="card shadow-sm p-4">
 
-        <div class="card shadow-sm p-4">
+                <form th:action="@{/tenants/create}"
+                      th:object="${tenant}"
+                      method="post">
 
-            <form th:action="@{/tenants/create}"
-                  th:object="${tenant}"
-                  method="post">
+                    <input type="hidden"
+                           name="forceCreate"
+                           id="forceCreate"
+                           value="false">
 
-                <input type="hidden"
-                       name="forceCreate"
-                       id="forceCreate"
-                       value="false">
+                    <div th:if="${duplicateWarning}"
+                         class="alert alert-warning shadow-sm">
 
-                <div th:if="${duplicateWarning}"
-                     class="alert alert-warning shadow-sm">
+                        <h5 class="fw-bold">
+                            Possible duplicate tenant found
+                        </h5>
 
-                    <h5 class="fw-bold">
-                        Possible duplicate tenant found
-                    </h5>
+                        <p class="mb-2">
+                            A tenant with the same name and matching email or phone already exists.
+                        </p>
 
-                    <p class="mb-2">
-                        A tenant with the same name and matching email or phone already exists.
-                    </p>
+                        <p class="mb-1">
+                            <strong>Existing Tenant:</strong>
+                            <span th:text="${possibleDuplicate.firstName + ' ' + possibleDuplicate.lastName}"></span>
+                        </p>
 
-                    <p class="mb-1">
-                        <strong>Existing Tenant:</strong>
+                        <p class="mb-1">
+                            <strong>Email:</strong>
+                            <span th:text="${possibleDuplicate.email != null && !possibleDuplicate.email.isBlank()
+                                ? possibleDuplicate.email
+                                : 'No email'}"></span>
+                        </p>
 
-                        <span th:text="${possibleDuplicate.firstName + ' ' + possibleDuplicate.lastName}">
-                </span>
-                    </p>
+                        <p class="mb-3">
+                            <strong>Phone:</strong>
+                            <span th:text="${possibleDuplicate.phone != null && !possibleDuplicate.phone.isBlank()
+                                ? possibleDuplicate.phone
+                                : 'No phone'}"></span>
+                        </p>
 
-                    <p class="mb-1">
-                        <strong>Email:</strong>
+                        <div class="mt-3">
 
-                        <span th:text="${possibleDuplicate.email != null && !possibleDuplicate.email.isBlank()
-                    ? possibleDuplicate.email
-                    : 'No email'}">
-                </span>
-                    </p>
+                            <button type="button"
+                                    class="btn btn-warning"
+                                    onclick="
+                                        document.getElementById('forceCreate').value='true';
+                                        this.form.submit();">
+                                Create Anyway
+                            </button>
 
-                    <p class="mb-3">
-                        <strong>Phone:</strong>
+                            <a th:href="@{/tenants}"
+                               class="btn btn-secondary ms-2">
+                                Cancel
+                            </a>
 
-                        <span th:text="${possibleDuplicate.phone != null && !possibleDuplicate.phone.isBlank()
-                    ? possibleDuplicate.phone
-                    : 'No phone'}">
-                </span>
-                    </p>
-
-                    <div class="mt-3">
-
-                        <button type="button"
-                                class="btn btn-warning"
-                                onclick="
-                            document.getElementById('forceCreate').value='true';
-                            this.form.submit();">
-
-                            Create Anyway
-                        </button>
-
-                        <a th:href="@{/tenants}"
-                           class="btn btn-secondary ms-2">
-
-                            Cancel
-                        </a>
+                        </div>
 
                     </div>
 
-                </div>
+                    <!-- BASIC -->
+                    <h5 class="text-primary">Basic Information</h5>
 
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label>First Name</label>
+                            <input type="text" th:field="*{firstName}" class="form-control" required>
+                        </div>
 
-                <!-- BASIC -->
-                <h5 class="text-primary">Basic Information</h5>
-
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label>First Name</label>
-                        <input type="text" th:field="*{firstName}" class="form-control" required>
-                    </div>
-
-                    <div class="col-md-6 mb-3">
-                        <label>Last Name</label>
-                        <input type="text" th:field="*{lastName}" class="form-control" required>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label>Phone</label>
-                        <input type="tel"
-                               th:field="*{phone}"
-                               class="form-control phone-input"
-                               placeholder="8550314 or 5068550314"
-                               maxlength="14">
-                    </div>
-
-                    <div class="col-md-6 mb-3">
-                        <label>Email</label>
-                        <input type="email" th:field="*{email}" class="form-control">
-                    </div>
-                </div>
-
-                <hr>
-
-                <h5 class="text-primary">Secondary Tenant / Additional Contact</h5>
-
-                <div class="row">
-                    <div class="col-md-4 mb-3">
-                        <label>Name</label>
-                        <input type="text" th:field="*{secondaryTenantName}" class="form-control">
-                    </div>
-
-                    <div class="col-md-4 mb-3">
-                        <label>Phone</label>
-                        <input type="tel"
-                               th:field="*{secondaryTenantPhone}"
-                               class="form-control phone-input"
-                               placeholder="8550314 or 5068550314"
-                               maxlength="14">
-                    </div>
-
-                    <div class="col-md-4 mb-3">
-                        <label>Email</label>
-                        <input type="email" th:field="*{secondaryTenantEmail}" class="form-control">
-                    </div>
-                </div>
-
-                <hr>
-
-                <!-- EMERGENCY -->
-                <h5 class="text-primary">Emergency Contact</h5>
-
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label>Name</label>
-                        <input type="text" th:field="*{emergencyContactName}" class="form-control">
-                    </div>
-
-                    <div class="col-md-6 mb-3">
-                        <label>Phone</label>
-                        <input type="tel"
-                               th:field="*{emergencyContactPhone}"
-                               class="form-control phone-input"
-                               placeholder="8550314 or 5068550314"
-                               maxlength="14">
-                    </div>
-                </div>
-
-
-
-                <hr>
-
-
-
-
-
-                <!-- HOUSEHOLD -->
-                <h5 class="text-primary">Household</h5>
-
-                <div class="row">
-                    <div class="col-md-3 mb-3">
-                        <label>Children</label>
-                        <input type="number" min="0" th:field="*{childrenCount}" class="form-control">
-                    </div>
-
-                    <div class="col-md-3 mb-3">
-                        <label>Youth</label>
-                        <input type="number" min="0" th:field="*{youthCount}" class="form-control">
-                    </div>
-
-                    <div class="col-md-3 mb-3">
-                        <label>Adults</label>
-                        <input type="number" min="0" th:field="*{adultsCount}" class="form-control">
-                    </div>
-
-                    <div class="col-md-3 mb-3">
-                        <label>Seniors</label>
-                        <input type="number" min="0" th:field="*{seniorsCount}" class="form-control">
-                    </div>
-                </div>
-
-                <hr>
-
-                <!-- PETS -->
-                <h5 class="text-primary">Pets</h5>
-
-                <div class="row">
-                    <div class="col-md-3 mb-3">
-                        <label>Dogs</label>
-                        <input type="number" min="0" th:field="*{dogsCount}" class="form-control" id="dogsCount">
-                    </div>
-
-                    <div class="col-md-3 mb-3">
-                        <label>Cats</label>
-                        <input type="number" min="0" th:field="*{catsCount}" class="form-control" id="catsCount">
-                    </div>
-
-
-
-                    <div class="col-md-3 mb-3">
-                        <label>Other Pets</label>
-                        <input type="text" th:field="*{otherPets}" class="form-control">
-                    </div>
-                </div>
-
-                <!-- HIDDEN FIELDS -->
-                <input type="hidden" th:field="*{dogNames}" id="dogNames">
-                <input type="hidden" th:field="*{dogInfo}" id="dogInfo">
-                <input type="hidden" th:field="*{catNames}" id="catNames">
-
-                <!-- DYNAMIC INPUTS -->
-                <div class="row">
-                    <div class="col-md-6">
-                        <div id="dogNamesContainer"></div>
-                    </div>
-
-                    <div class="col-md-6">
-                        <div id="catNamesContainer"></div>
-                    </div>
-                </div>
-
-                <hr>
-
-                <!-- VEHICLES -->
-                <h5 class="text-primary">Vehicles & Lifestyle</h5>
-
-                <div class="row">
-                    <div class="col-md-4 mb-3">
-                        <label>Cars</label>
-                        <input type="number" min="0" th:field="*{carsCount}" class="form-control">
-                    </div>
-
-                    <div class="col-md-4 mb-3 d-flex align-items-end">
-                        <div class="form-check">
-                            <input type="checkbox" th:field="*{smokers}" class="form-check-input">
-                            <label class="form-check-label">Smokers</label>
+                        <div class="col-md-6 mb-3">
+                            <label>Last Name</label>
+                            <input type="text" th:field="*{lastName}" class="form-control" required>
                         </div>
                     </div>
-                </div>
 
-                <hr>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label>Phone</label>
+                            <input type="tel"
+                                   th:field="*{phone}"
+                                   class="form-control phone-input"
+                                   placeholder="8550314 or 5068550314"
+                                   maxlength="14">
+                        </div>
 
-                <!-- NOTES -->
-                <h5 class="text-primary">Notes</h5>
+                        <div class="col-md-6 mb-3">
+                            <label>Email</label>
+                            <input type="email" th:field="*{email}" class="form-control">
+                        </div>
+                    </div>
 
-                <textarea th:field="*{notes}" class="form-control mb-3"></textarea>
+                    <hr>
 
-                <button class="btn btn-primary px-4">Save</button>
-                <a th:href="@{/tenants}" class="btn btn-secondary ms-2">Cancel</a>
+                    <h5 class="text-primary">Secondary Tenant / Additional Contact</h5>
 
-            </form>
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label>Name</label>
+                            <input type="text" th:field="*{secondaryTenantName}" class="form-control">
+                        </div>
+
+                        <div class="col-md-4 mb-3">
+                            <label>Phone</label>
+                            <input type="tel"
+                                   th:field="*{secondaryTenantPhone}"
+                                   class="form-control phone-input"
+                                   placeholder="8550314 or 5068550314"
+                                   maxlength="14">
+                        </div>
+
+                        <div class="col-md-4 mb-3">
+                            <label>Email</label>
+                            <input type="email" th:field="*{secondaryTenantEmail}" class="form-control">
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <!-- EMERGENCY -->
+                    <h5 class="text-primary">Emergency Contact</h5>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label>Name</label>
+                            <input type="text" th:field="*{emergencyContactName}" class="form-control">
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label>Phone</label>
+                            <input type="tel"
+                                   th:field="*{emergencyContactPhone}"
+                                   class="form-control phone-input"
+                                   placeholder="8550314 or 5068550314"
+                                   maxlength="14">
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <!-- HOUSEHOLD -->
+                    <h5 class="text-primary">Household</h5>
+
+                    <div class="row">
+                        <div class="col-md-3 mb-3">
+                            <label>Children</label>
+                            <input type="number" min="0" th:field="*{childrenCount}" class="form-control">
+                        </div>
+
+                        <div class="col-md-3 mb-3">
+                            <label>Youth</label>
+                            <input type="number" min="0" th:field="*{youthCount}" class="form-control">
+                        </div>
+
+                        <div class="col-md-3 mb-3">
+                            <label>Adults</label>
+                            <input type="number" min="0" th:field="*{adultsCount}" class="form-control">
+                        </div>
+
+                        <div class="col-md-3 mb-3">
+                            <label>Seniors</label>
+                            <input type="number" min="0" th:field="*{seniorsCount}" class="form-control">
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <!-- PETS -->
+                    <h5 class="text-primary">Pets</h5>
+
+                    <div class="row">
+                        <div class="col-md-3 mb-3">
+                            <label>Dogs</label>
+                            <input type="number" min="0" th:field="*{dogsCount}" class="form-control" id="dogsCount">
+                        </div>
+
+                        <div class="col-md-3 mb-3">
+                            <label>Cats</label>
+                            <input type="number" min="0" th:field="*{catsCount}" class="form-control" id="catsCount">
+                        </div>
+
+                        <div class="col-md-3 mb-3">
+                            <label>Other Pets</label>
+                            <input type="text" th:field="*{otherPets}" class="form-control">
+                        </div>
+                    </div>
+
+                    <!-- HIDDEN FIELDS -->
+                    <input type="hidden" th:field="*{dogNames}" id="dogNames">
+                    <input type="hidden" th:field="*{dogInfo}" id="dogInfo">
+                    <input type="hidden" th:field="*{catNames}" id="catNames">
+
+                    <!-- DYNAMIC INPUTS -->
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div id="dogNamesContainer"></div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div id="catNamesContainer"></div>
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <!-- VEHICLES -->
+                    <h5 class="text-primary">Vehicles & Lifestyle</h5>
+
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label>Cars</label>
+                            <input type="number" min="0" th:field="*{carsCount}" class="form-control">
+                        </div>
+
+                        <div class="col-md-4 mb-3 d-flex align-items-end">
+                            <div class="form-check">
+                                <input type="checkbox" th:field="*{smokers}" class="form-check-input" id="smokers">
+                                <label class="form-check-label" for="smokers">Smokers</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <!-- NOTES -->
+                    <h5 class="text-primary">Notes</h5>
+
+                    <textarea th:field="*{notes}" class="form-control mb-3"></textarea>
+
+                    <button type="submit" class="btn btn-primary px-4">Save</button>
+                    <a th:href="@{/tenants}" class="btn btn-secondary ms-2">Cancel</a>
+
+                </form>
+
+            </div>
 
         </div>
-
     </div>
-</div>
+</main>
 
 <script th:src="@{/js/tenants.js?v=3}"></script>
+
+<!-- SIDEBAR SCRIPT -->
+<script th:src="@{/js/sidebar.js?v=1}"></script>
+
 </body>
 </html>

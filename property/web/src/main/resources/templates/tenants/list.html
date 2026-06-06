@@ -12,114 +12,116 @@
 
 <body>
 
-<div class="page-shell mt-4">
+<!-- SIDEBAR -->
+<div th:replace="~{fragments/sidebar :: sidebar}"></div>
 
-    <!-- SIDEBAR -->
-    <div class="sidebar-wrapper">
-        <div th:replace="~{fragments/sidebar :: sidebar}"></div>
-    </div>
+<!-- PAGE CONTENT -->
+<main class="app-main">
+    <div class="page-shell mt-4">
+        <div class="content-wrapper">
 
-    <!-- CONTENT -->
-    <div class="content-wrapper">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h1 class="text-primary">Tenants Management</h1>
 
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <h1 class="text-primary">Tenants Management</h1>
-            <a th:href="@{/tenants/create}" class="btn btn-success"
-               sec:authorize="hasAnyRole('SUPER_ADMIN','ADMIN')">
-                + Add Tenant
-            </a>
-        </div>
-
-        <hr>
-
-        <div class="mb-3">
-            <input type="text"
-                   id="tenantSearchInput"
-                   class="form-control"
-                   placeholder="Search tenants by name, email, phone, or date...">
-        </div>
-
-        <div class="card shadow-sm">
-            <div class="table-responsive">
-
-                <table class="table table-hover align-middle mb-0 text-center">
-
-                    <thead class="table-dark">
-                    <tr>
-                        <!--                        <th>ID</th>-->
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Phone</th>
-                        <th>Last Updated</th>
-                        <th>Actions</th>
-                    </tr>
-                    </thead>
-
-                    <tbody>
-
-                    <tr th:each="t : ${tenants}" class="tenant-row">
-
-
-                        <td class="text-start ps-4">
-                            <a th:href="@{/tenants/details/{id}(id=${t.id})}"
-                               th:text="${t.firstName + ' ' + t.lastName}"
-                               class="text-decoration-none fw-bold">
-                            </a>
-                        </td>
-
-                        <td th:text="${t.email}"></td>
-
-                        <td>
-    <span th:if="${t.phone != null and t.phone.length() == 10}"
-          th:text="${'(' + t.phone.substring(0,3) + ') ' + t.phone.substring(3,6) + '-' + t.phone.substring(6,10)}"></span>
-
-                            <span th:if="${t.phone != null and t.phone.length() == 7}"
-                                  th:text="${'(---) ' + t.phone.substring(0,3) + '-' + t.phone.substring(3,7)}"></span>
-
-                            <span th:if="${t.phone == null or (t.phone.length() != 7 and t.phone.length() != 10)}"
-                                  th:text="${t.phone}"></span>
-                        </td>
-
-                        <td>
-                            <span th:if="${t.updatedAt != null}"
-                                  th:text="${#temporals.format(t.updatedAt, 'yyyy-MM-dd')}">
-                            </span>
-
-                            <span th:unless="${t.updatedAt != null}">
-                                Not Updated
-                            </span>
-                        </td>
-
-                        <td>
-                            <a th:href="@{/tenants/edit/{id}(id=${t.id})}"
-                               class="btn btn-sm btn-outline-primary"
-                               sec:authorize="hasAnyRole('SUPER_ADMIN','ADMIN')">
-                                Edit
-                            </a>
-
-                            <a th:href="@{/tenants/delete/{id}(id=${t.id})}"
-                               class="btn btn-sm btn-outline-danger ms-1"
-                               sec:authorize="hasRole('SUPER_ADMIN')">
-                                Delete
-                            </a>
-                        </td>
-                    </tr>
-
-                    <tr th:if="${#lists.isEmpty(tenants)}">
-                        <td colspan="5" class="text-muted">
-                            No tenants registered
-                        </td>
-                    </tr>
-
-                    </tbody>
-
-                </table>
+                <a th:href="@{/tenants/create}" class="btn btn-success"
+                   sec:authorize="hasAnyRole('SUPER_ADMIN','ADMIN')">
+                    + Add Tenant
+                </a>
             </div>
-        </div>
 
+            <hr>
+
+            <div class="mb-3">
+                <input type="text"
+                       id="tenantSearchInput"
+                       class="form-control"
+                       placeholder="Search tenants by name, email, phone, or date...">
+            </div>
+
+            <div class="card shadow-sm">
+                <div class="table-responsive">
+
+                    <table class="table table-hover align-middle mb-0 text-center">
+
+                        <thead class="table-dark">
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Last Updated</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+
+                        <tr th:each="t : ${tenants}" class="tenant-row">
+
+                            <td class="text-start ps-4">
+                                <a th:href="@{/tenants/details/{id}(id=${t.id})}"
+                                   th:text="${t.firstName + ' ' + t.lastName}"
+                                   class="text-decoration-none fw-bold">
+                                </a>
+                            </td>
+
+                            <td th:text="${t.email}"></td>
+
+                            <td>
+                                <span th:if="${t.phone != null and t.phone.length() == 10}"
+                                      th:text="${'(' + t.phone.substring(0,3) + ') ' + t.phone.substring(3,6) + '-' + t.phone.substring(6,10)}"></span>
+
+                                <span th:if="${t.phone != null and t.phone.length() == 7}"
+                                      th:text="${'(---) ' + t.phone.substring(0,3) + '-' + t.phone.substring(3,7)}"></span>
+
+                                <span th:if="${t.phone == null or (t.phone.length() != 7 and t.phone.length() != 10)}"
+                                      th:text="${t.phone}"></span>
+                            </td>
+
+                            <td>
+                                <span th:if="${t.updatedAt != null}"
+                                      th:text="${#temporals.format(t.updatedAt, 'yyyy-MM-dd')}">
+                                </span>
+
+                                <span th:unless="${t.updatedAt != null}">
+                                    Not Updated
+                                </span>
+                            </td>
+
+                            <td>
+                                <a th:href="@{/tenants/edit/{id}(id=${t.id})}"
+                                   class="btn btn-sm btn-outline-primary"
+                                   sec:authorize="hasAnyRole('SUPER_ADMIN','ADMIN')">
+                                    Edit
+                                </a>
+
+                                <a th:href="@{/tenants/delete/{id}(id=${t.id})}"
+                                   class="btn btn-sm btn-outline-danger ms-1"
+                                   sec:authorize="hasRole('SUPER_ADMIN')">
+                                    Delete
+                                </a>
+                            </td>
+                        </tr>
+
+                        <tr th:if="${#lists.isEmpty(tenants)}">
+                            <td colspan="5" class="text-muted py-4">
+                                No tenants registered
+                            </td>
+                        </tr>
+
+                        </tbody>
+
+                    </table>
+                </div>
+            </div>
+
+        </div>
     </div>
-</div>
+</main>
 
 <script th:src="@{/js/tenant-search.js}"></script>
+
+<!-- SIDEBAR SCRIPT -->
+<script th:src="@{/js/sidebar.js?v=1}"></script>
+
 </body>
 </html>
