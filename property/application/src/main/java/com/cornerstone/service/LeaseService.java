@@ -29,4 +29,6 @@ public interface LeaseService {
     Optional<LeaseDto> getActiveLeaseByTenantId(Long tenantId);
 
     Optional<LeaseDto> getLeaseByUnitAndDate(Long unitId, LocalDate date);
+
+    List<Long> getActiveUnitIds();
 }

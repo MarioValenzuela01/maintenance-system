@@ -9,7 +9,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Controller
 @RequestMapping("/managers")
@@ -47,6 +49,7 @@ public class ManagerController {
 
     @GetMapping("/{id}/assign-units")
     public String assignUnitsForm(@PathVariable("id") Long id, Model model) {
+
         ManagerDto manager = managerService.get(id)
                 .orElseThrow(() -> new RuntimeException("Manager not found"));
 
@@ -78,11 +81,16 @@ public class ManagerController {
     }
 
     private List<UnitDto> getAssignableUnits(ManagerDto manager) {
+
+        Set<Long> managerUnitIds = new HashSet<>(manager.getUnitIds());
+        Set<Long> activeLeaseUnitIds = new HashSet<>(leaseService.getActiveUnitIds());
+
         return unitService.getAll()
                 .stream()
+                .filter(unit -> unit.getId() != null)
                 .filter(unit ->
-                        manager.getUnitIds().contains(unit.getId())
-                                || leaseService.getActiveLeaseByUnitId(unit.getId()).isEmpty()
+                        managerUnitIds.contains(unit.getId())
+                                || !activeLeaseUnitIds.contains(unit.getId())
                 )
                 .toList();
     }

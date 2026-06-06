@@ -5,8 +5,10 @@ import com.cornerstone.repository.LeaseRepository;
 import com.cornerstone.repository.ManagerRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class ManagerServiceImpl implements ManagerService {
@@ -37,14 +39,18 @@ public class ManagerServiceImpl implements ManagerService {
 
     @Override
     public void assignUnits(Long managerId, List<Long> unitIds) {
+
         List<Long> safeUnitIds = unitIds == null ? List.of() : unitIds;
 
         ManagerDto currentManager = managerRepository.get(managerId)
                 .orElseThrow(() -> new RuntimeException("Manager not found"));
 
+        Set<Long> currentManagerUnitIds = new HashSet<>(currentManager.getUnitIds());
+        Set<Long> activeLeaseUnitIds = new HashSet<>(leaseRepository.getActiveUnitIds());
+
         for (Long unitId : safeUnitIds) {
-            boolean alreadyAssignedToThisManager = currentManager.getUnitIds().contains(unitId);
-            boolean hasActiveLease = leaseRepository.existsActiveLeaseByUnitId(unitId);
+            boolean alreadyAssignedToThisManager = currentManagerUnitIds.contains(unitId);
+            boolean hasActiveLease = activeLeaseUnitIds.contains(unitId);
 
             if (hasActiveLease && !alreadyAssignedToThisManager) {
                 throw new RuntimeException("Cannot assign occupied units to a manager.");

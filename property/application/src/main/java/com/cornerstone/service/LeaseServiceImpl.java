@@ -118,5 +118,10 @@ public class LeaseServiceImpl implements LeaseService {
         return leaseRepository.getLeaseByUnitAndDate(unitId, date);
     }
 
+    @Override
+    public List<Long> getActiveUnitIds() {
+        return leaseRepository.getActiveUnitIds();
+    }
+
 
 }
