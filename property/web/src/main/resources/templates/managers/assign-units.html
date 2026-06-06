@@ -3,69 +3,87 @@
 <head>
     <meta charset="UTF-8">
     <title>Assign Units to Manager</title>
+
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link th:href="@{/css/home.css?v=7}" rel="stylesheet"/>
 </head>
-<body class="container mt-4">
 
-<h1 class="text-primary">Assign Units to Manager</h1>
-<hr>
+<body>
 
-<div class="row justify-content-center">
-    <div class="col-md-8">
-        <div class="card shadow-sm p-4">
+<!-- SIDEBAR -->
+<div th:replace="~{fragments/sidebar :: sidebar}"></div>
 
-            <h4 class="text-primary mb-3"
-                th:text="'Manager: ' + ${manager.name}">
-                Manager Name
-            </h4>
+<!-- PAGE CONTENT -->
+<main class="app-main">
+    <div class="page-shell mt-4">
+        <div class="content-wrapper">
 
-            <div th:if="${assignError != null}"
-                 class="alert alert-danger">
-                <span th:text="${assignError}"></span>
-            </div>
+            <h1 class="text-primary">Assign Units to Manager</h1>
+            <hr>
 
-            <form th:action="@{/managers/{id}/assign-units(id=${manager.id})}" method="post">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="card shadow-sm p-4">
 
-                <div class="mb-3">
-                    <label class="form-label fw-bold">Available Units</label>
+                        <h4 class="text-primary mb-3"
+                            th:text="'Manager: ' + ${manager.name}">
+                            Manager Name
+                        </h4>
 
-                    <div class="border rounded p-3" style="max-height: 500px; overflow-y: auto;">
-
-                        <div class="form-check mb-2" th:each="unit : ${units}">
-                            <input class="form-check-input"
-                                   type="checkbox"
-                                   name="unitIds"
-                                   th:id="'unit-' + ${unit.id}"
-                                   th:value="${unit.id}"
-                                   th:checked="${manager.unitIds.contains(unit.id)}">
-
-                            <label class="form-check-label"
-                                   th:for="'unit-' + ${unit.id}"
-                                   th:text="${unit.displayName != null && !unit.displayName.isBlank()
-            ? unit.displayName
-            : unit.unitNumber + ' - ' + unit.address}">
-                                Unit Name - Address
-                            </label>
+                        <div th:if="${assignError != null}"
+                             class="alert alert-danger">
+                            <span th:text="${assignError}"></span>
                         </div>
+
+                        <form th:action="@{/managers/{id}/assign-units(id=${manager.id})}" method="post">
+
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Available Units</label>
+
+                                <div class="border rounded p-3" style="max-height: 500px; overflow-y: auto;">
+
+                                    <div class="form-check mb-2" th:each="unit : ${units}">
+                                        <input class="form-check-input"
+                                               type="checkbox"
+                                               name="unitIds"
+                                               th:id="'unit-' + ${unit.id}"
+                                               th:value="${unit.id}"
+                                               th:checked="${manager.unitIds.contains(unit.id)}">
+
+                                        <label class="form-check-label"
+                                               th:for="'unit-' + ${unit.id}"
+                                               th:text="${unit.displayName != null && !unit.displayName.isBlank()
+                                                    ? unit.displayName
+                                                    : unit.unitNumber + ' - ' + unit.address}">
+                                            Unit Name - Address
+                                        </label>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="mt-4">
+                                <button type="submit" class="btn btn-primary px-4">
+                                    Save Assigned Units
+                                </button>
+
+                                <a th:href="@{/managers}" class="btn btn-secondary ms-2">
+                                    Cancel
+                                </a>
+                            </div>
+
+                        </form>
 
                     </div>
                 </div>
-
-                <div class="mt-4">
-                    <button type="submit" class="btn btn-primary px-4">
-                        Save Assigned Units
-                    </button>
-
-                    <a th:href="@{/managers}" class="btn btn-secondary ms-2">
-                        Cancel
-                    </a>
-                </div>
-
-            </form>
+            </div>
 
         </div>
     </div>
-</div>
+</main>
+
+<!-- SIDEBAR SCRIPT -->
+<script th:src="@{/js/sidebar.js?v=1}"></script>
 
 </body>
 </html>

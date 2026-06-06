@@ -12,82 +12,93 @@
 
 <body>
 
-<div class="page-shell mt-4">
+<!-- SIDEBAR -->
+<div th:replace="~{fragments/sidebar :: sidebar}"></div>
 
-    <div class="sidebar-wrapper">
-        <div th:replace="~{fragments/sidebar :: sidebar}"></div>
-    </div>
+<!-- PAGE CONTENT -->
+<main class="app-main">
+    <div class="page-shell mt-4">
+        <div class="content-wrapper">
 
-    <div class="content-wrapper">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h1 class="text-primary">Managers</h1>
 
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <h1 class="text-primary">Managers</h1>
-            <a th:href="@{/managers/create}" class="btn btn-success" sec:authorize="hasRole('SUPER_ADMIN')">+ Create
-                Manager</a>
-        </div>
-
-        <hr>
-
-        <div class="card shadow-sm">
-            <div class="table-responsive">
-
-                <table class="table table-hover align-middle mb-0 text-center">
-
-                    <thead class="table-dark">
-                    <tr>
-                        <th>ID</th>
-                        <th>Name</th>
-                        <th>Units</th>
-                        <th>Actions</th>
-                    </tr>
-                    </thead>
-
-                    <tbody>
-                    <tr th:each="m : ${managers}">
-
-                        <td th:text="${m.id}"></td>
-                        <td th:text="${m.name}"></td>
-
-                        <td>
-                            <span th:if="${#lists.isEmpty(m.unitNumbers)}" class="text-muted">
-                                No units
-                            </span>
-
-                            <span th:each="unitNumber, iterStat : ${m.unitNumbers}">
-                                <a th:href="@{/units/details/{id}(id=${m.unitIds[iterStat.index]})}"
-                                   class="badge bg-primary me-1 text-decoration-none">
-                                    <span th:text="${unitNumber}"></span>
-                                </a>
-                            </span>
-
-                        </td>
-
-                        <td>
-                            <a th:href="@{/managers/{id}/assign-units(id=${m.id})}"
-                               class="btn btn-sm btn-outline-primary" sec:authorize="hasRole('SUPER_ADMIN')">
-                                Assign
-                            </a>
-
-                            <span class="text-muted small"
-                                  sec:authorize="!hasRole('SUPER_ADMIN')">
-                                    View only
-                            </span>
-                        </td>
-
-                    </tr>
-
-                    <tr th:if="${#lists.isEmpty(managers)}">
-                        <td colspan="4" class="text-muted">No managers</td>
-                    </tr>
-
-                    </tbody>
-
-                </table>
+                <a th:href="@{/managers/create}"
+                   class="btn btn-success"
+                   sec:authorize="hasRole('SUPER_ADMIN')">
+                    + Create Manager
+                </a>
             </div>
-        </div>
 
+            <hr>
+
+            <div class="card shadow-sm">
+                <div class="table-responsive">
+
+                    <table class="table table-hover align-middle mb-0 text-center">
+
+                        <thead class="table-dark">
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Units</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        <tr th:each="m : ${managers}">
+
+                            <td th:text="${m.id}"></td>
+                            <td th:text="${m.name}"></td>
+
+                            <td>
+                                <span th:if="${#lists.isEmpty(m.unitNumbers)}" class="text-muted">
+                                    No units
+                                </span>
+
+                                <span th:each="unitNumber, iterStat : ${m.unitNumbers}">
+                                    <a th:href="@{/units/details/{id}(id=${m.unitIds[iterStat.index]})}"
+                                       class="badge bg-primary me-1 text-decoration-none">
+                                        <span th:text="${unitNumber}"></span>
+                                    </a>
+                                </span>
+                            </td>
+
+                            <td>
+                                <a th:href="@{/managers/{id}/assign-units(id=${m.id})}"
+                                   class="btn btn-sm btn-outline-primary"
+                                   sec:authorize="hasRole('SUPER_ADMIN')">
+                                    Assign
+                                </a>
+
+                                <span class="text-muted small"
+                                      sec:authorize="!hasRole('SUPER_ADMIN')">
+                                    View only
+                                </span>
+                            </td>
+
+                        </tr>
+
+                        <tr th:if="${#lists.isEmpty(managers)}">
+                            <td colspan="4" class="text-muted py-4">
+                                No managers
+                            </td>
+                        </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+            </div>
+
+        </div>
     </div>
-</div>
+</main>
+
+<!-- SIDEBAR SCRIPT -->
+<script th:src="@{/js/sidebar.js?v=1}"></script>
 
 </body>
 </html>
