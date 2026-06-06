@@ -15,218 +15,209 @@
 
 <body>
 
-<div class="page-shell mt-4">
+<!-- SIDEBAR -->
+<div th:replace="~{fragments/sidebar :: sidebar}"></div>
 
-    <!-- SIDEBAR -->
-    <div class="sidebar-wrapper">
-        <div th:replace="~{fragments/sidebar :: sidebar}"></div>
-    </div>
+<!-- PAGE CONTENT -->
+<main class="app-main">
+    <div class="page-shell mt-4">
+        <div class="content-wrapper">
 
-    <!-- CONTENT -->
-    <div class="content-wrapper">
+            <div class="d-flex justify-content-between align-items-center mb-3">
 
-        <div class="d-flex justify-content-between align-items-center mb-3">
+                <div>
+                    <h1 class="text-primary">Work History</h1>
+                    <p class="text-muted mb-0">
+                        Search maintenance records across all units
+                    </p>
+                </div>
 
-            <div>
-                <h1 class="text-primary">Work History</h1>
-                <p class="text-muted mb-0">
-                    Search maintenance records across all units
-                </p>
             </div>
 
-        </div>
+            <hr>
 
-        <hr>
+            <!-- FILTERS -->
+            <div class="card shadow-sm p-3 mb-4">
 
-        <!-- FILTERS -->
+                <form id="unitHistorySearchForm" th:action="@{/unit-history}" method="get">
 
-        <div class="card shadow-sm p-3 mb-4">
+                    <div class="row g-2">
 
-            <form id="unitHistorySearchForm" th:action="@{/unit-history}" method="get">
+                        <div class="col-md-5">
 
-                <div class="row g-2">
+                            <input
+                                    id="unitHistorySearchInput"
+                                    type="text"
+                                    name="keyword"
+                                    class="form-control"
+                                    placeholder="Search unit, tenant, notes..."
+                                    th:value="${keyword}">
 
-                    <div class="col-md-5">
+                        </div>
 
-                        <input
-                                id="unitHistorySearchInput"
-                                type="text"
-                                name="keyword"
-                                class="form-control"
-                                placeholder="Search unit, tenant, notes..."
-                                th:value="${keyword}">
+                        <div class="col-md-3">
+
+                            <select name="category" class="form-select">
+
+                                <option value="">All Item Types</option>
+
+                                <option value="Fridge" th:selected="${category == 'Fridge'}">Fridge</option>
+                                <option value="Stove" th:selected="${category == 'Stove'}">Stove</option>
+                                <option value="Tub" th:selected="${category == 'Tub'}">Tub</option>
+                                <option value="Toilet" th:selected="${category == 'Toilet'}">Toilet</option>
+                                <option value="Painted" th:selected="${category == 'Painted'}">Painted</option>
+                                <option value="Reno Bathroom" th:selected="${category == 'Reno Bathroom'}">Reno Bathroom</option>
+                                <option value="Flooring" th:selected="${category == 'Flooring'}">Flooring</option>
+                                <option value="Sump Pump" th:selected="${category == 'Sump Pump'}">Sump Pump</option>
+                                <option value="Smoke Alarm Battery 10 years Warranty"
+                                        th:selected="${category == 'Smoke Alarm Battery 10 years Warranty'}">
+                                    Smoke Alarm Battery 10 years Warranty
+                                </option>
+                                <option value="Smoke Alarm Hard Wire"
+                                        th:selected="${category == 'Smoke Alarm Hard Wire'}">
+                                    Smoke Alarm Hard Wire
+                                </option>
+
+                            </select>
+
+                        </div>
+
+                        <div class="col-md-4">
+
+                            <button class="btn btn-primary">
+                                Search
+                            </button>
+
+                            <a th:href="@{/unit-history}"
+                               class="btn btn-secondary">
+                                Clear
+                            </a>
+
+                        </div>
 
                     </div>
 
-                    <div class="col-md-3">
+                </form>
 
-                        <select name="category" class="form-select">
+            </div>
 
-                            <option value="">All Item Types</option>
+            <!-- TABLE -->
+            <div class="card shadow-sm">
 
-                            <option value="Fridge" th:selected="${category == 'Fridge'}">Fridge</option>
-                            <option value="Stove" th:selected="${category == 'Stove'}">Stove</option>
-                            <option value="Tub" th:selected="${category == 'Tub'}">Tub</option>
-                            <option value="Toilet" th:selected="${category == 'Toilet'}">Toilet</option>
-                            <option value="Painted" th:selected="${category == 'Painted'}">Painted</option>
-                            <option value="Reno Bathroom" th:selected="${category == 'Reno Bathroom'}">Reno Bathroom</option>
-                            <option value="Flooring" th:selected="${category == 'Flooring'}">Flooring</option>
-                            <option value="Sump Pump" th:selected="${category == 'Sump Pump'}">Sump Pump</option>
-                            <option value="Smoke Alarm Battery 10 years Warranty"
-                                    th:selected="${category == 'Smoke Alarm Battery 10 years Warranty'}">
-                                Smoke Alarm Battery 10 years Warranty
-                            </option>
-                            <option value="Smoke Alarm Hard Wire"
-                                    th:selected="${category == 'Smoke Alarm Hard Wire'}">
-                                Smoke Alarm Hard Wire
-                            </option>
+                <div class="table-responsive">
 
-                        </select>
+                    <table class="table table-hover align-middle mb-0">
 
-                    </div>
+                        <thead class="table-dark">
 
-                    <div class="col-md-4">
+                        <tr>
+                            <th>Date</th>
+                            <th>Unit</th>
+                            <th>Work Done</th>
+                            <th>Item Type</th>
+                            <th>Tenant</th>
+                            <th>Notes</th>
+                            <th>Actions</th>
+                        </tr>
 
-                        <button class="btn btn-primary">
-                            Search
-                        </button>
+                        </thead>
 
-                        <a th:href="@{/unit-history}"
-                           class="btn btn-secondary">
-                            Clear
-                        </a>
+                        <tbody>
 
-                    </div>
+                        <tr th:each="item : ${historyList}">
+
+                            <td th:text="${item.completedDate}">
+                            </td>
+
+                            <td>
+
+                                <a th:href="@{/units/{id}/history(id=${item.unitId})}"
+                                   class="text-decoration-none">
+
+                                    <strong>
+                                        <span th:text="${item.unitDisplayName}">
+                                        </span>
+                                    </strong>
+
+                                </a>
+
+                            </td>
+
+                            <td th:text="${item.itemName}">
+                            </td>
+
+                            <td>
+
+                                <span class="badge bg-light text-dark border"
+                                      th:text="${item.category}">
+                                </span>
+
+                            </td>
+
+                            <td>
+
+                                <span th:text="${item.tenantNameAtTime != null and !item.tenantNameAtTime.isBlank()
+                                    ? item.tenantNameAtTime
+                                    : 'No tenant recorded'}"></span>
+
+                            </td>
+
+                            <td>
+
+                                <span th:text="${item.notes}">
+                                </span>
+
+                            </td>
+
+                            <td>
+
+                                <a th:href="@{/unit-history/edit/{id}(id=${item.id})}"
+                                   class="btn btn-sm btn-outline-primary"
+                                   sec:authorize="hasAnyRole('SUPER_ADMIN','ADMIN','USER')">
+
+                                    Edit
+
+                                </a>
+
+                                <a th:href="@{/unit-history/delete/{id}(id=${item.id})}"
+                                   class="btn btn-sm btn-outline-danger ms-1"
+                                   sec:authorize="hasRole('SUPER_ADMIN')">
+
+                                    Delete
+
+                                </a>
+
+                            </td>
+
+                        </tr>
+
+                        <tr th:if="${#lists.isEmpty(historyList)}">
+
+                            <td colspan="7"
+                                class="text-center text-muted py-5">
+
+                                No work history found.
+
+                            </td>
+
+                        </tr>
+
+                        </tbody>
+
+                    </table>
 
                 </div>
 
-            </form>
-
-        </div>
-
-        <!-- TABLE -->
-
-        <div class="card shadow-sm">
-
-            <div class="table-responsive">
-
-                <table class="table table-hover align-middle mb-0">
-
-                    <thead class="table-dark">
-
-                    <tr>
-
-                        <th>Date</th>
-
-                        <th>Unit</th>
-
-                        <th>Work Done</th>
-
-                        <th>Item Type</th>
-
-                        <th>Tenant</th>
-
-                        <th>Notes</th>
-
-                        <th>Actions</th>
-
-                    </tr>
-
-                    </thead>
-
-                    <tbody>
-
-                    <tr th:each="item : ${historyList}">
-
-                        <td th:text="${item.completedDate}">
-                        </td>
-
-                        <td>
-
-                            <a th:href="@{/units/{id}/history(id=${item.unitId})}"
-                               class="text-decoration-none">
-
-                                <strong>
-                                    <span th:text="${item.unitDisplayName}">
-                                    </span>
-                                </strong>
-
-                            </a>
-
-                        </td>
-
-                        <td th:text="${item.itemName}">
-                        </td>
-
-                        <td>
-
-                            <span class="badge bg-light text-dark border"
-                                  th:text="${item.category}">
-                            </span>
-
-                        </td>
-
-                        <td>
-
-                            <span th:text="${item.tenantNameAtTime != null and !item.tenantNameAtTime.isBlank()
-                            ? item.tenantNameAtTime
-                            : 'No tenant recorded'}"></span>
-
-                        </td>
-
-                        <td>
-
-                            <span th:text="${item.notes}">
-                            </span>
-
-                        </td>
-
-                        <td>
-
-                            <a th:href="@{/unit-history/edit/{id}(id=${item.id})}"
-                               class="btn btn-sm btn-outline-primary"
-                               sec:authorize="hasAnyRole('SUPER_ADMIN','ADMIN','USER')">
-
-                                Edit
-
-                            </a>
-
-                            <a th:href="@{/unit-history/delete/{id}(id=${item.id})}"
-                               class="btn btn-sm btn-outline-danger ms-1"
-                               sec:authorize="hasRole('SUPER_ADMIN')">
-
-                                Delete
-
-                            </a>
-
-                        </td>
-
-                    </tr>
-
-                    <tr th:if="${#lists.isEmpty(historyList)}">
-
-                        <td colspan="7"
-                            class="text-center text-muted py-5">
-
-                            No work history found.
-
-                        </td>
-
-                    </tr>
-
-                    </tbody>
-
-                </table>
-
             </div>
 
         </div>
-
     </div>
-
-</div>
+</main>
 
 <script th:src="@{/js/unit-history-search.js}"></script>
-</body>
 
+<!-- SIDEBAR SCRIPT -->
+<script th:src="@{/js/sidebar.js?v=1}"></script>
+
+</body>
 </html>
