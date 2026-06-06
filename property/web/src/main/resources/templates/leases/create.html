@@ -11,79 +11,85 @@
 
 <body>
 
-<div class="page-shell mt-4">
+<!-- SIDEBAR -->
+<div th:replace="~{fragments/sidebar :: sidebar}"></div>
 
-    <!-- SIDEBAR -->
-    <div class="sidebar-wrapper">
-        <div th:replace="~{fragments/sidebar :: sidebar}"></div>
-    </div>
+<!-- PAGE CONTENT -->
+<main class="app-main">
+    <div class="page-shell mt-4">
+        <div class="content-wrapper">
 
-    <!-- CONTENT -->
-    <div class="content-wrapper">
+            <h1 class="text-primary">Assign Unit to Tenant</h1>
+            <hr/>
 
-        <h1 class="text-primary">Assign Unit to Tenant</h1>
-        <hr/>
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="card shadow-sm p-4">
 
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card shadow-sm p-4">
+                        <form th:action="@{/leases/create}" th:object="${lease}" method="post">
 
-                    <form th:action="@{/leases/create}" th:object="${lease}" method="post">
+                            <h4 class="text-primary mb-3">Lease Information</h4>
 
-                        <h4 class="text-primary mb-3">Lease Information</h4>
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Tenant *</label>
+                                <select th:field="*{tenantId}" class="form-select" required>
+                                    <option value="">-- Select Tenant --</option>
+                                    <option th:each="t : ${tenants}"
+                                            th:value="${t.id}"
+                                            th:text="${t.firstName + ' ' + t.lastName}">
+                                    </option>
+                                </select>
+                            </div>
 
-                        <div class="mb-3">
-                            <label class="form-label fw-bold">Tenant *</label>
-                            <select th:field="*{tenantId}" class="form-select" required>
-                                <option value="">-- Select Tenant --</option>
-                                <option th:each="t : ${tenants}"
-                                        th:value="${t.id}"
-                                        th:text="${t.firstName + ' ' + t.lastName}">
-                                </option>
-                            </select>
-                        </div>
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Unit *</label>
+                                <select th:field="*{unitId}" class="form-select" required>
+                                    <option value="">-- Select Unit --</option>
+                                    <option th:each="u : ${units}"
+                                            th:value="${u.id}"
+                                            th:text="${u.unitNumber + ' - ' + u.address}">
+                                    </option>
+                                </select>
+                            </div>
 
-                        <div class="mb-3">
-                            <label class="form-label fw-bold">Unit *</label>
-                            <select th:field="*{unitId}" class="form-select" required>
-                                <option value="">-- Select Unit --</option>
-                                <option th:each="u : ${units}"
-                                        th:value="${u.id}"
-                                        th:text="${u.unitNumber + ' - ' + u.address}">
-                                </option>
-                            </select>
-                        </div>
+                            <div class="mb-4">
+                                <label class="form-label fw-bold">Start Date</label>
+                                <input type="date" th:field="*{startDate}" class="form-control">
+                                <small class="text-muted">
+                                    If left empty, the system will use today's date.
+                                </small>
+                            </div>
 
-                        <div class="mb-4">
-                            <label class="form-label fw-bold">Start Date</label>
-                            <input type="date" th:field="*{startDate}" class="form-control">
-                            <small class="text-muted">
-                                If left empty, the system will use today's date.
-                            </small>
-                        </div>
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Program Notes</label>
+                                <textarea th:field="*{programNotes}"
+                                          class="form-control"
+                                          rows="3"
+                                          placeholder="Optional notes about this lease or program"></textarea>
+                            </div>
 
-                        <div class="mb-3">
-                            <label class="form-label fw-bold">Program Notes</label>
-                            <textarea th:field="*{programNotes}"
-                                      class="form-control"
-                                      rows="3"
-                                      placeholder="Optional notes about this lease or program"></textarea>
-                        </div>
+                            <div class="mt-4">
+                                <button type="submit" class="btn btn-primary px-4">
+                                    Save Lease
+                                </button>
 
-                        <div class="mt-4">
-                            <button type="submit" class="btn btn-primary px-4">Save Lease</button>
-                            <a th:href="@{/leases}" class="btn btn-secondary ms-2">Cancel</a>
-                        </div>
+                                <a th:href="@{/leases}" class="btn btn-secondary ms-2">
+                                    Cancel
+                                </a>
+                            </div>
 
-                    </form>
+                        </form>
 
+                    </div>
                 </div>
             </div>
+
         </div>
-
     </div>
+</main>
 
-</div>
+<!-- SIDEBAR SCRIPT -->
+<script th:src="@{/js/sidebar.js?v=1}"></script>
 
 </body>
 </html>
