@@ -74,7 +74,11 @@
                                             </small>
                                         </div>
 
-                                        <span class="badge bg-light text-dark"
+                                        <span class="badge"
+                                              th:classappend="${wo.status == 'ASSIGNED'} ? ' status-badge-assigned' :
+                                              (${wo.status == 'IN_PROGRESS'} ? ' status-badge-in-progress' :
+                                              (${wo.status == 'COMPLETED'} ? ' status-badge-completed' :
+                                              (${wo.status == 'CANCELLED'} ? ' status-badge-cancelled' : ' bg-info text-dark')))"
                                               th:text="${wo.status}">
                                             Status
                                         </span>
@@ -133,7 +137,11 @@
                                 <div class="col-md-6">
                                     <strong>Status</strong>
                                     <div>
-                                        <span class="badge bg-info text-dark"
+                                        <span class="badge"
+                                              th:classappend="${selectedWorkOrder.status == 'ASSIGNED'} ? ' status-badge-assigned' :
+                                              (${selectedWorkOrder.status == 'IN_PROGRESS'} ? ' status-badge-in-progress' :
+                                              (${selectedWorkOrder.status == 'COMPLETED'} ? ' status-badge-completed' :
+                                              (${selectedWorkOrder.status == 'CANCELLED'} ? ' status-badge-cancelled' : ' bg-info text-dark')))"
                                               th:text="${selectedWorkOrder.status}">
                                             Status
                                         </span>

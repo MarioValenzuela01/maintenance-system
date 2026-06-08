@@ -943,3 +943,23 @@ body {
     overflow-y: auto;
 }
 
+.status-badge-assigned {
+    background-color: #0dcaf0 !important;
+    color: #000 !important;
+}
+
+.status-badge-in-progress {
+    background-color: #ffc107 !important;
+    color: #000 !important;
+}
+
+.status-badge-completed {
+    background-color: #198754 !important;
+    color: #fff !important;
+}
+
+.status-badge-cancelled {
+    background-color: #dc3545 !important;
+    color: #fff !important;
+}
+
