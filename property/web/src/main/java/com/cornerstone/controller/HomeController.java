@@ -9,6 +9,9 @@ import com.cornerstone.service.ManagerService;
 import com.cornerstone.service.TenantService;
 import com.cornerstone.service.UnitMaintenanceHistoryService;
 import com.cornerstone.service.UnitService;
+import com.cornerstone.dto.WorkOrderDto;
+import com.cornerstone.service.WorkOrderService;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,21 +29,29 @@ public class HomeController {
     private final LeaseService leaseService;
     private final ManagerService managerService;
     private final UnitMaintenanceHistoryService historyService;
+    private final WorkOrderService workOrderService;
 
     public HomeController(UnitService unitService,
                           TenantService tenantService,
                           LeaseService leaseService,
                           ManagerService managerService,
-                          UnitMaintenanceHistoryService historyService) {
+                          UnitMaintenanceHistoryService historyService,
+                          WorkOrderService workOrderService) {
+
         this.unitService = unitService;
         this.tenantService = tenantService;
         this.leaseService = leaseService;
         this.managerService = managerService;
         this.historyService = historyService;
+        this.workOrderService = workOrderService;
     }
 
     @GetMapping("/")
-    public String home(Model model) {
+    public String home(Model model, Authentication authentication) {
+
+        if (isRegularUser(authentication)) {
+            return userDashboard(model, authentication.getName());
+        }
 
         LocalDate today = LocalDate.now();
         LocalDate next90Days = today.plusDays(90);
@@ -152,6 +163,36 @@ public class HomeController {
                     return row;
                 })
                 .toList();
+
+        List<WorkOrderDto> workOrders = workOrderService.getAll();
+
+        long openWorkOrders = workOrders.stream()
+                .filter(this::isOpenWorkOrder)
+                .count();
+
+        long assignedWorkOrders = workOrders.stream()
+                .filter(wo -> "ASSIGNED".equalsIgnoreCase(wo.getStatus()))
+                .count();
+
+        long inProgressWorkOrders = workOrders.stream()
+                .filter(wo -> "IN_PROGRESS".equalsIgnoreCase(wo.getStatus()))
+                .count();
+
+        long completedWorkOrdersThisMonth = workOrders.stream()
+                .filter(wo -> wo.getCompletedDate() != null)
+                .filter(wo -> wo.getCompletedDate().getMonth() == today.getMonth())
+                .filter(wo -> wo.getCompletedDate().getYear() == today.getYear())
+                .count();
+
+        List<WorkOrderDto> recentWorkOrders = workOrders.stream()
+                .limit(5)
+                .toList();
+
+        model.addAttribute("openWorkOrders", openWorkOrders);
+        model.addAttribute("assignedWorkOrders", assignedWorkOrders);
+        model.addAttribute("inProgressWorkOrders", inProgressWorkOrders);
+        model.addAttribute("completedWorkOrdersThisMonth", completedWorkOrdersThisMonth);
+        model.addAttribute("recentWorkOrders", recentWorkOrders);
 
         model.addAttribute("totalUnits", totalUnits);
         model.addAttribute("rentableUnits", rentableUnits);
@@ -306,5 +347,66 @@ public class HomeController {
         model.addAttribute("type", type);
 
         return "dashboard/data-quality";
+    }
+
+    private String userDashboard(Model model, String username) {
+
+        LocalDate today = LocalDate.now();
+
+        List<WorkOrderDto> myWorkOrders = workOrderService.getMyOrders(username);
+
+        long myOpenWorkOrders = myWorkOrders.stream()
+                .filter(this::isOpenWorkOrder)
+                .count();
+
+        long myAssignedWorkOrders = myWorkOrders.stream()
+                .filter(wo -> "ASSIGNED".equalsIgnoreCase(wo.getStatus()))
+                .count();
+
+        long myInProgressWorkOrders = myWorkOrders.stream()
+                .filter(wo -> "IN_PROGRESS".equalsIgnoreCase(wo.getStatus()))
+                .count();
+
+        long myCompletedThisMonth = myWorkOrders.stream()
+                .filter(wo -> wo.getCompletedDate() != null)
+                .filter(wo -> wo.getCompletedDate().getMonth() == today.getMonth())
+                .filter(wo -> wo.getCompletedDate().getYear() == today.getYear())
+                .count();
+
+        List<WorkOrderDto> recentMyWorkOrders = myWorkOrders.stream()
+                .limit(5)
+                .toList();
+
+        model.addAttribute("myOpenWorkOrders", myOpenWorkOrders);
+        model.addAttribute("myAssignedWorkOrders", myAssignedWorkOrders);
+        model.addAttribute("myInProgressWorkOrders", myInProgressWorkOrders);
+        model.addAttribute("myCompletedThisMonth", myCompletedThisMonth);
+        model.addAttribute("recentMyWorkOrders", recentMyWorkOrders);
+
+        return "dashboard/user-home";
+    }
+
+    private boolean isRegularUser(Authentication authentication) {
+        if (authentication == null) {
+            return false;
+        }
+
+        boolean isUser = authentication.getAuthorities()
+                .stream()
+                .anyMatch(authority -> "ROLE_USER".equals(authority.getAuthority()));
+
+        boolean isAdmin = authentication.getAuthorities()
+                .stream()
+                .anyMatch(authority ->
+                        "ROLE_ADMIN".equals(authority.getAuthority())
+                                || "ROLE_SUPER_ADMIN".equals(authority.getAuthority()));
+
+        return isUser && !isAdmin;
+    }
+
+    private boolean isOpenWorkOrder(WorkOrderDto workOrder) {
+        return workOrder.getStatus() != null
+                && !"COMPLETED".equalsIgnoreCase(workOrder.getStatus())
+                && !"CANCELLED".equalsIgnoreCase(workOrder.getStatus());
     }
 }

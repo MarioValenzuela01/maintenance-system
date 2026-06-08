@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>My Dashboard</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link th:href="@{/css/home.css?v=11}" rel="stylesheet">
+</head>
+<body>
+
+<div th:replace="~{fragments/sidebar :: sidebar}"></div>
+
+<main class="app-main">
+    <div class="page-shell mt-4">
+        <div class="content-wrapper">
+
+            <div class="mb-4">
+                <h1 class="text-primary">My Dashboard</h1>
+                <p class="text-muted mb-0">
+                    Your assigned work orders only.
+                </p>
+            </div>
+
+            <hr>
+
+            <div class="row mb-4">
+
+                <div class="col-md-3 mb-3">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-body">
+                            <h6 class="text-muted">Open Work Orders</h6>
+                            <h2 class="text-primary" th:text="${myOpenWorkOrders}">0</h2>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3 mb-3">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-body">
+                            <h6 class="text-muted">Assigned</h6>
+                            <h2 class="text-secondary" th:text="${myAssignedWorkOrders}">0</h2>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3 mb-3">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-body">
+                            <h6 class="text-muted">In Progress</h6>
+                            <h2 class="text-warning" th:text="${myInProgressWorkOrders}">0</h2>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3 mb-3">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-body">
+                            <h6 class="text-muted">Completed This Month</h6>
+                            <h2 class="text-success" th:text="${myCompletedThisMonth}">0</h2>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="card shadow-sm">
+                <div class="card-header bg-white">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">Recent Assigned Work Orders</h5>
+
+                        <a th:href="@{/work-orders/my}" class="btn btn-sm btn-outline-primary">
+                            View All
+                        </a>
+                    </div>
+                </div>
+
+                <div class="card-body">
+
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle">
+                            <thead>
+                            <tr>
+                                <th>Unit</th>
+                                <th>Type</th>
+                                <th>Priority</th>
+                                <th>Status</th>
+                                <th>Due Date</th>
+                                <th class="text-end">Action</th>
+                            </tr>
+                            </thead>
+
+                            <tbody>
+                            <tr th:each="wo : ${recentMyWorkOrders}">
+                                <td th:text="${wo.unitDisplayLabel}">Unit</td>
+                                <td th:text="${wo.workType}">Type</td>
+                                <td>
+                                    <span class="badge bg-secondary" th:text="${wo.priority}">Priority</span>
+                                </td>
+                                <td>
+                                    <span class="badge bg-info text-dark" th:text="${wo.status}">Status</span>
+                                </td>
+                                <td th:text="${wo.dueDate != null ? wo.dueDate : 'No due date'}">Due date</td>
+                                <td class="text-end">
+                                    <a th:href="@{/work-orders/details/{id}(id=${wo.id})}"
+                                       class="btn btn-sm btn-outline-primary">
+                                        Details
+                                    </a>
+                                </td>
+                            </tr>
+
+                            <tr th:if="${#lists.isEmpty(recentMyWorkOrders)}">
+                                <td colspan="6" class="text-center text-muted py-4">
+                                    You do not have assigned work orders right now.
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</main>
+
+<script th:src="@{/js/loading.js?v=2}"></script>
+</body>
+</html>
