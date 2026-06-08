@@ -17,8 +17,12 @@ public class WorkOrderServiceImpl implements WorkOrderService {
 
     private final WorkOrderRepository workOrderRepository;
 
-    public WorkOrderServiceImpl(WorkOrderRepository workOrderRepository) {
+    private final WorkOrderTimeLogService timeLogService;
+
+    public WorkOrderServiceImpl(WorkOrderRepository workOrderRepository,
+                                WorkOrderTimeLogService timeLogService) {
         this.workOrderRepository = workOrderRepository;
+        this.timeLogService = timeLogService;
     }
 
     @Override
@@ -54,34 +58,21 @@ public class WorkOrderServiceImpl implements WorkOrderService {
         WorkOrderDto existing = workOrderRepository.get(id)
                 .orElseThrow(() -> new RuntimeException("Work order not found"));
 
+        Long previousUnitId = existing.getUnitId();
+
         dto.setId(id);
 
         if (isBlank(dto.getStatus())) {
             dto.setStatus(existing.getStatus());
         }
 
-        if (dto.getDueDate() == null) {
-            dto.setDueDate(existing.getDueDate());
-        }
-
         dto.setCreatedDate(existing.getCreatedDate());
         dto.setCreatedByUserId(existing.getCreatedByUserId());
 
-        /*
-         * Mantener dueDate:
-         * Si el formulario trae fecha, usa la nueva.
-         * Si viene null, conserva la fecha anterior.
-         */
         if (dto.getDueDate() == null) {
             dto.setDueDate(existing.getDueDate());
         }
 
-        /*
-         * completedDate:
-         * - Si está COMPLETED y ya tenía fecha, se mantiene.
-         * - Si está COMPLETED y no tenía fecha, se crea ahora.
-         * - Si no está COMPLETED, se limpia.
-         */
         if (STATUS_COMPLETED.equalsIgnoreCase(dto.getStatus())) {
             dto.setCompletedDate(existing.getCompletedDate() != null
                     ? existing.getCompletedDate()
@@ -90,7 +81,15 @@ public class WorkOrderServiceImpl implements WorkOrderService {
             dto.setCompletedDate(null);
         }
 
-        return workOrderRepository.save(dto);
+        WorkOrderDto saved = workOrderRepository.save(dto);
+
+        if (previousUnitId != null
+                && saved.getUnitId() != null
+                && !previousUnitId.equals(saved.getUnitId())) {
+            timeLogService.syncUnitForWorkOrder(saved.getId(), saved.getUnitId());
+        }
+
+        return saved;
     }
 
     @Override

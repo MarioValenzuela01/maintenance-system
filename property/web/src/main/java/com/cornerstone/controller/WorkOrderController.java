@@ -10,8 +10,17 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import com.cornerstone.dto.WorkOrderTimeLogDto;
+import com.cornerstone.service.WorkOrderTimeLogService;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
+
 import java.security.Principal;
 import java.util.List;
+
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/work-orders")
@@ -20,13 +29,16 @@ public class WorkOrderController {
     private final WorkOrderService workOrderService;
     private final UnitService unitService;
     private final AppUserRepository appUserRepository;
+    private final WorkOrderTimeLogService timeLogService;
 
     public WorkOrderController(WorkOrderService workOrderService,
                                UnitService unitService,
-                               AppUserRepository appUserRepository) {
+                               AppUserRepository appUserRepository,
+                               WorkOrderTimeLogService timeLogService) {
         this.workOrderService = workOrderService;
         this.unitService = unitService;
         this.appUserRepository = appUserRepository;
+        this.timeLogService = timeLogService;
     }
 
     @GetMapping
@@ -43,6 +55,7 @@ public class WorkOrderController {
         }
 
         WorkOrderDto selectedWorkOrder = getSelectedWorkOrder(workOrders, selectedId);
+        prepareTimeLogModel(model, selectedWorkOrder);
 
         model.addAttribute("workOrders", workOrders);
         model.addAttribute("selectedWorkOrder", selectedWorkOrder);
@@ -61,6 +74,7 @@ public class WorkOrderController {
         List<WorkOrderDto> workOrders = workOrderService.getMyOrders(principal.getName());
 
         WorkOrderDto selectedWorkOrder = getSelectedWorkOrder(workOrders, selectedId);
+        prepareTimeLogModel(model, selectedWorkOrder);
 
         model.addAttribute("workOrders", workOrders);
         model.addAttribute("selectedWorkOrder", selectedWorkOrder);
@@ -199,6 +213,64 @@ public class WorkOrderController {
         return "redirect:/work-orders";
     }
 
+    @PostMapping("/{id}/time-logs/create")
+    public String createTimeLog(@PathVariable("id") Long id,
+                                @RequestParam("workDate")
+                                @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                                LocalDate workDate,
+                                @RequestParam("startTime")
+                                @DateTimeFormat(iso = DateTimeFormat.ISO.TIME)
+                                LocalTime startTime,
+                                @RequestParam("endTime")
+                                @DateTimeFormat(iso = DateTimeFormat.ISO.TIME)
+                                LocalTime endTime,
+                                @RequestParam(name = "notes", required = false) String notes,
+                                Authentication authentication,
+                                RedirectAttributes redirectAttributes) {
+
+        WorkOrderDto workOrder = workOrderService.get(id)
+                .orElseThrow(() -> new RuntimeException("Work order not found"));
+
+        if (!isAccessibleUnit(workOrder)) {
+            return "redirect:/work-orders?selectedId=" + id;
+        }
+
+        if (!canManageWorkOrders(authentication)
+                && !authentication.getName().equals(workOrder.getAssignedToUsername())) {
+            return "redirect:/work-orders/my";
+        }
+
+        AppUserEntity currentUser = appUserRepository.findByUsername(authentication.getName())
+                .orElseThrow(() -> new RuntimeException("Current user not found"));
+
+        WorkOrderTimeLogDto dto = new WorkOrderTimeLogDto()
+                .setWorkOrderId(workOrder.getId())
+                .setUnitId(workOrder.getUnitId())
+                .setUserId(currentUser.getId())
+                .setWorkDate(workDate)
+                .setStartTime(startTime)
+                .setEndTime(endTime)
+                .setNotes(notes);
+
+        try {
+            timeLogService.create(dto);
+        } catch (IllegalArgumentException ex) {
+            redirectAttributes.addFlashAttribute("timeLogError", ex.getMessage());
+
+            if (canManageWorkOrders(authentication)) {
+                return "redirect:/work-orders?selectedId=" + id;
+            }
+
+            return "redirect:/work-orders/my?selectedId=" + id;
+        }
+
+        if (canManageWorkOrders(authentication)) {
+            return "redirect:/work-orders?selectedId=" + id;
+        }
+
+        return "redirect:/work-orders/my?selectedId=" + id;
+    }
+
     private void prepareFormData(Model model) {
         model.addAttribute("units", unitService.getAll());
         model.addAttribute("users", getAssignableUsers());
@@ -259,5 +331,38 @@ public class WorkOrderController {
         }
 
         return selectedWorkOrder;
+    }
+
+    private void prepareTimeLogModel(Model model, WorkOrderDto selectedWorkOrder) {
+
+        boolean accessibleUnit = isAccessibleUnit(selectedWorkOrder);
+
+        model.addAttribute("isAccessibleUnit", accessibleUnit);
+        model.addAttribute("today", LocalDate.now());
+
+        if (!accessibleUnit || selectedWorkOrder == null) {
+            model.addAttribute("timeLogs", List.of());
+            model.addAttribute("totalMinutesWorked", 0);
+            model.addAttribute("totalTimeWorked", "0h 0m");
+            return;
+        }
+
+        List<WorkOrderTimeLogDto> timeLogs = timeLogService.getByWorkOrderId(selectedWorkOrder.getId());
+        int totalMinutes = timeLogService.getTotalMinutesByWorkOrderId(selectedWorkOrder.getId());
+
+        model.addAttribute("timeLogs", timeLogs);
+        model.addAttribute("totalMinutesWorked", totalMinutes);
+        model.addAttribute("totalTimeWorked", timeLogService.formatMinutes(totalMinutes));
+    }
+
+    private boolean isAccessibleUnit(WorkOrderDto workOrder) {
+        if (workOrder == null || workOrder.getUnitNumber() == null) {
+            return false;
+        }
+
+        return "146-1".equalsIgnoreCase(workOrder.getUnitNumber())
+                || "146-2".equalsIgnoreCase(workOrder.getUnitNumber())
+                || "146-3".equalsIgnoreCase(workOrder.getUnitNumber())
+                || "146-4".equalsIgnoreCase(workOrder.getUnitNumber());
     }
 }
