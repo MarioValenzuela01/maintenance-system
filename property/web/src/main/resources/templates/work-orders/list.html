@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Work Orders</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link th:href="@{/css/home.css?v=10}" rel="stylesheet">
+</head>
+<body>
+
+<div th:replace="~{fragments/sidebar :: sidebar}"></div>
+
+<main class="app-main">
+    <div class="page-shell mt-4">
+        <div class="content-wrapper">
+
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div>
+                    <h1 class="text-primary">Work Orders</h1>
+                    <p class="text-muted mb-0">Manage assigned jobs for units and users.</p>
+                </div>
+
+                <a th:href="@{/work-orders/create}"
+                   class="btn btn-primary"
+                   sec:authorize="hasAnyRole('SUPER_ADMIN','ADMIN')">
+                    + Create Work Order
+                </a>
+            </div>
+
+            <hr>
+
+            <div class="card shadow-sm">
+                <div class="card-body">
+
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle">
+                            <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Unit</th>
+                                <th>Type</th>
+                                <th>Priority</th>
+                                <th>Status</th>
+                                <th>Assigned To</th>
+                                <th>Due Date</th>
+                                <th class="text-end">Actions</th>
+                            </tr>
+                            </thead>
+
+                            <tbody>
+                            <tr th:each="wo : ${workOrders}">
+                                <td th:text="${wo.id}">1</td>
+                                <td th:text="${wo.unitDisplayLabel}">Unit</td>
+                                <td th:text="${wo.workType}">Type</td>
+                                <td>
+                                    <span class="badge bg-secondary" th:text="${wo.priority}">Priority</span>
+                                </td>
+                                <td>
+                                    <span class="badge bg-info text-dark" th:text="${wo.status}">Status</span>
+                                </td>
+                                <td th:text="${wo.assignedToFullName != null && !wo.assignedToFullName.isBlank() ? wo.assignedToFullName : wo.assignedToUsername}">
+                                    User
+                                </td>
+                                <td th:text="${wo.dueDate}">Due date</td>
+                                <td class="text-end">
+                                    <a th:href="@{/work-orders/details/{id}(id=${wo.id})}"
+                                       class="btn btn-sm btn-outline-primary">
+                                        View
+                                    </a>
+
+                                    <a th:href="@{/work-orders/edit/{id}(id=${wo.id})}"
+                                       class="btn btn-sm btn-outline-warning"
+                                       sec:authorize="hasAnyRole('SUPER_ADMIN','ADMIN')">
+                                        Edit
+                                    </a>
+                                </td>
+                            </tr>
+
+                            <tr th:if="${#lists.isEmpty(workOrders)}">
+                                <td colspan="8" class="text-center text-muted py-4">
+                                    No work orders found.
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</main>
+
+<script th:src="@{/js/loading.js?v=2}"></script>
+</body>
+</html>

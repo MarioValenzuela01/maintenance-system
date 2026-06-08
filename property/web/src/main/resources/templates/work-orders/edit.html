@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Work Order</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link th:href="@{/css/home.css?v=10}" rel="stylesheet">
+</head>
+<body>
+
+<div th:replace="~{fragments/sidebar :: sidebar}"></div>
+
+<main class="app-main">
+    <div class="page-shell mt-4">
+        <div class="content-wrapper">
+
+            <h1 class="text-primary">Edit Work Order</h1>
+            <hr>
+
+            <div class="card shadow-sm p-4">
+                <form th:action="@{/work-orders/edit/{id}(id=${workOrder.id})}"
+                      th:object="${workOrder}"
+                      method="post">
+
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                    <input type="hidden" th:field="*{id}">
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Unit</label>
+                        <select th:field="*{unitId}" class="form-select" required>
+                            <option value="">-- Select Unit --</option>
+                            <option th:each="unit : ${units}"
+                                    th:value="${unit.id}"
+                                    th:text="${unit.displayName != null && !unit.displayName.isBlank() ? unit.displayName + ' - Unit ' + unit.unitNumber : 'Unit ' + unit.unitNumber}">
+                                Unit
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Assign To</label>
+                        <select th:field="*{assignedToUserId}" class="form-select" required>
+                            <option value="">-- Select User --</option>
+                            <option th:each="user : ${users}"
+                                    th:value="${user.id}"
+                                    th:text="${user.fullName != null && !user.fullName.isBlank() ? user.fullName + ' (' + user.username + ')' : user.username}">
+                                User
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label fw-bold">Work Type</label>
+                            <select th:field="*{workType}" class="form-select" required>
+                                <option th:each="type : ${workTypes}"
+                                        th:value="${type}"
+                                        th:text="${type}">
+                                    Type
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label fw-bold">Priority</label>
+                            <select th:field="*{priority}" class="form-select" required>
+                                <option th:each="priority : ${priorities}"
+                                        th:value="${priority}"
+                                        th:text="${priority}">
+                                    Priority
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label fw-bold">Status</label>
+                            <select th:field="*{status}" class="form-select" required>
+                                <option th:each="status : ${statuses}"
+                                        th:value="${status}"
+                                        th:text="${status}">
+                                    Status
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Due Date</label>
+                        <input type="date" th:field="*{dueDate}" class="form-control">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Description</label>
+                        <textarea th:field="*{description}"
+                                  class="form-control"
+                                  rows="4"
+                                  required></textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Notes</label>
+                        <textarea th:field="*{notes}"
+                                  class="form-control"
+                                  rows="3"></textarea>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary">Save</button>
+                        <a th:href="@{/work-orders/details/{id}(id=${workOrder.id})}"
+                           class="btn btn-secondary">
+                            Cancel
+                        </a>
+                    </div>
+
+                </form>
+            </div>
+
+        </div>
+    </div>
+</main>
+
+<script th:src="@{/js/loading.js?v=2}"></script>
+</body>
+</html>

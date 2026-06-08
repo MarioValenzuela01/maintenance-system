@@ -66,6 +66,17 @@
         <div class="sidebar-section">
             <div class="sidebar-section-title">Operations</div>
 
+            <a th:href="@{/work-orders/my}" class="sidebar-link">
+                <span class="sidebar-icon">🛠</span>
+                <span>My Work Orders</span>
+            </a>
+
+            <a th:href="@{/work-orders}" class="sidebar-link"
+               sec:authorize="hasAnyRole('SUPER_ADMIN','ADMIN')">
+                <span class="sidebar-icon">📋</span>
+                <span>Work Orders</span>
+            </a>
+
             <a th:href="@{/unit-history}" class="sidebar-link">
                 <span class="sidebar-icon">✦</span>
                 <span>Maintenance History</span>

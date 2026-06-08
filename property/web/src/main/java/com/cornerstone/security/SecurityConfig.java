@@ -24,6 +24,19 @@ public class SecurityConfig {
 
                         .requestMatchers("/users/**").hasRole("SUPER_ADMIN")
 
+                        .requestMatchers("/work-orders/create",
+                                "/work-orders/edit/**",
+                                "/work-orders/cancel/**")
+                        .hasAnyRole("SUPER_ADMIN", "ADMIN")
+
+                        .requestMatchers("/work-orders",
+                                "/work-orders/details/**")
+                        .hasAnyRole("SUPER_ADMIN", "ADMIN", "USER")
+
+                        .requestMatchers("/work-orders/my",
+                                "/work-orders/status/**")
+                        .hasAnyRole("SUPER_ADMIN", "ADMIN", "USER")
+
                         .requestMatchers("/units/delete/**",
                                 "/tenants/delete/**",
                                 "/leases/end/**",
