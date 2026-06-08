@@ -2,6 +2,7 @@ package com.cornerstone.dto;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import org.springframework.format.annotation.DateTimeFormat;
 
 public class WorkOrderDto {
 
@@ -28,6 +29,7 @@ public class WorkOrderDto {
     private String notes;
 
     private LocalDateTime createdDate;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate dueDate;
     private LocalDateTime completedDate;
 

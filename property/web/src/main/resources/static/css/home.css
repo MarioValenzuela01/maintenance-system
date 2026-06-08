@@ -929,3 +929,17 @@ body {
     font-weight: 900;
 }
 
+.work-orders-layout {
+    min-height: calc(100vh - 180px);
+}
+
+.work-orders-list-panel {
+    max-height: calc(100vh - 230px);
+    overflow-y: auto;
+}
+
+.work-orders-detail-panel {
+    max-height: calc(100vh - 230px);
+    overflow-y: auto;
+}
+

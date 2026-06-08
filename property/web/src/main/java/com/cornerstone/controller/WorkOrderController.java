@@ -30,15 +30,45 @@ public class WorkOrderController {
     }
 
     @GetMapping
-    public String list(Model model) {
-        model.addAttribute("workOrders", workOrderService.getAll());
+    public String list(@RequestParam(name = "selectedId", required = false) Long selectedId,
+                       Authentication authentication,
+                       Model model) {
+
+        List<WorkOrderDto> workOrders;
+
+        if (canManageWorkOrders(authentication)) {
+            workOrders = workOrderService.getAll();
+        } else {
+            workOrders = workOrderService.getMyOrders(authentication.getName());
+        }
+
+        WorkOrderDto selectedWorkOrder = getSelectedWorkOrder(workOrders, selectedId);
+
+        model.addAttribute("workOrders", workOrders);
+        model.addAttribute("selectedWorkOrder", selectedWorkOrder);
+        model.addAttribute("pageTitle", canManageWorkOrders(authentication) ? "Work Orders" : "My Work Orders");
+        model.addAttribute("pageSubtitle", "Select a work order on the left to view details.");
+        model.addAttribute("workOrdersBasePath", "/work-orders");
+
         return "work-orders/list";
     }
 
     @GetMapping("/my")
-    public String myOrders(Principal principal, Model model) {
-        model.addAttribute("workOrders", workOrderService.getMyOrders(principal.getName()));
-        return "work-orders/my-orders";
+    public String myOrders(@RequestParam(name = "selectedId", required = false) Long selectedId,
+                           Principal principal,
+                           Model model) {
+
+        List<WorkOrderDto> workOrders = workOrderService.getMyOrders(principal.getName());
+
+        WorkOrderDto selectedWorkOrder = getSelectedWorkOrder(workOrders, selectedId);
+
+        model.addAttribute("workOrders", workOrders);
+        model.addAttribute("selectedWorkOrder", selectedWorkOrder);
+        model.addAttribute("pageTitle", "My Work Orders");
+        model.addAttribute("pageSubtitle", "Select one of your assigned work orders to view details.");
+        model.addAttribute("workOrdersBasePath", "/work-orders/my");
+
+        return "work-orders/list";
     }
 
     @GetMapping("/create")
@@ -134,6 +164,35 @@ public class WorkOrderController {
         return "redirect:/work-orders/my";
     }
 
+    @PostMapping("/status-with-notes/{id}")
+    public String changeStatusWithNotes(@PathVariable("id") Long id,
+                                        @RequestParam("status") String status,
+                                        @RequestParam(name = "notes", required = false) String notes,
+                                        Authentication authentication) {
+
+        WorkOrderDto workOrder = workOrderService.get(id)
+                .orElseThrow(() -> new RuntimeException("Work order not found"));
+
+        if (!canManageWorkOrders(authentication)
+                && !authentication.getName().equals(workOrder.getAssignedToUsername())) {
+            return "redirect:/work-orders/my";
+        }
+
+        if (!canManageWorkOrders(authentication)
+                && !"COMPLETED".equalsIgnoreCase(status)
+                && !"IN_PROGRESS".equalsIgnoreCase(status)) {
+            return "redirect:/work-orders/my";
+        }
+
+        workOrderService.changeStatusWithNotes(id, status, notes);
+
+        if (canManageWorkOrders(authentication)) {
+            return "redirect:/work-orders?selectedId=" + id;
+        }
+
+        return "redirect:/work-orders/my?selectedId=" + id;
+    }
+
     @PostMapping("/cancel/{id}")
     public String cancel(@PathVariable("id") Long id) {
         workOrderService.cancel(id);
@@ -182,5 +241,23 @@ public class WorkOrderController {
                 .anyMatch(authority ->
                         "ROLE_SUPER_ADMIN".equals(authority.getAuthority())
                                 || "ROLE_ADMIN".equals(authority.getAuthority()));
+    }
+
+    private WorkOrderDto getSelectedWorkOrder(List<WorkOrderDto> workOrders, Long selectedId) {
+
+        WorkOrderDto selectedWorkOrder = null;
+
+        if (selectedId != null) {
+            selectedWorkOrder = workOrders.stream()
+                    .filter(workOrder -> workOrder.getId().equals(selectedId))
+                    .findFirst()
+                    .orElse(null);
+        }
+
+        if (selectedWorkOrder == null && !workOrders.isEmpty()) {
+            selectedWorkOrder = workOrders.get(0);
+        }
+
+        return selectedWorkOrder;
     }
 }

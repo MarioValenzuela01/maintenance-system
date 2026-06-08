@@ -77,7 +77,8 @@
                 <span>Work Orders</span>
             </a>
 
-            <a th:href="@{/unit-history}" class="sidebar-link">
+            <a th:href="@{/unit-history}" class="sidebar-link"
+               sec:authorize="hasAnyRole('SUPER_ADMIN','ADMIN')">
                 <span class="sidebar-icon">✦</span>
                 <span>Maintenance History</span>
             </a>

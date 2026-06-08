@@ -34,7 +34,8 @@ public class SecurityConfig {
                         .hasAnyRole("SUPER_ADMIN", "ADMIN", "USER")
 
                         .requestMatchers("/work-orders/my",
-                                "/work-orders/status/**")
+                                "/work-orders/status/**",
+                                "/work-orders/status-with-notes/**")
                         .hasAnyRole("SUPER_ADMIN", "ADMIN", "USER")
 
                         .requestMatchers("/units/delete/**",

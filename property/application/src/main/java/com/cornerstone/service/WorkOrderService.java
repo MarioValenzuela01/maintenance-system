@@ -19,5 +19,7 @@ public interface WorkOrderService {
 
     WorkOrderDto changeStatus(Long id, String status);
 
+    WorkOrderDto changeStatusWithNotes(Long id, String status, String notes);
+
     WorkOrderDto cancel(Long id);
 }
