@@ -48,8 +48,8 @@
                             <th>Name</th>
                             <th>Email</th>
                             <th>Phone</th>
-                            <th>Last Updated</th>
-                            <th>Actions</th>
+                            <th sec:authorize="hasAnyRole('SUPER_ADMIN','ADMIN')">Last Updated</th>
+                            <th sec:authorize="hasAnyRole('SUPER_ADMIN','ADMIN')">Actions</th>
                         </tr>
                         </thead>
 
@@ -77,7 +77,7 @@
                                       th:text="${t.phone}"></span>
                             </td>
 
-                            <td>
+                            <td sec:authorize="hasAnyRole('SUPER_ADMIN','ADMIN')">
                                 <span th:if="${t.updatedAt != null}"
                                       th:text="${#temporals.format(t.updatedAt, 'yyyy-MM-dd')}">
                                 </span>

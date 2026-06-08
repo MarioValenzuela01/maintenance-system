@@ -201,15 +201,15 @@
                         <h4 class="panel-title mb-3">Quick Actions</h4>
 
                         <div class="d-grid gap-2">
-                            <a th:href="@{/units/create}" class="btn btn-primary">
+                            <a th:href="@{/units/create}" class="btn btn-primary" sec:authorize="hasRole('SUPER_ADMIN')">
                                 Add New Unit
                             </a>
 
-                            <a th:href="@{/tenants/create}" class="btn btn-success">
+                            <a th:href="@{/tenants/create}" class="btn btn-success" sec:authorize="hasRole('SUPER_ADMIN')">
                                 Add New Tenant
                             </a>
 
-                            <a th:href="@{/leases/create}" class="btn btn-warning text-white">
+                            <a th:href="@{/leases/create}" class="btn btn-warning text-white" sec:authorize="hasRole('SUPER_ADMIN')">
                                 Create Lease
                             </a>
 

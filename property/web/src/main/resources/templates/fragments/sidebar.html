@@ -57,7 +57,7 @@
                 <span>Tenants</span>
             </a>
 
-            <a th:href="@{/leases}" class="sidebar-link">
+            <a th:href="@{/leases}" class="sidebar-link" sec:authorize="hasAnyRole('SUPER_ADMIN','ADMIN')">
                 <span class="sidebar-icon">▤</span>
                 <span>Leases</span>
             </a>
@@ -71,7 +71,7 @@
                 <span>Maintenance History</span>
             </a>
 
-            <a th:href="@{/managers}" class="sidebar-link">
+            <a th:href="@{/managers}" class="sidebar-link" sec:authorize="hasAnyRole('SUPER_ADMIN','ADMIN')">
                 <span class="sidebar-icon">◉</span>
                 <span>Managers</span>
             </a>
