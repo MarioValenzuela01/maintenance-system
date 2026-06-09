@@ -1,5 +1,6 @@
 package com.cornerstone.controller;
 
+import com.cornerstone.dto.UnitDto;
 import com.cornerstone.dto.WorkOrderDto;
 import com.cornerstone.entity.AppUserEntity;
 import com.cornerstone.repository.AppUserRepository;
@@ -18,6 +19,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 import java.security.Principal;
+import java.util.Comparator;
 import java.util.List;
 
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -43,25 +45,66 @@ public class WorkOrderController {
 
     @GetMapping
     public String list(@RequestParam(name = "selectedId", required = false) Long selectedId,
+                       @RequestParam(name = "assignedToUserId", required = false) Long assignedToUserId,
+                       @RequestParam(name = "unitId", required = false) Long unitId,
+                       @RequestParam(name = "status", required = false) String status,
                        Authentication authentication,
                        Model model) {
 
+        boolean canManage = canManageWorkOrders(authentication);
+
         List<WorkOrderDto> workOrders;
 
-        if (canManageWorkOrders(authentication)) {
+        if (canManage) {
             workOrders = workOrderService.getAll();
+
+            if (assignedToUserId != null) {
+                workOrders = workOrders.stream()
+                        .filter(workOrder -> assignedToUserId.equals(workOrder.getAssignedToUserId()))
+                        .toList();
+            }
+
+            if (unitId != null) {
+                workOrders = workOrders.stream()
+                        .filter(workOrder -> unitId.equals(workOrder.getUnitId()))
+                        .toList();
+            }
+
+            if (status != null && !status.isBlank() && !"ALL".equalsIgnoreCase(status)) {
+                workOrders = workOrders.stream()
+                        .filter(workOrder -> status.equalsIgnoreCase(workOrder.getStatus()))
+                        .toList();
+            }
+
+
+
         } else {
             workOrders = workOrderService.getMyOrders(authentication.getName());
         }
 
         WorkOrderDto selectedWorkOrder = getSelectedWorkOrder(workOrders, selectedId);
+
         prepareTimeLogModel(model, selectedWorkOrder);
 
         model.addAttribute("workOrders", workOrders);
         model.addAttribute("selectedWorkOrder", selectedWorkOrder);
-        model.addAttribute("pageTitle", canManageWorkOrders(authentication) ? "Work Orders" : "My Work Orders");
-        model.addAttribute("pageSubtitle", "Select a work order on the left to view details.");
+
+        model.addAttribute("pageTitle", "Work Orders");
+        model.addAttribute("pageSubtitle", "Manage and review work orders assigned to users.");
         model.addAttribute("workOrdersBasePath", "/work-orders");
+
+        model.addAttribute("assignedUsers", getEnabledUserAccounts());
+        model.addAttribute("selectedAssignedToUserId", assignedToUserId);
+        model.addAttribute("filterUnits", getFilterUnits());
+        model.addAttribute("selectedUnitId", unitId);
+        model.addAttribute("selectedStatus", status == null || status.isBlank() ? "ALL" : status);
+        model.addAttribute("workOrderStatuses", List.of(
+                "ALL",
+                "ASSIGNED",
+                "IN_PROGRESS",
+                "COMPLETED",
+                "CANCELLED"
+        ));
 
         return "work-orders/list";
     }
@@ -364,5 +407,62 @@ public class WorkOrderController {
                 || "146-2".equalsIgnoreCase(workOrder.getUnitNumber())
                 || "146-3".equalsIgnoreCase(workOrder.getUnitNumber())
                 || "146-4".equalsIgnoreCase(workOrder.getUnitNumber());
+    }
+
+    private List<AppUserEntity> getEnabledUserAccounts() {
+        return appUserRepository.findAll()
+                .stream()
+                .filter(user -> user.getEnabled() != null && user.getEnabled())
+                .filter(user -> user.getRole() != null && "USER".equalsIgnoreCase(user.getRole()))
+                .sorted(Comparator.comparing(this::getUserDisplayName, String.CASE_INSENSITIVE_ORDER))
+                .toList();
+    }
+
+    private String getUserDisplayName(AppUserEntity user) {
+        if (user.getFullName() != null && !user.getFullName().isBlank()) {
+            return user.getFullName();
+        }
+
+        return user.getUsername();
+    }
+
+    private List<UnitDto> getFilterUnits() {
+        return unitService.getAll()
+                .stream()
+                .sorted((first, second) -> compareUnitNumbers(first.getUnitNumber(), second.getUnitNumber()))
+                .toList();
+    }
+
+    private int compareUnitNumbers(String first, String second) {
+        int firstNumber = extractLeadingNumber(first);
+        int secondNumber = extractLeadingNumber(second);
+
+        if (firstNumber != secondNumber) {
+            return Integer.compare(firstNumber, secondNumber);
+        }
+
+        return safeString(first).compareToIgnoreCase(safeString(second));
+    }
+
+    private int extractLeadingNumber(String unitNumber) {
+        if (unitNumber == null || unitNumber.isBlank()) {
+            return Integer.MAX_VALUE;
+        }
+
+        String number = unitNumber.replaceAll("[^0-9].*", "");
+
+        if (number.isBlank()) {
+            return Integer.MAX_VALUE;
+        }
+
+        try {
+            return Integer.parseInt(number);
+        } catch (NumberFormatException ex) {
+            return Integer.MAX_VALUE;
+        }
+    }
+
+    private String safeString(String value) {
+        return value == null ? "" : value;
     }
 }

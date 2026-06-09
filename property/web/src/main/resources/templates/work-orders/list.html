@@ -48,6 +48,138 @@
                             <h5 class="mb-0">Work Order List</h5>
                         </div>
 
+                        <div class="card-body border-bottom"
+                             sec:authorize="hasAnyRole('SUPER_ADMIN','ADMIN')">
+
+                            <div class="d-flex flex-wrap gap-2 align-items-center">
+
+                                <!-- Assigned To Filter -->
+                                <div class="dropdown">
+                                    <button class="btn btn-outline-primary btn-sm dropdown-toggle"
+                                            type="button"
+                                            data-bs-toggle="dropdown"
+                                            aria-expanded="false">
+                                        Assigned to
+                                    </button>
+
+                                    <ul class="dropdown-menu">
+                                        <li>
+                                            <a class="dropdown-item"
+                                               th:href="@{/work-orders(
+                            unitId=${selectedUnitId},
+                            status=${selectedStatus}
+                       )}">
+                                                All Users
+                                            </a>
+                                        </li>
+
+                                        <li><hr class="dropdown-divider"></li>
+
+                                        <li th:each="user : ${assignedUsers}">
+                                            <a class="dropdown-item"
+                                               th:classappend="${selectedAssignedToUserId != null && selectedAssignedToUserId.equals(user.id)} ? ' active' : ''"
+                                               th:href="@{/work-orders(
+                            assignedToUserId=${user.id},
+                            unitId=${selectedUnitId},
+                            status=${selectedStatus}
+                       )}"
+                                               th:text="${user.fullName != null && !user.fullName.isBlank() ? user.fullName : user.username}">
+                                                User
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                <!-- Unit Filter -->
+                                <div class="dropdown">
+                                    <button class="btn btn-outline-primary btn-sm dropdown-toggle"
+                                            type="button"
+                                            data-bs-toggle="dropdown"
+                                            aria-expanded="false">
+                                        Units
+                                    </button>
+
+                                    <ul class="dropdown-menu">
+                                        <li>
+                                            <a class="dropdown-item"
+                                               th:href="@{/work-orders(
+                            assignedToUserId=${selectedAssignedToUserId},
+                            status=${selectedStatus}
+                       )}">
+                                                All Units
+                                            </a>
+                                        </li>
+
+                                        <li><hr class="dropdown-divider"></li>
+
+                                        <li th:each="unit : ${filterUnits}">
+                                            <a class="dropdown-item"
+                                               th:classappend="${selectedUnitId != null && selectedUnitId.equals(unit.id)} ? ' active' : ''"
+                                               th:href="@{/work-orders(
+                            assignedToUserId=${selectedAssignedToUserId},
+                            unitId=${unit.id},
+                            status=${selectedStatus}
+                       )}"
+                                               th:text="${unit.displayName != null && !unit.displayName.isBlank() ? unit.displayName + ' - Unit ' + unit.unitNumber : 'Unit ' + unit.unitNumber}">
+                                                Unit 146-2
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                <!-- Status Filter -->
+                                <div class="dropdown">
+                                    <button class="btn btn-outline-primary btn-sm dropdown-toggle"
+                                            type="button"
+                                            data-bs-toggle="dropdown"
+                                            aria-expanded="false">
+                                        Status
+                                    </button>
+
+                                    <ul class="dropdown-menu">
+                                        <li th:each="statusOption : ${workOrderStatuses}">
+                                            <a class="dropdown-item"
+                                               th:classappend="${selectedStatus == statusOption} ? ' active' : ''"
+                                               th:href="@{/work-orders(
+                            assignedToUserId=${selectedAssignedToUserId},
+                            unitId=${selectedUnitId},
+                            status=${statusOption}
+                       )}"
+                                               th:text="${statusOption == 'ALL' ? 'All Status' : statusOption}">
+                                                Status
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                <!-- Clear Filter -->
+                                <a th:href="@{/work-orders}"
+                                   class="btn btn-outline-secondary btn-sm">
+                                    Clear
+                                </a>
+
+                            </div>
+
+                            <div class="small text-muted mt-3">
+                                Results:
+                                <strong th:text="${#lists.size(workOrders)}">0</strong>
+
+                                <span class="ms-2" th:if="${selectedAssignedToUserId != null}">
+            User filter active
+        </span>
+
+                                <span class="ms-2" th:if="${selectedUnitId != null}">
+            Unit filter active
+        </span>
+
+                                <span class="ms-2" th:if="${selectedStatus != null && selectedStatus != 'ALL'}">
+            Status:
+            <strong th:text="${selectedStatus}">COMPLETED</strong>
+        </span>
+                            </div>
+
+                        </div>
+
                         <div class="card-body p-0 work-orders-list-panel">
 
                             <div th:if="${#lists.isEmpty(workOrders)}"
@@ -59,7 +191,12 @@
                                  th:if="${!#lists.isEmpty(workOrders)}">
 
                                 <a th:each="wo : ${workOrders}"
-                                   th:href="${workOrdersBasePath + '?selectedId=' + wo.id}"
+                                   th:href="@{/work-orders(
+                                   selectedId=${wo.id},
+                                   assignedToUserId=${selectedAssignedToUserId},
+                                   unitId=${selectedUnitId},
+                                   status=${selectedStatus}
+                                   )}"
                                    class="list-group-item list-group-item-action"
                                    th:classappend="${selectedWorkOrder != null && selectedWorkOrder.id == wo.id} ? ' active' : ''">
                                     <div class="d-flex justify-content-between align-items-start">
