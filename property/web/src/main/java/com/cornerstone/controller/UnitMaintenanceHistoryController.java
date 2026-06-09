@@ -95,8 +95,6 @@ public class UnitMaintenanceHistoryController {
 
         List<UnitMaintenanceHistoryDto> historyList = service.getAll();
 
-
-
         if (category != null && !category.isBlank()) {
             historyList = historyList.stream()
                     .filter(h -> h.getCategory() != null &&
@@ -119,10 +117,47 @@ public class UnitMaintenanceHistoryController {
                     .toList();
         }
 
+        historyList = historyList.stream()
+                .sorted((first, second) -> compareUnitNumbers(first.getUnitNumber(), second.getUnitNumber()))
+                .toList();
+
         model.addAttribute("historyList", historyList);
         model.addAttribute("keyword", keyword);
         model.addAttribute("category", category);
 
         return "unit-history/list";
+    }
+
+    private int compareUnitNumbers(String first, String second) {
+        int firstNumber = extractLeadingNumber(first);
+        int secondNumber = extractLeadingNumber(second);
+
+        if (firstNumber != secondNumber) {
+            return Integer.compare(firstNumber, secondNumber);
+        }
+
+        return safeString(first).compareToIgnoreCase(safeString(second));
+    }
+
+    private int extractLeadingNumber(String unitNumber) {
+        if (unitNumber == null || unitNumber.isBlank()) {
+            return Integer.MAX_VALUE;
+        }
+
+        String number = unitNumber.replaceAll("[^0-9].*", "");
+
+        if (number.isBlank()) {
+            return Integer.MAX_VALUE;
+        }
+
+        try {
+            return Integer.parseInt(number);
+        } catch (NumberFormatException ex) {
+            return Integer.MAX_VALUE;
+        }
+    }
+
+    private String safeString(String value) {
+        return value == null ? "" : value;
     }
 }
