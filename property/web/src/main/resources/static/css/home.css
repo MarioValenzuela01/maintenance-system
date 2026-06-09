@@ -963,3 +963,166 @@ body {
     color: #fff !important;
 }
 
+/* =========================
+   PRINT TENANTS PAGE
+========================= */
+
+.print-page {
+    background: #f8fafc;
+}
+
+.print-main {
+    padding: 24px;
+}
+
+.print-screen-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+    margin-bottom: 20px;
+}
+
+.print-container {
+    background: white;
+    padding: 24px;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+.tenant-print-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.print-report-header {
+    margin-bottom: 18px;
+}
+
+.print-logo {
+    width: 90px;
+    height: auto;
+    object-fit: contain;
+}
+
+.print-table-wrapper {
+    background: white;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+/* =========================
+   PRINT MODE
+========================= */
+
+@media print {
+
+    @page {
+        size: auto;
+        margin: 10mm;
+    }
+
+    html,
+    body,
+    body.print-page {
+        background: white !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        box-shadow: none !important;
+    }
+
+    .print-hidden,
+    .sidebar,
+    .sidebar-wrapper,
+    .app-sidebar,
+    .mobile-sidebar-topbar,
+    .sidebar-mobile-backdrop,
+    .btn,
+    button,
+    form,
+    nav,
+    header,
+    .navbar,
+    .topbar,
+    .app-header,
+    .sidebar-brand,
+    .brand,
+    .brand-title,
+    .brand-subtitle {
+        display: none !important;
+        visibility: hidden !important;
+    }
+
+    .app-main,
+    .print-main,
+    .print-container,
+    .tenant-print-container,
+    .print-table-wrapper,
+    .table-responsive,
+    .page-shell,
+    .content-wrapper,
+    .card,
+    .card-body {
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        background: white !important;
+        border: none !important;
+        box-shadow: none !important;
+        filter: none !important;
+    }
+
+    .shadow,
+    .shadow-sm,
+    .shadow-lg,
+    .modern-card,
+    .dashboard-panel,
+    .summary-card,
+    .page-header-card {
+        box-shadow: none !important;
+        border: none !important;
+    }
+
+    .print-report-header {
+        display: block !important;
+        margin-bottom: 14px !important;
+        padding: 0 !important;
+        background: white !important;
+        border: none !important;
+        box-shadow: none !important;
+    }
+
+    .print-logo {
+        width: 82px !important;
+        height: auto !important;
+        object-fit: contain !important;
+    }
+
+    .printable-table {
+        width: 100% !important;
+        border-collapse: collapse !important;
+        font-size: 10px !important;
+        box-shadow: none !important;
+    }
+
+    .printable-table th,
+    .printable-table td {
+        border: 1px solid #777 !important;
+        padding: 5px !important;
+        color: black !important;
+        background: white !important;
+        vertical-align: top !important;
+        box-shadow: none !important;
+    }
+
+    .printable-table th {
+        font-weight: bold !important;
+        background: #f2f2f2 !important;
+    }
+
+    a {
+        color: black !important;
+        text-decoration: none !important;
+    }
+}

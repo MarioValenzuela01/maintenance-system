@@ -61,6 +61,13 @@
                 <span class="sidebar-icon">▤</span>
                 <span>Leases</span>
             </a>
+
+            <a th:href="@{/print/tenants}"
+               class="sidebar-link"
+               sec:authorize="hasAnyRole('SUPER_ADMIN','ADMIN')">
+                <span class="sidebar-icon">🖨</span>
+                <span>Print Tenants</span>
+            </a>
         </div>
 
         <div class="sidebar-section">

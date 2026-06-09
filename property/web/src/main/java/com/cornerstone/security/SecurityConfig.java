@@ -24,6 +24,9 @@ public class SecurityConfig {
 
                         .requestMatchers("/users/**").hasRole("SUPER_ADMIN")
 
+                        .requestMatchers("/print/**")
+                        .hasAnyRole("SUPER_ADMIN", "ADMIN")
+
                         .requestMatchers("/work-orders/reports/**")
                         .hasAnyRole("SUPER_ADMIN", "ADMIN")
 

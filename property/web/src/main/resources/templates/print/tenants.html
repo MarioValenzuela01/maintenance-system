@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Printable Tenant List</title>
+
+    <link rel="icon" type="image/png" th:href="@{/images/Cornestone-small.png}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link th:href="@{/css/home.css?v=15}" rel="stylesheet">
+</head>
+
+<body class="print-page">
+
+<div class="print-hidden">
+    <div th:replace="~{fragments/sidebar :: sidebar}"></div>
+</div>
+
+<main class="app-main print-main">
+
+    <div class="print-screen-actions print-hidden">
+        <div>
+            <h1 class="text-primary mb-1">Printable Tenant List</h1>
+            <p class="text-muted mb-0">
+                Active tenants with unit, bedrooms, contact information, and second tenant.
+            </p>
+        </div>
+
+        <div class="d-flex gap-2">
+            <a th:href="@{/}" class="btn btn-outline-secondary">
+                Back to Dashboard
+            </a>
+
+            <button type="button"
+                    class="btn btn-primary"
+                    onclick="window.print()">
+                Print Tenant List
+            </button>
+        </div>
+    </div>
+
+    <section class="print-container tenant-print-container">
+
+        <div class="print-report-header">
+
+            <div class="d-flex justify-content-between align-items-start">
+                <div>
+                    <h3 class="mb-2">Cornerstone Tenant List</h3>
+
+                    <p class="mb-1">
+                        <strong>Printed date:</strong>
+                        <span th:text="${printedDate}">2026-06-08</span>
+                    </p>
+
+                    <p class="mb-0">
+                        <strong>Total active tenants:</strong>
+                        <span th:text="${#lists.size(rows)}">0</span>
+                    </p>
+                </div>
+
+                <img th:src="@{/images/Cornestone-small.png}"
+                     alt="Cornerstone Logo"
+                     class="print-logo">
+            </div>
+
+        </div>
+
+        <div class="print-table-wrapper">
+
+            <div class="table-responsive">
+                <table class="table table-hover align-middle printable-table">
+                    <thead>
+                    <tr>
+                        <th>Unit</th>
+                        <th>Bed</th>
+                        <th>Tenant Name</th>
+                        <th>Email</th>
+                        <th>Telephone</th>
+                        <th>Second Tenant</th>
+                        <th>Second Tenant Phone</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <tr th:each="row : ${rows}">
+                        <td th:text="${row.unitNumber != null && !row.unitNumber.isBlank() ? row.unitNumber : '-'}">
+                            101
+                        </td>
+
+                        <td th:text="${row.bedrooms != null ? row.bedrooms : '-'}">
+                            2
+                        </td>
+
+                        <td th:text="${row.tenantName != null && !row.tenantName.isBlank() ? row.tenantName : '-'}">
+                            Tenant Name
+                        </td>
+
+                        <td th:text="${row.email != null && !row.email.isBlank() ? row.email : '-'}">
+                            email@example.com
+                        </td>
+
+                        <td th:text="${row.telephone != null && !row.telephone.isBlank() ? row.telephone : '-'}">
+                            123-456-7890
+                        </td>
+
+                        <td th:text="${row.secondaryTenantName != null && !row.secondaryTenantName.isBlank() ? row.secondaryTenantName : '-'}">
+                            Second Tenant
+                        </td>
+
+                        <td th:text="${row.secondaryTenantPhone != null && !row.secondaryTenantPhone.isBlank() ? row.secondaryTenantPhone : '-'}">
+                            Second Tenant Phone
+                        </td>
+                    </tr>
+
+                    <tr th:if="${#lists.isEmpty(rows)}">
+                        <td colspan="7" class="text-center text-muted py-4">
+                            No active tenants found.
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+<script th:src="@{/js/loading.js?v=2}"></script>
+
+</body>
+</html>
