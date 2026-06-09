@@ -22,6 +22,13 @@
                 Weekly, monthly, and custom report for units 146-1 to 146-4.
             </p>
 
+            <p class="text-muted mb-0">
+                <strong>Selected unit:</strong>
+                <span th:text="${unitNumber != null ? unitNumber : 'All Accessible Units'}">
+                    All Accessible Units
+                </span>
+            </p>
+
             <hr>
 
             <div class="card shadow-sm mb-4">
@@ -42,6 +49,20 @@
                                 </select>
                             </div>
 
+                            <div class="col-md-2 mb-3">
+                                <label class="form-label fw-bold">Unit</label>
+                                <select name="unitNumber" class="form-select">
+                                    <option value="ALL" th:selected="${unitNumber == null}">All Units</option>
+
+                                    <option th:each="unit : ${accessibleUnits}"
+                                            th:value="${unit}"
+                                            th:text="${unit}"
+                                            th:selected="${unitNumber == unit}">
+                                        146-1
+                                    </option>
+                                </select>
+                            </div>
+
                             <div class="col-md-3 mb-3">
                                 <label class="form-label fw-bold">From Date</label>
                                 <input type="date"
@@ -58,9 +79,9 @@
                                        class="form-control">
                             </div>
 
-                            <div class="col-md-3 mb-3">
+                            <div class="col-md-1 mb-3">
                                 <button type="submit" class="btn btn-primary w-100">
-                                    Apply Filter
+                                    Go
                                 </button>
                             </div>
 

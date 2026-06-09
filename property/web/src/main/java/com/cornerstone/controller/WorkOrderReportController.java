@@ -19,6 +19,13 @@ import java.util.Map;
 @RequestMapping("/work-orders/reports")
 public class WorkOrderReportController {
 
+    private static final List<String> ACCESSIBLE_UNITS = List.of(
+            "146-1",
+            "146-2",
+            "146-3",
+            "146-4"
+    );
+
     private final WorkOrderTimeLogService timeLogService;
 
     public WorkOrderReportController(WorkOrderTimeLogService timeLogService) {
@@ -28,6 +35,7 @@ public class WorkOrderReportController {
     @GetMapping("/accessible-units-hours")
     public String accessibleUnitsHours(
             @RequestParam(name = "period", defaultValue = "thisMonth") String period,
+            @RequestParam(name = "unitNumber", required = false) String unitNumber,
             @RequestParam(name = "fromDate", required = false)
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
             LocalDate fromDate,
@@ -63,35 +71,83 @@ public class WorkOrderReportController {
             toDate = today.withDayOfMonth(today.lengthOfMonth());
         }
 
-        Map<String, Integer> totals = timeLogService.getAccessibleUnitTotals(fromDate, toDate);
+        String selectedUnitNumber = normalizeUnitNumber(unitNumber);
+
         List<WorkOrderTimeLogDto> logs = timeLogService.getAccessibleUnitLogsBetween(fromDate, toDate);
+
+        if (selectedUnitNumber != null) {
+            logs = logs.stream()
+                    .filter(log -> selectedUnitNumber.equalsIgnoreCase(log.getUnitNumber()))
+                    .toList();
+        }
+
+        Map<String, Integer> totals = timeLogService.getAccessibleUnitTotals(fromDate, toDate);
 
         List<Map<String, Object>> summaryRows = new ArrayList<>();
 
         for (Map.Entry<String, Integer> entry : totals.entrySet()) {
-            int minutes = entry.getValue();
+            String currentUnitNumber = entry.getKey();
+
+            if (selectedUnitNumber != null && !selectedUnitNumber.equalsIgnoreCase(currentUnitNumber)) {
+                continue;
+            }
+
+            int minutes;
+
+            if (selectedUnitNumber == null) {
+                minutes = entry.getValue();
+            } else {
+                minutes = logs.stream()
+                        .filter(log -> currentUnitNumber.equalsIgnoreCase(log.getUnitNumber()))
+                        .map(WorkOrderTimeLogDto::getMinutesWorked)
+                        .filter(value -> value != null)
+                        .mapToInt(Integer::intValue)
+                        .sum();
+            }
 
             summaryRows.add(Map.of(
-                    "unitNumber", entry.getKey(),
+                    "unitNumber", currentUnitNumber,
                     "minutes", minutes,
                     "formattedTime", timeLogService.formatMinutes(minutes),
                     "billableHours", timeLogService.toBillableHours(minutes)
             ));
         }
 
-        int grandTotalMinutes = totals.values()
-                .stream()
+        int grandTotalMinutes = logs.stream()
+                .map(WorkOrderTimeLogDto::getMinutesWorked)
+                .filter(value -> value != null)
                 .mapToInt(Integer::intValue)
                 .sum();
 
         model.addAttribute("period", period);
         model.addAttribute("fromDate", fromDate);
         model.addAttribute("toDate", toDate);
+        model.addAttribute("unitNumber", selectedUnitNumber);
+        model.addAttribute("accessibleUnits", ACCESSIBLE_UNITS);
+
         model.addAttribute("summaryRows", summaryRows);
         model.addAttribute("logs", logs);
         model.addAttribute("grandTotalTime", timeLogService.formatMinutes(grandTotalMinutes));
         model.addAttribute("grandTotalBillableHours", timeLogService.toBillableHours(grandTotalMinutes));
 
         return "work-orders/reports/accessible-units-hours";
+    }
+
+    private String normalizeUnitNumber(String unitNumber) {
+        if (unitNumber == null || unitNumber.isBlank()) {
+            return null;
+        }
+
+        String value = unitNumber.trim();
+
+        if ("ALL".equalsIgnoreCase(value)) {
+            return null;
+        }
+
+        if (!ACCESSIBLE_UNITS.contains(value)) {
+            return null;
+        }
+
+        return value;
     }
 }
