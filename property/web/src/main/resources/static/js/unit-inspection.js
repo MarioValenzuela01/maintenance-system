@@ -97,4 +97,20 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     updateAllRows();
+
+    const inspectionForm = document.getElementById("inspectionForm");
+    const saveInspectionBtn = document.getElementById("saveInspectionBtn");
+
+    if (inspectionForm) {
+        inspectionForm.addEventListener("submit", function () {
+            if (saveInspectionBtn) {
+                saveInspectionBtn.disabled = true;
+                saveInspectionBtn.textContent = "Saving inspection...";
+            }
+
+            if (typeof showLoading === "function") {
+                showLoading("Saving inspection...");
+            }
+        });
+    }
 });

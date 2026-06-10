@@ -32,8 +32,8 @@
             <div th:replace="~{unit-inspection/form :: inspectionForm}"></div>
 
             <div class="mt-4">
-                <button type="submit" class="btn btn-primary">
-                    Save Changes
+                <button type="submit" class="btn btn-primary" id="saveInspectionBtn">
+                    Update Inspection
                 </button>
 
                 <a th:href="@{/unit-inspections/{id}(id=${inspection.id})}" class="btn btn-secondary">
@@ -46,6 +46,7 @@
     </div>
 </div>
 
+<script th:src="@{/js/loading.js?v=3}"></script>
 <script th:src="@{/js/unit-inspection.js}"></script>
 </body>
 </html>

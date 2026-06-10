@@ -23,14 +23,17 @@
         <p class="text-muted">Digital checklist based on the Cornerstone inspection sheet.</p>
         <hr>
 
-        <form th:action="@{/unit-inspections/create}" th:object="${inspection}" method="post">
+        <form id="inspectionForm"
+              th:action="@{/unit-inspections/create}"
+              th:object="${inspection}"
+              method="post">
 
             <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
 
             <div th:replace="~{unit-inspection/form :: inspectionForm}"></div>
 
             <div class="mt-4">
-                <button type="submit" class="btn btn-primary">
+                <button type="submit" class="btn btn-primary" id="saveInspectionBtn">
                     Save Inspection
                 </button>
 
@@ -44,6 +47,7 @@
     </div>
 </div>
 
+<script th:src="@{/js/loading.js?v=3}"></script>
 <script th:src="@{/js/unit-inspection.js}"></script>
 </body>
 </html>
