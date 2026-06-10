@@ -27,6 +27,14 @@
                 Maintenance History
             </a>
 
+            <a th:href="@{/unit-inspections/create(unitId=${unit.id})}" class="btn btn-primary">
+                New Inspection
+            </a>
+
+            <a th:href="@{/unit-inspections(unitId=${unit.id})}" class="btn btn-outline-primary">
+                View Inspections
+            </a>
+
             <hr/>
 
             <!-- MAIN CARD -->

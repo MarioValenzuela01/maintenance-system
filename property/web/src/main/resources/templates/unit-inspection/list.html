@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Unit Inspections</title>
+    <link rel="icon" type="image/png" th:href="@{/images/Cornestone-small.png}">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link th:href="@{/css/home.css?v=7}" rel="stylesheet"/>
+</head>
+<body>
+
+<div class="page-shell mt-4">
+
+    <div class="sidebar-wrapper">
+        <div th:replace="~{fragments/sidebar :: sidebar}"></div>
+    </div>
+
+    <div class="content-wrapper">
+
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <div>
+                <h1 class="text-primary">Unit Inspections</h1>
+                <p class="text-muted mb-0">Move In, Move Out, Annual, Follow Up and Emergency inspections</p>
+            </div>
+
+            <a th:href="@{/unit-inspections/create}" class="btn btn-primary">
+                New Inspection
+            </a>
+        </div>
+
+        <hr>
+
+        <form th:action="@{/unit-inspections}" method="get" class="card shadow-sm p-3 mb-4">
+            <div class="row g-3 align-items-end">
+
+                <div class="col-md-4">
+                    <label class="form-label fw-bold">Unit</label>
+                    <select name="unitId" class="form-select">
+                        <option th:each="unit : ${units}"
+                                th:value="${unit.id}"
+                                th:selected="${selectedUnitId != null and selectedUnitId == unit.id}"
+                                th:text="${unit.displayName}">
+                        </option>
+                    </select>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label fw-bold">Inspection Type</label>
+                    <input type="text"
+                           name="inspectionType"
+                           class="form-control"
+                           placeholder="Move In, Move Out, Annual..."
+                           th:value="${selectedInspectionType}">
+                </div>
+
+                <div class="col-md-4">
+                    <button type="submit" class="btn btn-secondary">Filter</button>
+                    <a th:href="@{/unit-inspections}" class="btn btn-outline-secondary">Clear</a>
+                </div>
+
+            </div>
+        </form>
+
+        <div class="card shadow-sm p-3">
+            <table class="table table-hover align-middle">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Unit</th>
+                    <th>Type</th>
+                    <th>Date</th>
+                    <th>Inspector</th>
+                    <th>Photos</th>
+                    <th class="text-end">Actions</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr th:each="inspection : ${inspections}">
+                    <td th:text="${inspection.id}"></td>
+                    <td th:text="${inspection.unitId}"></td>
+                    <td th:text="${inspection.inspectionType}"></td>
+                    <td th:text="${inspection.inspectionDate}"></td>
+                    <td th:text="${inspection.inspectorOne}"></td>
+                    <td th:text="${inspection.photos ? 'Yes' : 'No'}"></td>
+
+                    <td class="text-end">
+                        <a th:href="@{/unit-inspections/{id}(id=${inspection.id})}"
+                           class="btn btn-sm btn-info">
+                            Details
+                        </a>
+
+                        <a th:href="@{/unit-inspections/{id}/edit(id=${inspection.id})}"
+                           class="btn btn-sm btn-warning">
+                            Edit
+                        </a>
+
+                        <form th:action="@{/unit-inspections/{id}/delete(id=${inspection.id})}"
+                              method="post"
+                              class="d-inline"
+                              onsubmit="return confirm('Delete this inspection?');">
+                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                            <button type="submit" class="btn btn-sm btn-danger">
+                                Delete
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+
+                <tr th:if="${#lists.isEmpty(inspections)}">
+                    <td colspan="7" class="text-center text-muted py-4">
+                        No inspections found.
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>

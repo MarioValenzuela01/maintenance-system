@@ -1,0 +1,251 @@
+<div th:fragment="inspectionForm"
+     th:object="${inspection}"
+     xmlns:th="http://www.thymeleaf.org">
+
+    <div class="card shadow-sm p-4 mb-4">
+
+        <h4 class="text-primary mb-3">Inspection Information</h4>
+
+        <div class="row g-3">
+
+            <div class="col-md-4">
+                <label class="form-label fw-bold">Unit</label>
+                <select th:field="*{unitId}" class="form-select" required>
+                    <option th:each="unit : ${units}"
+                            th:value="${unit.id}"
+                            th:text="${unit.displayName}">
+                    </option>
+                </select>
+            </div>
+
+            <div class="col-md-4">
+                <label class="form-label fw-bold">Tenant</label>
+                <select th:field="*{tenantId}" class="form-select">
+                    <option value="">No tenant selected</option>
+                    <option th:each="tenant : ${tenants}"
+                            th:value="${tenant.id}"
+                            th:text="${tenant.firstName + ' ' + tenant.lastName}">
+                    </option>
+                </select>
+            </div>
+
+            <div class="col-md-4">
+                <label class="form-label fw-bold">Date</label>
+                <input type="date" th:field="*{inspectionDate}" class="form-control" required>
+            </div>
+
+            <div class="col-md-4">
+                <label class="form-label fw-bold">Inspection Type</label>
+                <select th:field="*{inspectionType}" class="form-select" required>
+                    <option th:each="type : ${inspectionTypes}"
+                            th:value="${type}"
+                            th:text="${type}">
+                    </option>
+                </select>
+            </div>
+
+            <div class="col-md-4">
+                <label class="form-label fw-bold">Inspector 1</label>
+                <input type="text" th:field="*{inspectorOne}" class="form-control">
+            </div>
+
+            <div class="col-md-4">
+                <label class="form-label fw-bold">Inspector 2</label>
+                <input type="text" th:field="*{inspectorTwo}" class="form-control">
+            </div>
+
+        </div>
+
+        <hr>
+
+        <div class="row g-3">
+            <div class="col-md-3 form-check">
+                <input class="form-check-input" type="checkbox" th:field="*{memberPresent}">
+                <label class="form-check-label">Member Present</label>
+            </div>
+
+            <div class="col-md-3 form-check">
+                <input class="form-check-input" type="checkbox" th:field="*{handbook}">
+                <label class="form-check-label">Handbook</label>
+            </div>
+
+            <div class="col-md-3 form-check">
+                <input class="form-check-input" type="checkbox" th:field="*{emergencyInspection}">
+                <label class="form-check-label">Emergency Inspection</label>
+            </div>
+
+            <div class="col-md-3 form-check">
+                <input class="form-check-input" type="checkbox" th:field="*{photos}">
+                <label class="form-check-label">Photos</label>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="card shadow-sm p-4 mb-4">
+
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <div>
+                <h4 class="text-primary mb-1">Inspection Checklist</h4>
+                <p class="text-muted mb-0">
+                    Items are OK by default. Only add notes when something needs attention.
+                </p>
+            </div>
+
+            <button type="button"
+                    class="btn btn-outline-secondary btn-sm"
+                    id="toggleOnlyIssues">
+                Show Only Issues
+            </button>
+        </div>
+
+        <div class="alert alert-info py-2">
+            <strong>Tip:</strong> Leave items as OK if there are no problems. Change the status only when repair, damage, or follow up is needed.
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-hover align-middle" id="inspectionChecklistTable">
+                <thead class="table-light">
+                <tr>
+                    <th style="width: 16%">Area</th>
+                    <th style="width: 22%">Item</th>
+                    <th style="width: 16%">Status</th>
+                    <th>Issue / Notes</th>
+                    <th style="width: 12%">Details</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <th:block th:each="item, stat : *{items}">
+
+                    <tr class="checklist-row">
+
+                        <td>
+                            <input type="hidden" th:field="*{items[__${stat.index}__].id}">
+                            <input type="hidden" th:field="*{items[__${stat.index}__].area}">
+                            <span class="fw-bold" th:text="${item.area}"></span>
+                        </td>
+
+                        <td>
+                            <input type="hidden" th:field="*{items[__${stat.index}__].itemName}">
+                            <span th:text="${item.itemName}"></span>
+                        </td>
+
+                        <td>
+                            <select th:field="*{items[__${stat.index}__].status}"
+                                    class="form-select form-select-sm inspection-status">
+                                <option value="OK">OK</option>
+                                <option value="Needs Repair">Needs Repair</option>
+                                <option value="Damaged">Damaged</option>
+                                <option value="Missing">Missing</option>
+                                <option value="N/A">N/A</option>
+                            </select>
+                        </td>
+
+                        <td>
+            <textarea th:field="*{items[__${stat.index}__].notes}"
+                      class="form-control form-control-sm inspection-notes"
+                      rows="2"
+                      placeholder="Add notes only if there is an issue..."></textarea>
+                        </td>
+
+                        <td>
+                            <button type="button"
+                                    class="btn btn-outline-primary btn-sm toggle-condition-details">
+                                Details
+                            </button>
+                        </td>
+
+                    </tr>
+
+                    <tr class="condition-detail-row d-none">
+                        <td colspan="5">
+                            <div class="border rounded p-3 bg-light">
+
+                                <div class="row g-3">
+
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-bold">Move In Condition</label>
+                                        <textarea th:field="*{items[__${stat.index}__].inCondition}"
+                                                  class="form-control form-control-sm"
+                                                  rows="2"
+                                                  placeholder="Optional: condition at move in"></textarea>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-bold">Move Out Condition</label>
+                                        <textarea th:field="*{items[__${stat.index}__].outCondition}"
+                                                  class="form-control form-control-sm"
+                                                  rows="2"
+                                                  placeholder="Optional: condition at move out"></textarea>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </td>
+                    </tr>
+
+                </th:block>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+    <div class="card shadow-sm p-4 mb-4">
+
+        <h4 class="text-primary mb-3">Pets, Mice Issues and Remarks</h4>
+
+        <div class="row g-3">
+
+            <div class="col-md-4">
+                <label class="form-label fw-bold">Cat</label>
+                <input type="text" th:field="*{petsCat}" class="form-control">
+            </div>
+
+            <div class="col-md-4">
+                <label class="form-label fw-bold">Dog</label>
+                <input type="text" th:field="*{petsDog}" class="form-control">
+            </div>
+
+            <div class="col-md-4">
+                <label class="form-label fw-bold">Breed of Dog</label>
+                <input type="text" th:field="*{dogBreed}" class="form-control">
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label fw-bold">Do you have any mice issues?</label>
+                <textarea th:field="*{miceIssues}" class="form-control" rows="3"></textarea>
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label fw-bold">Remarks</label>
+                <textarea th:field="*{remarks}" class="form-control" rows="3"></textarea>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="card shadow-sm p-4 mb-4">
+
+        <h4 class="text-primary mb-3">Signatures</h4>
+
+        <div class="row g-3">
+
+            <div class="col-md-6">
+                <label class="form-label fw-bold">Inspector Signature</label>
+                <input type="text" th:field="*{inspectorSignature}" class="form-control">
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label fw-bold">Occupant Signature</label>
+                <input type="text" th:field="*{occupantSignature}" class="form-control">
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

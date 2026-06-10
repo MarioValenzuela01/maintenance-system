@@ -67,6 +67,37 @@ public class UnitDto {
     public UnitDto setGoogleMapsUrl(String googleMapsUrl) {this.googleMapsUrl = googleMapsUrl; return this;
     }
 
-    public String getDisplayName() {return displayName;}
-    public UnitDto setDisplayName(String displayName) {this.displayName = displayName;return this;}
+
+    public String getDisplayName() {
+        if (displayName != null && !displayName.isBlank()) {
+            return displayName;
+        }
+
+        StringBuilder name = new StringBuilder();
+
+        if (unitNumber != null && !unitNumber.isBlank()) {
+            name.append(unitNumber);
+        } else if (address != null && !address.isBlank()) {
+            name.append(address);
+        } else if (id != null) {
+            name.append("Unit ").append(id);
+        } else {
+            name.append("Unit");
+        }
+
+        if (programType != null && !programType.isBlank()) {
+            name.append(" - ").append(programType);
+        }
+
+        if (ownershipType != null && !ownershipType.isBlank()) {
+            name.append(" - ").append(ownershipType);
+        }
+
+        return name.toString();
+    }
+
+    public UnitDto setDisplayName(String displayName) {
+        this.displayName = displayName;
+        return this;
+    }
 }

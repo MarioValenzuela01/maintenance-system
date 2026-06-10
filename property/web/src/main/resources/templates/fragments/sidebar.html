@@ -68,6 +68,12 @@
                 <span class="sidebar-icon">🖨</span>
                 <span>Print Tenants</span>
             </a>
+
+            <a th:href="@{/unit-inspections}"
+               class="sidebar-link">
+                <span class="sidebar-icon">📝</span>
+                <span>Unit Inspections</span>
+            </a>
         </div>
 
         <div class="sidebar-section">
@@ -88,7 +94,7 @@
                class="sidebar-link"
                sec:authorize="hasAnyRole('SUPER_ADMIN','ADMIN')">
                 <span class="sidebar-icon">⏱</span>
-                <span>Accessible Hours</span>
+                <span>Accessible Unit Hours</span>
             </a>
 
             <a th:href="@{/unit-history}" class="sidebar-link"
@@ -102,6 +108,10 @@
                 <span>Managers</span>
             </a>
 
+        </div>
+
+        <div class="sidebar-section">
+            <div class="sidebar-section-title">Configuration</div>
             <a th:href="@{/users}" class="sidebar-link"
                sec:authorize="hasRole('SUPER_ADMIN')">
                 <span class="sidebar-icon">⚙</span>
